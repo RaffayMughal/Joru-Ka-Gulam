@@ -1,0 +1,6 @@
+{
+  "name": "aurora-ai-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Groq-powered AI chatbot with streaming responses, deployed on Vercel."
+}

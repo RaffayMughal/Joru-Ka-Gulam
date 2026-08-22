@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aurora AI Chatbot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="aurora-blob blob-1"></div>
+  <div class="aurora-blob blob-2"></div>
+
+  <div class="app">
+    <header class="hero">
+      <h1 class="hero-title">Aurora AI</h1>
+      <p class="hero-subtitle">Powered by Groq + Llama 3.1 — instant, streaming answers.</p>
+    </header>
+
+    <main class="chat-card" id="chat-card">
+      <div class="messages" id="messages">
+        <div class="message bot">
+          <div class="bubble">Hi! Ask me anything — I stream responses in real time.</div>
+        </div>
+      </div>
+
+      <div class="examples" id="examples">
+        <button class="example-chip">What can you help me with?</button>
+        <button class="example-chip">Explain quantum computing simply</button>
+        <button class="example-chip">Give me a productivity tip</button>
+        <button class="example-chip">Suggest a creative project idea</button>
+      </div>
+
+      <form class="input-row" id="chat-form">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Type your message..."
+          autocomplete="off"
+        />
+        <button type="submit" id="send-btn">Send</button>
+      </form>
+    </main>
+
+    <footer class="footer-note">Built with Groq + Vercel</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
