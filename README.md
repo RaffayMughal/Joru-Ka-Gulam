@@ -1,4 +1,4 @@
-# Aurora AI Chatbot — GitHub + Vercel Deployment Guide
+# Wazeer AI Chatbot — GitHub + Vercel Deployment Guide
 
 This project is a Groq-powered chatbot with a custom animated frontend, deployed as a **permanent, free, public link** using GitHub + Vercel — no Gradio, no Hugging Face paywall.
 
@@ -11,7 +11,7 @@ vercel-chatbot/
 ├── api/
 │   └── chat.js        <- Serverless function that calls Groq (keeps your API key secret)
 ├── index.html          <- The chat page structure
-├── style.css            <- The aurora/glow animated design
+├── style.css            <- The wazeer/glow animated design
 ├── script.js            <- Handles sending messages + streaming replies
 ├── package.json         <- Project metadata (no dependencies needed)
 ├── .gitignore           <- Keeps node_modules and secrets out of GitHub
@@ -32,7 +32,7 @@ Every file is required. Don't rename any of them — Vercel looks for `api/chat.
 ## Step 2: Create a new GitHub repository
 
 1. Click the **+** icon (top right) → **New repository**
-2. Name it something like `aurora-ai-chatbot`
+2. Name it something like `wazeer-ai-chatbot`
 3. Keep it **Public** or **Private** — either works with Vercel
 4. Don't add a README, .gitignore, or license here — we already have them
 5. Click **Create repository**
@@ -62,7 +62,7 @@ Every file is required. Don't rename any of them — Vercel looks for `api/chat.
 
 1. Go to **vercel.com** → **Sign up** (choose "Continue with GitHub" — this links the two automatically)
 2. Click **Add New** → **Project**
-3. Find your `aurora-ai-chatbot` repository in the list → click **Import**
+3. Find your `wazeer-ai-chatbot` repository in the list → click **Import**
 4. Framework Preset: leave as **Other** (Vercel auto-detects the `api` folder as serverless functions)
 5. Don't click Deploy yet — go to Step 5 first
 
@@ -94,7 +94,7 @@ This keeps your key secret and out of your code entirely.
 Your chatbot is now live at:
 
 ```
-https://aurora-ai-chatbot-yourname.vercel.app
+https://wazeer-ai-chatbot-yourname.vercel.app
 ```
 
 (Vercel generates the exact subdomain based on your project name — it's shown right on the success screen.)
@@ -110,7 +110,7 @@ This link:
 
 ## How it works (in plain terms)
 
-- **`index.html` + `style.css` + `script.js`** run entirely in the visitor's browser — this is your chat interface, with the aurora glow animation
+- **`index.html` + `style.css` + `script.js`** run entirely in the visitor's browser — this is your chat interface, with the wazeer glow animation
 - When someone sends a message, `script.js` sends it to `/api/chat`
 - **`api/chat.js`** runs on Vercel's servers (not the visitor's browser), calls Groq using your secret key, and streams the reply back word-by-word
 - Your `GROQ_API_KEY` never appears in the browser or in your GitHub repo — it only lives inside Vercel's Environment Variables
