@@ -1,52 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Wazeer AI Chatbot</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="wazeer-blob blob-1"></div>
-  <div class="wazeer-blob blob-2"></div>
-
   <div class="app">
-    <header class="hero">
-      <h1 class="hero-title">Wazeer AI</h1>
-      <p class="hero-subtitle">Powered by Groq</p>
-    </header>
 
-    <main class="chat-card" id="chat-card">
-      <div class="messages" id="messages">
-        <div class="message bot">
-          <div class="bubble">Hi! Ask me anything — I stream responses in real time.</div>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <button class="icon-btn logo-btn">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        </button>
+        <button class="icon-btn collapse-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-item active">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          New chat
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search chats
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          Images
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+          Plugins
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Deep research
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          See plans and pricing
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+          Settings
+        </a>
+        <a href="#" class="sidebar-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>
+          Help
+        </a>
+
+        <div class="sidebar-cta">
+          <p class="cta-title">Get responses tailored to you</p>
+          <p class="cta-desc">Log in to get answers based on saved chats, plus create images and upload files.</p>
+          <button class="login-btn">Log in</button>
         </div>
       </div>
+    </aside>
 
-      <div class="examples" id="examples">
-        <button class="example-chip">What can you help me with?</button>
-        <button class="example-chip">Explain quantum computing simply</button>
-        <button class="example-chip">Give me a productivity tip</button>
-        <button class="example-chip">Suggest a creative project idea</button>
+    <!-- Main content -->
+    <main class="main">
+      <header class="topbar">
+        <div class="model-selector">Chatbot <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="topbar-actions">
+          <button class="login-btn outline">Log in</button>
+          <button class="signup-btn">Sign up for free</button>
+        </div>
+      </header>
+
+      <div class="landing">
+        <h1 class="landing-title">Where should we begin?</h1>
+
+        <div class="chat-input-container">
+          <button class="icon-btn plus-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+
+          <textarea id="chat-input" rows="1" placeholder="Ask anything"></textarea>
+
+          <button class="icon-btn mic-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          </button>
+
+          <button class="send-button" id="send-btn" disabled>
+            <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+
+        <button class="suggestion-chip">What can you do?</button>
       </div>
 
-      <form class="input-row" id="chat-form">
-        <input
-          type="text"
-          id="user-input"
-          placeholder="Type your message..."
-          autocomplete="off"
-        />
-        <button type="submit" id="send-btn">Send</button>
-      </form>
+      <p class="footer-note">
+        Chatbot is AI. By using it, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>. Chats may be reviewed and used to improve our AI models. <a href="#">Learn more</a>
+      </p>
     </main>
 
-    <footer class="footer-note">Built with Groq + Vercel</footer>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const textarea = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    textarea.addEventListener('input', () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+      sendBtn.disabled = textarea.value.trim().length === 0;
+    });
+  </script>
+
 </body>
 </html>
