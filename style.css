@@ -24,14 +24,14 @@ html, body {
   overflow-x: hidden;
 }
 
-@keyframes auroraDrift {
+@keyframes wazeerDrift {
   0%   { transform: translate(-10%, -10%) scale(1); }
   33%  { transform: translate(8%, 5%) scale(1.15); }
   66%  { transform: translate(-5%, 10%) scale(0.95); }
   100% { transform: translate(-10%, -10%) scale(1); }
 }
 
-.aurora-blob {
+.wazeer-blob {
   position: fixed;
   border-radius: 50%;
   filter: blur(50px);
@@ -47,7 +47,7 @@ html, body {
   max-width: 700px;
   max-height: 700px;
   background: radial-gradient(circle, rgba(139,92,246,0.35), transparent 65%);
-  animation: auroraDrift 18s ease-in-out infinite;
+  animation: wazeerDrift 18s ease-in-out infinite;
 }
 
 .blob-2 {
@@ -58,7 +58,7 @@ html, body {
   max-width: 650px;
   max-height: 650px;
   background: radial-gradient(circle, rgba(6,182,212,0.3), transparent 65%);
-  animation: auroraDrift 22s ease-in-out infinite reverse;
+  animation: wazeerDrift 22s ease-in-out infinite reverse;
 }
 
 .app {
