@@ -1,4 +1,4 @@
-# Wazeer (Vercel + Groq)
+# Chughli (Vercel + Groq)
 
 This is a Vercel-native rebuild: a static frontend (`index.html`, `style.css`,
 `script.js`) plus one serverless API route (`api/chat.js`). No Flask, no
