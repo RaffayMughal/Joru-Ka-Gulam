@@ -1,11 +1,6 @@
-/* ==========================================================================
-   Chatbot Dark Theme — style.css (ChatGPT-style layout)
-   ========================================================================== */
-
 :root {
   --bg-app: #000000;
   --bg-sidebar: #0d0d0d;
-  --bg-main: #000000;
   --bg-hover: #1a1a1a;
   --bg-active: #212121;
   --bg-input: #1a1a1a;
@@ -30,7 +25,6 @@ body {
 
 .app { display: flex; height: 100vh; width: 100%; }
 
-/* Sidebar */
 .sidebar {
   width: 260px;
   flex-shrink: 0;
@@ -41,7 +35,7 @@ body {
   border-right: 1px solid var(--border-color);
 }
 
-.sidebar-top { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px 12px; }
+.sidebar-top { display: flex; align-items: center; padding: 4px 8px 12px; }
 
 .icon-btn {
   background: transparent;
@@ -74,18 +68,15 @@ body {
 .sidebar-item.active { background-color: var(--bg-active); }
 
 .sidebar-bottom { margin-top: auto; }
-
 .sidebar-cta { padding: 14px 12px; border-top: 1px solid var(--border-color); }
 .cta-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
 .cta-desc { font-size: 12.5px; color: var(--text-secondary); }
 
-/* Main area */
 .main { flex: 1; display: flex; flex-direction: column; height: 100vh; }
 
 .topbar { display: flex; align-items: center; padding: 16px 24px; }
 .model-selector { font-size: 18px; font-weight: 600; }
 
-/* Landing view */
 .landing {
   flex: 1;
   display: flex;
@@ -98,13 +89,7 @@ body {
 
 .landing-title { font-size: 28px; font-weight: 600; }
 
-/* Chat view */
-.chat-view {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+.chat-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
 .chat-messages {
   flex: 1;
@@ -127,22 +112,11 @@ body {
   white-space: pre-wrap;
 }
 
-.message.user {
-  align-self: flex-end;
-  background-color: var(--bg-active);
-}
+.message.user { align-self: flex-end; background-color: var(--bg-active); }
+.message.bot { align-self: flex-start; background-color: transparent; max-width: 90%; }
 
-.message.bot {
-  align-self: flex-start;
-  background-color: transparent;
-  max-width: 90%;
-}
+.chat-input-wrapper { padding: 12px 20px 24px; }
 
-.chat-input-wrapper {
-  padding: 12px 20px 24px;
-}
-
-/* Input bar (shared by landing + chat view) */
 .chat-input-container {
   display: flex;
   align-items: center;
