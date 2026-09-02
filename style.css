@@ -35,7 +35,25 @@ body {
   border-right: 1px solid var(--border-color);
 }
 
-.sidebar-top { display: flex; align-items: center; padding: 4px 8px 12px; }
+.sidebar-top { display: flex; align-items: center; padding: 8px 8px 16px; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-logo {
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.2px;
+}
 
 .icon-btn {
   background: transparent;
