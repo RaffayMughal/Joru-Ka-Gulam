@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=8" />
+<link rel="stylesheet" href="style.css?v=9" />
 </head>
 <body>
 
@@ -20,22 +20,59 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo">
-          <span class="logo-dot"></span>
-          <h1>Wazeer</h1>
+
+      <!-- Sidebar Top Brand Area -->
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Wazeer</h1>
+            <span class="brand-tag">AI Assistant</span>
+          </div>
         </div>
         <button id="sidebar-close" class="icon-btn sidebar-close" type="button" aria-label="Close sidebar">
           <svg viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
 
+      <!-- New Chat Button -->
       <button id="new-chat-btn" class="new-chat-btn" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        New chat
+        <div class="new-chat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <span>New Conversation</span>
       </button>
 
+      <!-- Search Conversations -->
+      <div class="sidebar-search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="text" id="conv-search" placeholder="Search chats..." />
+      </div>
+
+      <!-- Section Label -->
+      <div class="conv-section-label">
+        <span>Recent Chats</span>
+        <span class="conv-count" id="conv-count">0</span>
+      </div>
+
+      <!-- Conversation List -->
       <div id="conversation-list" class="conversation-list"></div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="footer-status">
+          <span class="status-dot"></span>
+          <span>Groq Powered</span>
+        </div>
+        <span class="footer-version">v1.0</span>
+      </div>
+
     </aside>
 
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
@@ -108,7 +145,7 @@
           </div>
         </div>
 
-        <!-- Thinking — hidden by default, shown only when sending -->
+        <!-- Thinking — hidden by default -->
         <div id="thinking-indicator" class="thinking-indicator hidden">
           <div class="avatar bot-avatar">W</div>
           <div class="thinking-bubble">
@@ -157,7 +194,7 @@
     document.addEventListener('click', () => notifPanel.classList.remove('open'));
     notifPanel.addEventListener('click', (e) => e.stopPropagation());
 
-    // ── Thinking animation (called by script.js only when loading) ──
+    // ── Thinking animation ──
     const THINKING_STEPS = [
       "Reading your message",
       "Detecting language",
@@ -170,18 +207,14 @@
       const indicator = document.getElementById('thinking-indicator');
       const stepsEl   = document.getElementById('thinking-steps');
       const labelEl   = document.getElementById('thinking-label-text');
-
       document.getElementById('typing-indicator').classList.add('hidden');
-
       indicator.classList.remove('hidden');
       stepsEl.innerHTML = '';
       labelEl.textContent = 'Thinking...';
-
       let i = 0;
       function addStep() {
         const prev = stepsEl.querySelector('.thinking-step.active');
         if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
-
         if (i < THINKING_STEPS.length) {
           const step = document.createElement('div');
           step.className = 'thinking-step active';
