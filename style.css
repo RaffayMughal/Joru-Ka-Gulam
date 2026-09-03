@@ -16,55 +16,43 @@
 html, body {
   height: 100%;
   margin: 0;
-  /* Changed to transparent so the video shows through */
-  background: transparent; 
+  background-color: var(--bg); /* Solid fallback */
   color: var(--text);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
 }
 
-/* ── LIVE VIDEO BACKGROUND ── */
-.video-bg-container {
+/* ── LIVE ANIMATED CSS BACKGROUND ── */
+.live-bg-gradient {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: -2; /* Behind everything */
-  overflow: hidden;
-  background-color: var(--bg); /* Fallback color while video loads */
+  background: linear-gradient(-45deg, #0b0b12, #1a1025, #0d1b2a, #160b12);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
 }
 
-.video-bg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures video covers screen without stretching */
-  filter: brightness(0.4) saturate(1.2); /* Dims video so text is readable */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, transparent 0%, rgba(11, 11, 18, 0.8) 100%);
-  pointer-events: none;
-}
-
-/* ── Animated background orbs (Now float over video) ── */
+/* ── Animated background orbs ── */
 .orb {
   position: fixed;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.5; /* Slightly reduced opacity to blend with video */
-  z-index: -1; /* Above video, below app */
+  opacity: 0.6;
+  z-index: -1; /* Above gradient, below app */
   pointer-events: none;
   will-change: transform;
   animation-fill-mode: both;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  mix-blend-mode: screen; /* Makes orbs glow nicely over the video */
 }
 
 .orb-1 {
@@ -131,7 +119,7 @@ html, body {
 /* ── App layout ── */
 .app {
   position: relative;
-  z-index: 2;
+  z-index: 10; /* FORCED HIGH Z-INDEX so chat box is always visible */
   height: 100vh;
   width: 100%;
   display: flex;
@@ -149,7 +137,7 @@ html, body {
   padding: 24px 16px;
 }
 
-/* ── Sidebar ── */
+/* ── Sidebar ─ */
 .sidebar {
   width: 268px;
   flex-shrink: 0;
@@ -158,7 +146,6 @@ html, body {
   flex-direction: column;
   gap: 10px;
   padding: 18px 12px;
-  /* Increased glass effect for video background */
   background: rgba(15, 15, 20, 0.4);
   border-right: 1px solid var(--glass-border);
   backdrop-filter: blur(24px);
@@ -271,7 +258,7 @@ html, body {
   .main-col { padding: 12px 8px; }
 }
 
-/* ── Header ─ */
+/* ── Header ── */
 .app-header {
   display: flex;
   align-items: center;
@@ -337,7 +324,7 @@ html, body {
   position: absolute;
   top: 44px; right: 0;
   width: 280px;
-  background: rgba(23, 23, 31, 0.85); /* Made slightly transparent */
+  background: rgba(23, 23, 31, 0.85);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 14px;
   padding: 8px;
@@ -378,7 +365,6 @@ html, body {
 .chat-shell {
   flex: 1;
   display: flex; flex-direction: column;
-  /* Enhanced glass effect for video background */
   background: rgba(20, 20, 25, 0.45);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
