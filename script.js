@@ -447,7 +447,13 @@ async function sendMessage(userText) {
 
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(errText || `Request failed with ${res.status}`);
+      let message = `Request failed with ${res.status}`;
+      try {
+        message = JSON.parse(errText)?.error || message;
+      } catch (_) {
+        if (errText) message = errText;
+      }
+      throw new Error(message);
     }
 
     const data = await res.json();
@@ -460,7 +466,7 @@ async function sendMessage(userText) {
     addMessage("bot", reply);
   } catch (err) {
     console.error(err);
-    addMessage("bot", "⚠️ Something went wrong reaching the model. Please try again.");
+    addMessage("bot", `⚠️ ${err.message || "Something went wrong reaching the model."}`);
   } finally {
     setLoading(false);
   }
