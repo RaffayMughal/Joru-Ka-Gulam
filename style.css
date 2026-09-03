@@ -16,24 +16,55 @@
 html, body {
   height: 100%;
   margin: 0;
-  background: var(--bg);
+  /* Changed to transparent so the video shows through */
+  background: transparent; 
   color: var(--text);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
 }
 
-/* ── Animated background orbs ── */
+/* ── LIVE VIDEO BACKGROUND ── */
+.video-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2; /* Behind everything */
+  overflow: hidden;
+  background-color: var(--bg); /* Fallback color while video loads */
+}
+
+.video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures video covers screen without stretching */
+  filter: brightness(0.4) saturate(1.2); /* Dims video so text is readable */
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(11, 11, 18, 0.8) 100%);
+  pointer-events: none;
+}
+
+/* ── Animated background orbs (Now float over video) ── */
 .orb {
   position: fixed;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.6;
-  z-index: 0;
+  opacity: 0.5; /* Slightly reduced opacity to blend with video */
+  z-index: -1; /* Above video, below app */
   pointer-events: none;
   will-change: transform;
   animation-fill-mode: both;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+  mix-blend-mode: screen; /* Makes orbs glow nicely over the video */
 }
 
 .orb-1 {
@@ -90,7 +121,7 @@ html, body {
 .noise-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 3px 3px;
@@ -127,10 +158,11 @@ html, body {
   flex-direction: column;
   gap: 10px;
   padding: 18px 12px;
-  background: rgba(255,255,255,0.03);
+  /* Increased glass effect for video background */
+  background: rgba(15, 15, 20, 0.4);
   border-right: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   transition: transform 0.25s ease;
 }
 
@@ -239,7 +271,7 @@ html, body {
   .main-col { padding: 12px 8px; }
 }
 
-/* ── Header ── */
+/* ── Header ─ */
 .app-header {
   display: flex;
   align-items: center;
@@ -305,7 +337,7 @@ html, body {
   position: absolute;
   top: 44px; right: 0;
   width: 280px;
-  background: #17171f;
+  background: rgba(23, 23, 31, 0.85); /* Made slightly transparent */
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 14px;
   padding: 8px;
@@ -346,12 +378,13 @@ html, body {
 .chat-shell {
   flex: 1;
   display: flex; flex-direction: column;
-  background: var(--glass);
+  /* Enhanced glass effect for video background */
+  background: rgba(20, 20, 25, 0.45);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   overflow: hidden;
 }
 
@@ -366,7 +399,7 @@ html, body {
 .chat-window::-webkit-scrollbar { width: 6px; }
 .chat-window::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 
-/* ── Messages ── */
+/* ── Messages ─ */
 .message {
   display: flex; gap: 10px; max-width: 85%;
   animation: rise 0.25s ease;
