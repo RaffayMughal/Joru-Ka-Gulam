@@ -8,11 +8,14 @@
 </head>
 <body>
 
-  <!-- LIVE VIDEO BACKGROUND -->
-  <video class="video-bg" autoplay muted loop playsinline>
-    <source src="https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4" type="video/mp4">
-  </video>
-  <div class="video-overlay"></div>
+  <!-- LIVE CSS ANIMATED BACKGROUND -->
+  <div class="live-bg"></div>
+
+  <!-- Animated background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="noise-overlay"></div>
 
   <div class="app">
 
@@ -84,128 +87,4 @@
         </div>
 
         <button id="clear-btn" class="clear-btn" type="button" aria-label="Clear chat">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Clear
-        </button>
-      </header>
-
-      <main class="chat-shell">
-        <div id="chat-window" class="chat-window">
-          <div class="message bot">
-            <div class="avatar bot-avatar">W</div>
-            <div class="bubble">
-              <div class="bubble-text">Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Thinking — hidden by default, shown only when sending -->
-        <div id="thinking-indicator" class="thinking-indicator hidden">
-          <div class="avatar bot-avatar">W</div>
-          <div class="thinking-bubble">
-            <div class="thinking-label">
-              <div class="thinking-spinner"></div>
-              <span id="thinking-label-text">Thinking...</span>
-            </div>
-            <div class="thinking-steps" id="thinking-steps"></div>
-          </div>
-        </div>
-
-        <!-- Typing dots — hidden by default -->
-        <div id="typing-indicator" class="typing-indicator hidden">
-          <div class="avatar bot-avatar">W</div>
-          <div class="bubble typing-bubble">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div id="attachment-preview" class="attachment-preview hidden"></div>
-
-        <form id="chat-form" class="chat-input-row" autocomplete="off">
-          <input id="file-input" type="file" accept="image/*,.txt,.md,.csv,.json,.js,.ts,.py,.log,.html,.css,.pdf,.docx" hidden />
-          <button id="attach-btn" type="button" aria-label="Attach file">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5L12.5 20C10.6 21.9 7.5 21.9 5.6 20C3.7 18.1 3.7 15 5.6 13.1L14.1 4.6C15.4 3.3 17.5 3.3 18.8 4.6C20.1 5.9 20.1 8 18.8 9.3L10.6 17.5C9.9 18.2 8.8 18.2 8.1 17.5C7.4 16.8 7.4 15.7 8.1 15L15.5 7.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
-          <button id="send-btn" type="submit" aria-label="Send">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
-          </button>
-        </form>
-      </main>
-    </div>
-  </div>
-
-  <script>
-    // ── Notification bell ──
-    const notifBtn = document.getElementById('notif-btn');
-    const notifPanel = document.getElementById('notif-panel');
-    const notifDot = document.getElementById('notif-dot');
-    notifBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifPanel.classList.toggle('open');
-      if (notifPanel.classList.contains('open')) notifDot.style.display = 'none';
-    });
-    document.addEventListener('click', () => notifPanel.classList.remove('open'));
-    notifPanel.addEventListener('click', (e) => e.stopPropagation());
-
-    // ── Thinking animation (called by script.js only when loading) ──
-    const THINKING_STEPS = [
-      "Reading your message",
-      "Searching knowledge",
-      "Forming a response",
-      "Almost ready"
-    ];
-    let _thinkingTimer = null;
-
-    window.startThinking = function () {
-      const indicator = document.getElementById('thinking-indicator');
-      const stepsEl   = document.getElementById('thinking-steps');
-      const labelEl   = document.getElementById('thinking-label-text');
-
-      // make sure typing dots are hidden
-      document.getElementById('typing-indicator').classList.add('hidden');
-
-      indicator.classList.remove('hidden');
-      stepsEl.innerHTML = '';
-      labelEl.textContent = 'Thinking...';
-
-      let i = 0;
-      function addStep() {
-        // mark previous as done
-        const prev = stepsEl.querySelector('.thinking-step.active');
-        if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
-
-        if (i < THINKING_STEPS.length) {
-          const step = document.createElement('div');
-          step.className = 'thinking-step active';
-          step.textContent = THINKING_STEPS[i];
-          stepsEl.appendChild(step);
-          i++;
-          _thinkingTimer = setTimeout(addStep, 650);
-        } else {
-          labelEl.textContent = 'Responding...';
-          // switch to typing dots after steps finish
-          setTimeout(() => {
-            indicator.classList.add('hidden');
-            document.getElementById('typing-indicator').classList.remove('hidden');
-          }, 400);
-        }
-      }
-      addStep();
-    };
-
-    window.stopThinking = function () {
-      clearTimeout(_thinkingTimer);
-      document.getElementById('thinking-indicator').classList.add('hidden');
-      document.getElementById('thinking-steps').innerHTML = '';
-      document.getElementById('typing-indicator').classList.add('hidden');
-    };
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H
