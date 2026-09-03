@@ -5,6 +5,180 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
 <link rel="stylesheet" href="style.css" />
+<style>
+  /* ── Notification bell ── */
+  .notif-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .notif-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(242,242,247,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+  .notif-btn:hover { background: rgba(124,92,255,0.15); color: #c3b3ff; }
+  .notif-btn svg { width: 17px; height: 17px; }
+  .notif-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: #ff5c8a;
+    border-radius: 50%;
+    border: 2px solid #0b0b12;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+  }
+  .notif-panel {
+    position: absolute;
+    top: 44px;
+    right: 0;
+    width: 280px;
+    background: #17171f;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+    display: none;
+  }
+  .notif-panel.open { display: block; }
+  .notif-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(242,242,247,0.5);
+    padding: 6px 10px 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .notif-item:hover { background: rgba(255,255,255,0.06); }
+  .notif-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(124,92,255,0.3), rgba(255,92,138,0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .notif-text { flex: 1; }
+  .notif-title { font-size: 13px; font-weight: 600; color: #f2f2f7; }
+  .notif-desc { font-size: 12px; color: rgba(242,242,247,0.5); margin-top: 2px; }
+  .notif-empty {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(242,242,247,0.35);
+    padding: 20px 10px;
+  }
+
+  /* ── Thinking indicator ── */
+  .thinking-indicator {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px 12px;
+    align-items: flex-start;
+  }
+  .thinking-indicator.hidden { display: none; }
+  .thinking-bubble {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 180px;
+  }
+  .thinking-label {
+    font-size: 12px;
+    color: rgba(242,242,247,0.45);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .thinking-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(124,92,255,0.3);
+    border-top-color: #7c5cff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .thinking-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .thinking-step {
+    font-size: 12.5px;
+    color: rgba(242,242,247,0.6);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: fadeSlideIn 0.3s ease forwards;
+    opacity: 0;
+  }
+  .thinking-step.done { color: rgba(52,224,208,0.8); }
+  .thinking-step.done::before { content: "✓"; font-size: 11px; }
+  .thinking-step.active::before { content: "›"; font-size: 14px; color: #7c5cff; }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateX(-6px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── Attach btn fix (was missing class) ── */
+  #attach-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(242,242,247,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  #attach-btn:hover {
+    background: rgba(124,92,255,0.15);
+    border-color: rgba(124,92,255,0.4);
+    color: #c3b3ff;
+  }
+  #attach-btn svg { width: 18px; height: 18px; stroke: currentColor; }
+</style>
 </head>
 <body>
 
@@ -16,7 +190,7 @@
 
   <div class="app">
 
-    <!-- Sidebar: conversation history -->
+    <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
         <div class="logo">
@@ -45,12 +219,52 @@
     <!-- Main chat column -->
     <div class="main-col">
       <header class="app-header">
+
+        <!-- Sidebar toggle -->
         <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button" aria-label="Toggle sidebar">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
           </svg>
         </button>
+
         <p class="tagline">Powered by Groq</p>
+
+        <!-- Notification bell -->
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notif-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="notif-dot" id="notif-dot"></span>
+          </button>
+          <div class="notif-panel" id="notif-panel">
+            <div class="notif-header">Notifications</div>
+            <div class="notif-item">
+              <div class="notif-icon">🚀</div>
+              <div class="notif-text">
+                <div class="notif-title">Wazeer is live!</div>
+                <div class="notif-desc">Your AI assistant is ready to help.</div>
+              </div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon">⚡</div>
+              <div class="notif-text">
+                <div class="notif-title">Groq speed enabled</div>
+                <div class="notif-desc">Responses are powered by Groq LPU.</div>
+              </div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon">📎</div>
+              <div class="notif-text">
+                <div class="notif-title">File upload supported</div>
+                <div class="notif-desc">Attach PDFs, images, docs and more.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clear button -->
         <button id="clear-btn" class="clear-btn" type="button" aria-label="Clear chat">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -69,6 +283,19 @@
           </div>
         </div>
 
+        <!-- Thinking indicator (shows before typing dots) -->
+        <div id="thinking-indicator" class="thinking-indicator hidden">
+          <div class="avatar bot-avatar">W</div>
+          <div class="thinking-bubble">
+            <div class="thinking-label">
+              <div class="thinking-spinner"></div>
+              <span id="thinking-label-text">Thinking...</span>
+            </div>
+            <div class="thinking-steps" id="thinking-steps"></div>
+          </div>
+        </div>
+
+        <!-- Typing dots (shows after thinking) -->
         <div id="typing-indicator" class="typing-indicator hidden">
           <div class="avatar bot-avatar">W</div>
           <div class="bubble typing-bubble">
@@ -100,6 +327,76 @@
       </main>
     </div>
   </div>
+
+  <!-- Notification logic -->
+  <script>
+    const notifBtn = document.getElementById('notif-btn');
+    const notifPanel = document.getElementById('notif-panel');
+    const notifDot = document.getElementById('notif-dot');
+
+    notifBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifPanel.classList.toggle('open');
+      // Hide dot once opened
+      if (notifPanel.classList.contains('open')) {
+        notifDot.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', () => {
+      notifPanel.classList.remove('open');
+    });
+
+    notifPanel.addEventListener('click', (e) => e.stopPropagation());
+  </script>
+
+  <!-- Thinking steps logic -->
+  <script>
+    const THINKING_STEPS = [
+      "Reading your message",
+      "Searching knowledge",
+      "Forming a response",
+      "Almost ready"
+    ];
+
+    let thinkingInterval = null;
+    let thinkingTimeout = null;
+
+    window.startThinking = function() {
+      const indicator = document.getElementById('thinking-indicator');
+      const stepsEl = document.getElementById('thinking-steps');
+      const labelEl = document.getElementById('thinking-label-text');
+      indicator.classList.remove('hidden');
+      stepsEl.innerHTML = '';
+      labelEl.textContent = 'Thinking...';
+
+      let i = 0;
+      function addStep() {
+        if (i > 0 && stepsEl.children[i - 1]) {
+          stepsEl.children[i - 1].classList.remove('active');
+          stepsEl.children[i - 1].classList.add('done');
+        }
+        if (i < THINKING_STEPS.length) {
+          const step = document.createElement('div');
+          step.className = 'thinking-step active';
+          step.textContent = THINKING_STEPS[i];
+          stepsEl.appendChild(step);
+          i++;
+          thinkingInterval = setTimeout(addStep, 600);
+        } else {
+          labelEl.textContent = 'Responding...';
+        }
+      }
+      addStep();
+    };
+
+    window.stopThinking = function() {
+      clearTimeout(thinkingInterval);
+      const indicator = document.getElementById('thinking-indicator');
+      indicator.classList.add('hidden');
+      document.getElementById('thinking-steps').innerHTML = '';
+    };
+  </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
