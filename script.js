@@ -19,15 +19,19 @@ const CONVERSATIONS_KEY = "wazeer_conversations";
 const ACTIVE_ID_KEY = "wazeer_active_id";
 const LEGACY_KEY = "wazeer_chat_history";
 
-const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant. Never use markdown symbols like **, *, #, ##, or - in your responses. Write in plain text only." };
-const GREETING = "Hey! I'm Wazeer 👋 Ask me anything, I'll treat you as my Badshah.";
+const SYSTEM_PROMPT = { 
+  role: "system", 
+  content: "You are Wazeer, a friendly, sharp, and concise AI assistant. Always reply in the exact same language the user is using. If they write Urdu, reply in Urdu. If English, reply in English. If Roman Urdu, reply in Roman Urdu. Never use markdown symbols like **, *, #, ##, or - in your responses. Write in plain text only." 
+};
+
+const GREETING = "Assalamu Alaikum! Main hoon Wazeer 🤖 Aap ka apna AI assistant. Aap mujhse kisi bhi zabaan mein baat kar sakte hain — main usi zabaan mein jawab doonga!";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const MAX_TEXT_CHARS = 12000;
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
 let pendingAttachment = null;
-let loadingTimeoutId = null; // <-- FIX: Track the timeout so we can cancel it
+let loadingTimeoutId = null;
 
 // ---------- Clean markdown from bot replies ----------
 
@@ -307,25 +311,23 @@ function scrollToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// ---------- FIXED setLoading FUNCTION ----------
+// ---------- FIXED setLoading — no more ghost thinking dots ----------
+
 function setLoading(isLoading) {
   sendBtn.disabled = isLoading;
   chatInput.disabled = isLoading;
 
   if (isLoading) {
-    // Clear any existing timeout to prevent overlap
     if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
     
     if (typeof window.startThinking === "function") window.startThinking();
     
-    // Store the timeout ID so we can cancel it if the response comes back fast
     loadingTimeoutId = setTimeout(() => {
       if (typeof window.stopThinking === "function") window.stopThinking();
       typingIndicator.classList.remove("hidden");
       scrollToBottom();
     }, 2400);
   } else {
-    // FIX: Cancel the pending timeout so dots don't appear after response
     if (loadingTimeoutId) {
       clearTimeout(loadingTimeoutId);
       loadingTimeoutId = null;
@@ -570,7 +572,6 @@ chatForm.addEventListener("submit", (e) => {
 
 // ---------- Init ----------
 
-// FIX: Ensure typing indicator is hidden on fresh load
 typingIndicator.classList.add("hidden");
 renderChatWindow();
 renderSidebar();
