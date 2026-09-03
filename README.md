@@ -43,7 +43,7 @@ A Vercel-native chatbot: a static frontend (`index.html`, `style.css`, `script.j
 
 ## 📎 File uploads
 
-- **Images** (`png`, `jpg`, `webp`, `gif`) are sent as base64 data URLs. `api/chat.js` automatically detects an image in the request and switches the model to `meta-llama/llama-4-scout-17b-16e-instruct` (Groq's vision-capable model) for that request only.
+- **Images** (`png`, `jpg`, `webp`, `gif`) are sent as base64 data URLs. `api/chat.js` automatically detects an image in the request and switches the model to `qwen/qwen3.6-27b` (Groq's current multimodal model) for that request only. If Groq deprecates this one too, check https://console.groq.com/docs/deprecations and swap the `model` value in `api/chat.js`.
 - **Text-based files** (`.txt`, `.md`, `.csv`, `.json`, `.js`, `.ts`, `.py`, `.log`, `.html`, `.css`) are read client-side and included as context alongside your message, truncated to ~12,000 characters to keep requests fast.
 - Max file size is 5MB (adjust `MAX_FILE_BYTES` in `script.js`).
 - Files are **not** uploaded anywhere persistent — they're read in the browser and sent directly to Groq as part of that one request.
