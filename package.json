@@ -1,5 +1,9 @@
 {
-  "name": "Wazeer",
+  "name": "wazeer",
   "version": "1.0.0",
-  "private": true
+  "description": "Wazeer chatbot — static frontend + Vercel serverless API powered by Groq.",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev"
+  }
 }
