@@ -20,12 +20,12 @@ export default async function handler(req, res) {
 
   // If any message includes an image, use Groq's vision-capable model instead
   // of the default text model — image_url content blocks need it.
+  // NOTE: meta-llama/llama-4-scout-17b-16e-instruct was deprecated by Groq
+  // (announced June 2026) — qwen/qwen3.6-27b is their current multimodal model.
   const hasImage = messages.some(
     (m) => Array.isArray(m.content) && m.content.some((part) => part.type === "image_url")
   );
-  const model = hasImage
-    ? "meta-llama/llama-4-scout-17b-16e-instruct"
-    : "openai/gpt-oss-20b";
+  const model = hasImage ? "qwen/qwen3.6-27b" : "openai/gpt-oss-20b";
 
   try {
     const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -45,7 +45,13 @@ export default async function handler(req, res) {
     if (!groqRes.ok) {
       const errBody = await groqRes.text();
       console.error("Groq API error:", errBody);
-      return res.status(groqRes.status).json({ error: "Groq API request failed" });
+      let message = "Groq API request failed";
+      try {
+        message = JSON.parse(errBody)?.error?.message || message;
+      } catch (_) {
+        /* errBody wasn't JSON — keep the generic message */
+      }
+      return res.status(groqRes.status).json({ error: message });
     }
 
     const data = await groqRes.json();
