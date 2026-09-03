@@ -18,11 +18,37 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "messages array is required" });
   }
 
-  // If any message includes an image, use Groq's vision-capable model instead
-  // of the default text model — image_url content blocks need it.
-  // NOTE: meta-llama/llama-4-scout-17b-16e-instruct was deprecated by Groq
-  // (announced June 2026) — qwen/qwen3.6-27b is their current multimodal model.
-  const hasImage = messages.some(
+  // ── LANGUAGE MIRRORING SYSTEM PROMPT ──
+  const LANGUAGE_SYSTEM_PROMPT = {
+    role: "system",
+    content: `You are Wazeer, a friendly, sharp, and concise AI assistant powered by Groq.
+
+CRITICAL LANGUAGE RULE — YOU MUST FOLLOW THIS ALWAYS:
+- Detect the language the user is writing in automatically.
+- Always reply in the EXACT same language the user used in their message.
+- If the user writes in Urdu, reply in Urdu script (اردو).
+- If the user writes in English, reply in English.
+- If the user writes in Arabic, reply in Arabic (العربية).
+- If the user writes in Hindi, reply in Hindi (हिन्दी).
+- If the user writes in Punjabi, reply in Punjabi.
+- If the user writes in Roman Urdu (Urdu in English letters like "kya haal hai"), reply in the same Roman Urdu style.
+- If the user mixes two languages (code-switching), mirror that exact mix naturally.
+- NEVER force English on a non-English user.
+- NEVER translate unless explicitly asked to translate.
+- Match the user's tone — casual stays casual, formal stays formal.
+
+FORMATTING RULE:
+- Never use markdown symbols like **, *, #, ##, or - in your responses.
+- Write in plain text only.
+- Keep responses concise and helpful.`
+  };
+
+  // Inject our system prompt at the start, removing any existing system messages to avoid conflicts
+  const filteredMessages = messages.filter(m => m.role !== "system");
+  const finalMessages = [LANGUAGE_SYSTEM_PROMPT, ...filteredMessages];
+
+  // If any message includes an image, use Groq's vision-capable model
+  const hasImage = finalMessages.some(
     (m) => Array.isArray(m.content) && m.content.some((part) => part.type === "image_url")
   );
   const model = hasImage ? "qwen/qwen3.6-27b" : "openai/gpt-oss-20b";
@@ -32,34 +58,4 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.7,
-        max_tokens: 1024
-      })
-    });
-
-    if (!groqRes.ok) {
-      const errBody = await groqRes.text();
-      console.error("Groq API error:", errBody);
-      let message = "Groq API request failed";
-      try {
-        message = JSON.parse(errBody)?.error?.message || message;
-      } catch (_) {
-        /* errBody wasn't JSON — keep the generic message */
-      }
-      return res.status(groqRes.status).json({ error: message });
-    }
-
-    const data = await groqRes.json();
-    const reply = data.choices?.[0]?.message?.content ?? "";
-
-    return res.status(200).json({ reply });
-  } catch (err) {
-    console.error("Server error:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-}
+        Authorization: `Bearer
