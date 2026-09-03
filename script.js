@@ -8,15 +8,6 @@ const fileInput = document.getElementById("file-input");
 const attachBtn = document.getElementById("attach-btn");
 const attachmentPreview = document.getElementById("attachment-preview");
 
-const attachMenu = document.getElementById("attach-menu");
-const menuAddFiles = document.getElementById("menu-add-files");
-const menuScreenshot = document.getElementById("menu-screenshot");
-const menuAddProject = document.getElementById("menu-add-project");
-const menuWebSearch = document.getElementById("menu-web-search");
-const webSearchCheck = document.getElementById("web-search-check");
-
-let webSearchEnabled = false;
-
 const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const sidebarClose = document.getElementById("sidebar-close");
@@ -313,98 +304,9 @@ function setLoading(isLoading) {
   if (isLoading) scrollToBottom();
 }
 
-// ---------- Plus menu ----------
-// Visibility is controlled directly via inline style (not just a CSS class),
-// so a CSS load/caching issue can never leave this menu stuck open, and a
-// missing element can never crash the rest of the script (every handler is
-// guarded with an `if`).
-
-function hideAttachMenu() {
-  if (attachMenu) attachMenu.style.display = "none";
-}
-
-function showAttachMenu() {
-  if (attachMenu) attachMenu.style.display = "block";
-}
-
-// Force it hidden the instant the script runs, regardless of CSS state
-hideAttachMenu();
-
-if (attachBtn && attachMenu) {
-  attachBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isHidden = attachMenu.style.display === "none" || attachMenu.style.display === "";
-    if (isHidden) {
-      showAttachMenu();
-    } else {
-      hideAttachMenu();
-    }
-  });
-
-  document.addEventListener("click", (e) => {
-    if (attachMenu.style.display !== "none" && !attachMenu.contains(e.target) && e.target !== attachBtn) {
-      hideAttachMenu();
-    }
-  });
-}
-
-if (menuAddFiles) {
-  menuAddFiles.addEventListener("click", () => {
-    hideAttachMenu();
-    fileInput.click();
-  });
-}
-
-if (menuScreenshot) {
-  menuScreenshot.addEventListener("click", async () => {
-    hideAttachMenu();
-
-    if (!navigator.mediaDevices?.getDisplayMedia) {
-      addMessage("bot", "⚠️ Screenshot capture isn't supported in this browser.");
-      return;
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-      const track = stream.getVideoTracks()[0];
-
-      const video = document.createElement("video");
-      video.srcObject = stream;
-      await video.play();
-      await new Promise((r) => setTimeout(r, 200));
-
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
-
-      track.stop();
-
-      const dataUrl = canvas.toDataURL("image/png");
-      pendingAttachment = { kind: "image", name: `screenshot-${Date.now()}.png`, dataUrl };
-      renderAttachmentPreview();
-    } catch (err) {
-      console.warn("Screenshot capture cancelled or failed:", err);
-    }
-  });
-}
-
-if (menuAddProject) {
-  menuAddProject.addEventListener("click", () => {
-    hideAttachMenu();
-    addMessage("bot", "📁 \"Add to project\" isn't wired up yet — there's no project/workspace feature in Wazeer at the moment.");
-  });
-}
-
-if (menuWebSearch) {
-  menuWebSearch.addEventListener("click", () => {
-    webSearchEnabled = !webSearchEnabled;
-    if (webSearchCheck) webSearchCheck.classList.toggle("on", webSearchEnabled);
-    hideAttachMenu();
-  });
-}
-
 // ---------- File attach handling ----------
+
+attachBtn.addEventListener("click", () => fileInput.click());
 
 fileInput.addEventListener("change", async () => {
   const file = fileInput.files?.[0];
@@ -542,17 +444,6 @@ function clearAttachment() {
   attachBtn.classList.remove("has-file");
 }
 
-// ---------- Web search ----------
-
-async function fetchWebContext(query) {
-  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-  if (!res.ok) {
-    throw new Error(`Search failed (${res.status})`);
-  }
-  const data = await res.json();
-  return data.context || "";
-}
-
 // ---------- Sending ----------
 
 async function sendMessage(userText) {
@@ -592,4 +483,58 @@ async function sendMessage(userText) {
   if (wasFirstUserMessage) {
     conv.title = titleFromText(displayText || attachment?.name || "New chat");
   }
-  conv.updatedAt =
+  conv.updatedAt = Date.now();
+  saveState();
+  renderSidebar();
+  setLoading(true);
+
+  try {
+    // Strip UI-only fields before sending to the API
+    const apiMessages = conv.messages.map((m) => ({ role: m.role, content: m.content }));
+
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: apiMessages })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      let message = `Request failed with ${res.status}`;
+      try {
+        message = JSON.parse(errText)?.error || message;
+      } catch (_) {
+        if (errText) message = errText;
+      }
+      throw new Error(message);
+    }
+
+    const data = await res.json();
+    const reply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
+
+    conv.messages.push({ role: "assistant", content: reply });
+    conv.updatedAt = Date.now();
+    saveState();
+    renderSidebar();
+    addMessage("bot", reply);
+  } catch (err) {
+    console.error(err);
+    addMessage("bot", `⚠️ ${err.message || "Something went wrong reaching the model."}`);
+  } finally {
+    setLoading(false);
+  }
+}
+
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text && !pendingAttachment) return;
+
+  chatInput.value = "";
+  sendMessage(text);
+});
+
+// ---------- Init ----------
+
+renderChatWindow();
+renderSidebar();
