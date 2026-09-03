@@ -314,65 +314,95 @@ function setLoading(isLoading) {
 }
 
 // ---------- Plus menu ----------
+// Visibility is controlled directly via inline style (not just a CSS class),
+// so a CSS load/caching issue can never leave this menu stuck open, and a
+// missing element can never crash the rest of the script (every handler is
+// guarded with an `if`).
 
-attachBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  attachMenu.classList.toggle("hidden");
-});
+function hideAttachMenu() {
+  if (attachMenu) attachMenu.style.display = "none";
+}
 
-document.addEventListener("click", (e) => {
-  if (!attachMenu.classList.contains("hidden") && !attachMenu.contains(e.target) && e.target !== attachBtn) {
-    attachMenu.classList.add("hidden");
-  }
-});
+function showAttachMenu() {
+  if (attachMenu) attachMenu.style.display = "block";
+}
 
-menuAddFiles.addEventListener("click", () => {
-  attachMenu.classList.add("hidden");
-  fileInput.click();
-});
+// Force it hidden the instant the script runs, regardless of CSS state
+hideAttachMenu();
 
-menuScreenshot.addEventListener("click", async () => {
-  attachMenu.classList.add("hidden");
+if (attachBtn && attachMenu) {
+  attachBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isHidden = attachMenu.style.display === "none" || attachMenu.style.display === "";
+    if (isHidden) {
+      showAttachMenu();
+    } else {
+      hideAttachMenu();
+    }
+  });
 
-  if (!navigator.mediaDevices?.getDisplayMedia) {
-    addMessage("bot", "⚠️ Screenshot capture isn't supported in this browser.");
-    return;
-  }
+  document.addEventListener("click", (e) => {
+    if (attachMenu.style.display !== "none" && !attachMenu.contains(e.target) && e.target !== attachBtn) {
+      hideAttachMenu();
+    }
+  });
+}
 
-  try {
-    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-    const track = stream.getVideoTracks()[0];
+if (menuAddFiles) {
+  menuAddFiles.addEventListener("click", () => {
+    hideAttachMenu();
+    fileInput.click();
+  });
+}
 
-    const video = document.createElement("video");
-    video.srcObject = stream;
-    await video.play();
-    await new Promise((r) => setTimeout(r, 200));
+if (menuScreenshot) {
+  menuScreenshot.addEventListener("click", async () => {
+    hideAttachMenu();
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      addMessage("bot", "⚠️ Screenshot capture isn't supported in this browser.");
+      return;
+    }
 
-    track.stop();
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      const track = stream.getVideoTracks()[0];
 
-    const dataUrl = canvas.toDataURL("image/png");
-    pendingAttachment = { kind: "image", name: `screenshot-${Date.now()}.png`, dataUrl };
-    renderAttachmentPreview();
-  } catch (err) {
-    console.warn("Screenshot capture cancelled or failed:", err);
-  }
-});
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      await video.play();
+      await new Promise((r) => setTimeout(r, 200));
 
-menuAddProject.addEventListener("click", () => {
-  attachMenu.classList.add("hidden");
-  addMessage("bot", "📁 \"Add to project\" isn't wired up yet — there's no project/workspace feature in Wazeer at the moment.");
-});
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
 
-menuWebSearch.addEventListener("click", () => {
-  webSearchEnabled = !webSearchEnabled;
-  webSearchCheck.classList.toggle("on", webSearchEnabled);
-  attachMenu.classList.add("hidden");
-});
+      track.stop();
+
+      const dataUrl = canvas.toDataURL("image/png");
+      pendingAttachment = { kind: "image", name: `screenshot-${Date.now()}.png`, dataUrl };
+      renderAttachmentPreview();
+    } catch (err) {
+      console.warn("Screenshot capture cancelled or failed:", err);
+    }
+  });
+}
+
+if (menuAddProject) {
+  menuAddProject.addEventListener("click", () => {
+    hideAttachMenu();
+    addMessage("bot", "📁 \"Add to project\" isn't wired up yet — there's no project/workspace feature in Wazeer at the moment.");
+  });
+}
+
+if (menuWebSearch) {
+  menuWebSearch.addEventListener("click", () => {
+    webSearchEnabled = !webSearchEnabled;
+    if (webSearchCheck) webSearchCheck.classList.toggle("on", webSearchEnabled);
+    hideAttachMenu();
+  });
+}
 
 // ---------- File attach handling ----------
 
@@ -414,3 +444,152 @@ fileInput.addEventListener("change", async () => {
   } catch (err) {
     console.error(err);
     removeLastBotStatus();
+    addMessage("bot", `⚠️ Couldn't read "${file.name}". ${err.message || "Try a different file."}`);
+  }
+});
+
+function setAttachmentFromText(name, text) {
+  const truncated = text.length > MAX_TEXT_CHARS;
+  pendingAttachment = {
+    kind: "text",
+    name,
+    content: text.slice(0, MAX_TEXT_CHARS),
+    truncated
+  };
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(file);
+  });
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function extractPdfText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let text = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map((item) => item.str).join(" ") + "\n\n";
+    if (text.length > MAX_TEXT_CHARS * 2) break; // don't parse a 300-page PDF fully
+  }
+  if (!text.trim()) {
+    throw new Error("No extractable text found (it may be a scanned/image-only PDF).");
+  }
+  return text;
+}
+
+async function extractDocxText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  if (!result.value.trim()) {
+    throw new Error("No extractable text found in this document.");
+  }
+  return result.value;
+}
+
+function renderAttachmentPreview() {
+  attachmentPreview.innerHTML = "";
+  attachmentPreview.classList.remove("hidden");
+  attachBtn.classList.add("has-file");
+
+  if (pendingAttachment.kind === "image") {
+    const thumb = document.createElement("img");
+    thumb.src = pendingAttachment.dataUrl;
+    thumb.className = "thumb";
+    attachmentPreview.appendChild(thumb);
+  } else {
+    const icon = document.createElement("div");
+    icon.className = "file-icon";
+    const ext = pendingAttachment.name.split(".").pop()?.toUpperCase().slice(0, 4) || "FILE";
+    icon.textContent = ext;
+    attachmentPreview.appendChild(icon);
+  }
+
+  const name = document.createElement("div");
+  name.className = "file-name";
+  name.textContent = pendingAttachment.truncated
+    ? `${pendingAttachment.name} (truncated to fit)`
+    : pendingAttachment.name;
+  attachmentPreview.appendChild(name);
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "remove-file";
+  removeBtn.setAttribute("aria-label", "Remove attachment");
+  removeBtn.textContent = "✕";
+  removeBtn.addEventListener("click", clearAttachment);
+  attachmentPreview.appendChild(removeBtn);
+}
+
+function clearAttachment() {
+  pendingAttachment = null;
+  attachmentPreview.classList.add("hidden");
+  attachmentPreview.innerHTML = "";
+  attachBtn.classList.remove("has-file");
+}
+
+// ---------- Web search ----------
+
+async function fetchWebContext(query) {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  if (!res.ok) {
+    throw new Error(`Search failed (${res.status})`);
+  }
+  const data = await res.json();
+  return data.context || "";
+}
+
+// ---------- Sending ----------
+
+async function sendMessage(userText) {
+  const conv = getActive();
+  const attachment = pendingAttachment;
+  clearAttachment();
+
+  let apiContent = userText;
+  let displayText = userText;
+  let attachmentMeta = null;
+
+  if (attachment?.kind === "image") {
+    apiContent = [
+      { type: "text", text: userText || "Describe this image." },
+      { type: "image_url", image_url: { url: attachment.dataUrl } }
+    ];
+    attachmentMeta = { kind: "image", name: attachment.name, dataUrl: attachment.dataUrl };
+  } else if (attachment?.kind === "text") {
+    const label = attachment.truncated
+      ? `(truncated to ${MAX_TEXT_CHARS} characters)`
+      : "";
+    apiContent = `Attached file "${attachment.name}" ${label}:\n\`\`\`\n${attachment.content}\n\`\`\`\n\n${userText || "Please review the attached file."}`;
+    attachmentMeta = { kind: "text", name: attachment.name };
+  }
+
+  addMessage("user", displayText, attachmentMeta);
+
+  const wasFirstUserMessage = !conv.messages.some((m) => m.role === "user");
+
+  conv.messages.push({
+    role: "user",
+    content: apiContent,
+    displayText,
+    attachmentMeta
+  });
+
+  if (wasFirstUserMessage) {
+    conv.title = titleFromText(displayText || attachment?.name || "New chat");
+  }
+  conv.updatedAt =
