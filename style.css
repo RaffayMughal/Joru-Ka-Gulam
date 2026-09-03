@@ -16,110 +16,42 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: var(--bg); /* Solid fallback */
+  background-color: var(--bg);
   color: var(--text);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
 }
 
-/* ── LIVE ANIMATED CSS BACKGROUND ── */
-.live-bg-gradient {
+/* ── LIVE VIDEO BACKGROUND ── */
+.video-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: -2;
+  object-fit: cover;
+  filter: brightness(0.3) saturate(1.2); /* Dims video heavily so text is readable */
+}
+
+.video-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -2; /* Behind everything */
-  background: linear-gradient(-45deg, #0b0b12, #1a1025, #0d1b2a, #160b12);
-  background-size: 400% 400%;
-  animation: gradientShift 20s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ── Animated background orbs ── */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.6;
-  z-index: -1; /* Above gradient, below app */
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(11, 11, 18, 0.9) 100%);
+  z-index: -1;
   pointer-events: none;
-  will-change: transform;
-  animation-fill-mode: both;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-.orb-1 {
-  width: 520px;
-  height: 520px;
-  top: -160px;
-  left: -140px;
-  background: radial-gradient(circle at 30% 30%, #7c5cff, transparent 70%);
-  animation-name: float1;
-  animation-duration: 12s;
-}
-
-.orb-2 {
-  width: 460px;
-  height: 460px;
-  bottom: -160px;
-  right: -120px;
-  background: radial-gradient(circle at 40% 40%, #ff5c8a, transparent 70%);
-  animation-name: float2;
-  animation-duration: 15s;
-}
-
-.orb-3 {
-  width: 400px;
-  height: 400px;
-  top: 35%;
-  left: 55%;
-  background: radial-gradient(circle at 50% 50%, #34e0d0, transparent 70%);
-  animation-name: float3;
-  animation-duration: 18s;
-}
-
-@keyframes float1 {
-  0%   { transform: translate(0px,   0px)  scale(1);    }
-  25%  { transform: translate(70px,  50px) scale(1.1);  }
-  50%  { transform: translate(40px,  90px) scale(1.18); }
-  75%  { transform: translate(-30px, 60px) scale(1.05); }
-  100% { transform: translate(0px,   0px)  scale(1);    }
-}
-@keyframes float2 {
-  0%   { transform: translate(0px,    0px)   scale(1);    }
-  25%  { transform: translate(-60px, -40px)  scale(1.12); }
-  50%  { transform: translate(-90px, -80px)  scale(1.08); }
-  75%  { transform: translate(-40px, -30px)  scale(1.15); }
-  100% { transform: translate(0px,    0px)   scale(1);    }
-}
-@keyframes float3 {
-  0%   { transform: translate(0px,   0px)  scale(1);    }
-  33%  { transform: translate(-50px, 70px) scale(0.88); }
-  66%  { transform: translate(40px,  50px) scale(1.1);  }
-  100% { transform: translate(0px,   0px)  scale(1);    }
-}
-
-.noise-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity: 0.5;
 }
 
 /* ── App layout ── */
 .app {
   position: relative;
-  z-index: 10; /* FORCED HIGH Z-INDEX so chat box is always visible */
+  z-index: 999; /* FORCED HIGH so chat is always visible over video */
   height: 100vh;
   width: 100%;
   display: flex;
@@ -146,10 +78,10 @@ html, body {
   flex-direction: column;
   gap: 10px;
   padding: 18px 12px;
-  background: rgba(15, 15, 20, 0.4);
+  background: rgba(15, 15, 20, 0.6); /* Slightly more opaque for video bg */
   border-right: 1px solid var(--glass-border);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   transition: transform 0.25s ease;
 }
 
@@ -258,7 +190,7 @@ html, body {
   .main-col { padding: 12px 8px; }
 }
 
-/* ── Header ── */
+/* ── Header ─ */
 .app-header {
   display: flex;
   align-items: center;
@@ -365,7 +297,7 @@ html, body {
 .chat-shell {
   flex: 1;
   display: flex; flex-direction: column;
-  background: rgba(20, 20, 25, 0.45);
+  background: rgba(20, 20, 25, 0.6); /* Slightly more opaque for video bg */
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   backdrop-filter: blur(24px);
@@ -385,7 +317,7 @@ html, body {
 .chat-window::-webkit-scrollbar { width: 6px; }
 .chat-window::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 
-/* ── Messages ─ */
+/* ── Messages ── */
 .message {
   display: flex; gap: 10px; max-width: 85%;
   animation: rise 0.25s ease;
