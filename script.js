@@ -8,7 +8,17 @@ const fileInput = document.getElementById("file-input");
 const attachBtn = document.getElementById("attach-btn");
 const attachmentPreview = document.getElementById("attachment-preview");
 
-const STORAGE_KEY = "wazeer_chat_history";
+const sidebar = document.getElementById("sidebar");
+const sidebarToggle = document.getElementById("sidebar-toggle");
+const sidebarClose = document.getElementById("sidebar-close");
+const sidebarOverlay = document.getElementById("sidebar-overlay");
+const newChatBtn = document.getElementById("new-chat-btn");
+const conversationList = document.getElementById("conversation-list");
+
+const CONVERSATIONS_KEY = "wazeer_conversations";
+const ACTIVE_ID_KEY = "wazeer_active_id";
+const LEGACY_KEY = "wazeer_chat_history"; // single-conversation format from an earlier version
+
 const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant." };
 const GREETING = "Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.";
 
@@ -16,32 +26,204 @@ const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5MB
 const MAX_TEXT_CHARS = 12000; // truncate huge text files before sending to the model
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
-// Keep a running history so the model has context.
-// Persisted to localStorage so a refresh doesn't lose the conversation.
-let history = loadHistory();
 let pendingAttachment = null; // { kind: "text"|"image", name, content|dataUrl }
 
-function loadHistory() {
+// ---------- Conversation state ----------
+
+function uid() {
+  return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function newConversation() {
+  const now = Date.now();
+  return {
+    id: uid(),
+    title: "New chat",
+    createdAt: now,
+    updatedAt: now,
+    messages: [SYSTEM_PROMPT]
+  };
+}
+
+function loadState() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (Array.isArray(saved) && saved.length) return saved;
+    const saved = JSON.parse(localStorage.getItem(CONVERSATIONS_KEY));
+    if (Array.isArray(saved) && saved.length) {
+      const activeId = localStorage.getItem(ACTIVE_ID_KEY);
+      const active = saved.find((c) => c.id === activeId) ? activeId : saved[0].id;
+      return { conversations: saved, activeId: active };
+    }
   } catch (_) {
     /* ignore corrupt storage */
   }
-  return [SYSTEM_PROMPT];
+
+  // Migrate the old single-conversation format if present
+  try {
+    const legacy = JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if (Array.isArray(legacy) && legacy.some((m) => m.role !== "system")) {
+      const conv = newConversation();
+      conv.messages = legacy;
+      const firstUser = legacy.find((m) => m.role === "user");
+      if (firstUser) conv.title = titleFromText(firstUser.displayText ?? firstUser.content);
+      localStorage.removeItem(LEGACY_KEY);
+      return { conversations: [conv], activeId: conv.id };
+    }
+  } catch (_) {
+    /* ignore */
+  }
+
+  const conv = newConversation();
+  return { conversations: [conv], activeId: conv.id };
 }
 
-function saveHistory() {
+let { conversations, activeId } = loadState();
+
+function saveState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+    localStorage.setItem(ACTIVE_ID_KEY, activeId);
   } catch (_) {
     /* storage full (e.g. big base64 images) — chat still works, just won't persist */
   }
 }
 
-function renderHistory() {
+function getActive() {
+  return conversations.find((c) => c.id === activeId) || conversations[0];
+}
+
+function titleFromText(text) {
+  if (!text) return "New chat";
+  const clean = text.trim().replace(/\s+/g, " ");
+  return clean.length > 40 ? `${clean.slice(0, 40)}…` : clean;
+}
+
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(ts).toLocaleDateString();
+}
+
+// ---------- Sidebar ----------
+
+function renderSidebar() {
+  conversationList.innerHTML = "";
+
+  if (conversations.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "conversation-empty";
+    empty.textContent = "No conversations yet";
+    conversationList.appendChild(empty);
+    return;
+  }
+
+  const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
+
+  sorted.forEach((conv) => {
+    const item = document.createElement("div");
+    item.className = `conversation-item${conv.id === activeId ? " active" : ""}`;
+
+    const title = document.createElement("div");
+    title.className = "conv-title";
+    title.textContent = conv.title || "New chat";
+    title.title = `${conv.title || "New chat"} · ${timeAgo(conv.updatedAt)}`;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "conv-delete";
+    deleteBtn.setAttribute("aria-label", "Delete conversation");
+    deleteBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteConversation(conv.id);
+    });
+
+    item.appendChild(title);
+    item.appendChild(deleteBtn);
+    item.addEventListener("click", () => switchConversation(conv.id));
+    conversationList.appendChild(item);
+  });
+}
+
+function switchConversation(id) {
+  if (id === activeId) {
+    closeSidebarOnMobile();
+    return;
+  }
+  activeId = id;
+  saveState();
+  clearAttachment();
+  renderChatWindow();
+  renderSidebar();
+  closeSidebarOnMobile();
+}
+
+function createConversation() {
+  const conv = newConversation();
+  conversations.push(conv);
+  activeId = conv.id;
+  saveState();
+  clearAttachment();
+  renderChatWindow();
+  renderSidebar();
+  closeSidebarOnMobile();
+  chatInput.focus();
+}
+
+function deleteConversation(id) {
+  conversations = conversations.filter((c) => c.id !== id);
+
+  if (conversations.length === 0) {
+    conversations = [newConversation()];
+  }
+
+  if (id === activeId) {
+    activeId = conversations[0].id;
+  }
+
+  saveState();
+  clearAttachment();
+  renderChatWindow();
+  renderSidebar();
+}
+
+newChatBtn.addEventListener("click", createConversation);
+
+// ---------- Sidebar open/close (mobile) ----------
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  sidebarOverlay.classList.remove("hidden");
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  sidebarOverlay.classList.add("hidden");
+}
+
+function closeSidebarOnMobile() {
+  if (window.innerWidth <= 860) closeSidebar();
+}
+
+sidebarToggle.addEventListener("click", () => {
+  sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
+});
+sidebarClose.addEventListener("click", closeSidebar);
+sidebarOverlay.addEventListener("click", closeSidebar);
+
+// ---------- Message rendering ----------
+
+function renderChatWindow() {
   chatWindow.innerHTML = "";
-  const visible = history.filter((m) => m.role !== "system");
+  const conv = getActive();
+  const visible = conv.messages.filter((m) => m.role !== "system");
+
   if (visible.length === 0) {
     addMessage("bot", GREETING);
     return;
@@ -52,17 +234,18 @@ function renderHistory() {
 }
 
 function clearChat() {
-  history = [SYSTEM_PROMPT];
-  saveHistory();
+  const conv = getActive();
+  conv.messages = [SYSTEM_PROMPT];
+  conv.title = "New chat";
+  conv.updatedAt = Date.now();
+  saveState();
   clearAttachment();
   chatWindow.innerHTML = "";
   addMessage("bot", GREETING);
+  renderSidebar();
 }
 
 clearBtn.addEventListener("click", clearChat);
-renderHistory();
-
-// ---------- Message rendering ----------
 
 function addMessage(role, text, attachmentMeta) {
   const wrapper = document.createElement("div");
@@ -211,6 +394,7 @@ function clearAttachment() {
 // ---------- Sending ----------
 
 async function sendMessage(userText) {
+  const conv = getActive();
   const attachment = pendingAttachment;
   clearAttachment();
 
@@ -234,18 +418,26 @@ async function sendMessage(userText) {
 
   addMessage("user", displayText, attachmentMeta);
 
-  history.push({
+  const wasFirstUserMessage = !conv.messages.some((m) => m.role === "user");
+
+  conv.messages.push({
     role: "user",
     content: apiContent,
     displayText,
     attachmentMeta
   });
-  saveHistory();
+
+  if (wasFirstUserMessage) {
+    conv.title = titleFromText(displayText || attachment?.name || "New chat");
+  }
+  conv.updatedAt = Date.now();
+  saveState();
+  renderSidebar();
   setLoading(true);
 
   try {
     // Strip UI-only fields before sending to the API
-    const apiMessages = history.map((m) => ({ role: m.role, content: m.content }));
+    const apiMessages = conv.messages.map((m) => ({ role: m.role, content: m.content }));
 
     const res = await fetch("/api/chat", {
       method: "POST",
@@ -261,8 +453,10 @@ async function sendMessage(userText) {
     const data = await res.json();
     const reply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
 
-    history.push({ role: "assistant", content: reply });
-    saveHistory();
+    conv.messages.push({ role: "assistant", content: reply });
+    conv.updatedAt = Date.now();
+    saveState();
+    renderSidebar();
     addMessage("bot", reply);
   } catch (err) {
     console.error(err);
@@ -280,3 +474,8 @@ chatForm.addEventListener("submit", (e) => {
   chatInput.value = "";
   sendMessage(text);
 });
+
+// ---------- Init ----------
+
+renderChatWindow();
+renderSidebar();
