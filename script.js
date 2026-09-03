@@ -576,6 +576,22 @@ typingIndicator.classList.add("hidden");
 renderChatWindow();
 renderSidebar();
 
+// ─ Theme Toggle Logic ──
+const themeToggleBtn = document.getElementById('theme-toggle');
+const savedTheme = localStorage.getItem('wazeer_theme');
+
+// Load saved theme
+if (savedTheme === 'light') {
+  document.body.classList.add('light-mode');
+}
+
+// Toggle theme on click
+themeToggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
+});
+
 // ---------- Plus / attach menu ----------
 
 const attachMenu = document.getElementById("attach-menu");
