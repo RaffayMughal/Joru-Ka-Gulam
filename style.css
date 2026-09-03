@@ -468,6 +468,11 @@ html, body {
 
 .bubble-text { white-space: pre-wrap; }
 
+.bubble-status {
+  opacity: 0.65;
+  font-style: italic;
+}
+
 /* Typing indicator */
 .typing-indicator {
   display: flex;
