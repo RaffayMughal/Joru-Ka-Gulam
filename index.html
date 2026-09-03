@@ -78,4 +78,55 @@
 
         <div id="attachment-preview" class="attachment-preview hidden"></div>
 
-        <form
+        <form id="chat-form" class="chat-input-row" autocomplete="off">
+          <div class="attach-wrapper">
+            <button id="attach-btn" type="button" class="plus-btn" aria-label="Add content">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+
+            <div id="attach-menu" class="attach-menu hidden">
+              <button type="button" class="attach-item" id="menu-add-files">
+                <span class="attach-icon">📎</span> Add files or photos
+              </button>
+              <button type="button" class="attach-item" id="menu-screenshot">
+                <span class="attach-icon">📷</span> Take a screenshot
+              </button>
+              <button type="button" class="attach-item" id="menu-add-project">
+                <span class="attach-icon">📁</span> Add to project
+              </button>
+              <div class="attach-divider"></div>
+              <button type="button" class="attach-item" id="menu-web-search">
+                <span class="attach-icon">🌐</span> Web search
+                <span class="attach-check" id="web-search-check"></span>
+              </button>
+            </div>
+
+            <input id="file-input" type="file" accept="image/*,.txt,.md,.csv,.json,.js,.ts,.py,.log,.html,.css,.pdf,.docx" hidden />
+          </div>
+          <input
+            id="chat-input"
+            type="text"
+            placeholder="Type a message..."
+            autocomplete="off"
+          />
+          <button id="send-btn" type="submit" aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
