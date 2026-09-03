@@ -22,7 +22,7 @@ const LEGACY_KEY = "wazeer_chat_history"; // single-conversation format from an 
 const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant." };
 const GREETING = "Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.";
 
-const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_BYTES = 8 * 1024 * 1024; // 8MB
 const MAX_TEXT_CHARS = 12000; // truncate huge text files before sending to the model
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
@@ -247,9 +247,10 @@ function clearChat() {
 
 clearBtn.addEventListener("click", clearChat);
 
-function addMessage(role, text, attachmentMeta) {
+function addMessage(role, text, attachmentMeta, isStatus) {
   const wrapper = document.createElement("div");
   wrapper.className = `message ${role === "user" ? "user" : "bot"}`;
+  if (isStatus) wrapper.dataset.status = "true";
 
   const avatar = document.createElement("div");
   avatar.className = `avatar ${role === "user" ? "user-avatar" : "bot-avatar"}`;
@@ -257,6 +258,7 @@ function addMessage(role, text, attachmentMeta) {
 
   const bubble = document.createElement("div");
   bubble.className = "bubble";
+  if (isStatus) bubble.classList.add("bubble-status");
 
   if (attachmentMeta) {
     if (attachmentMeta.kind === "image" && attachmentMeta.dataUrl) {
@@ -286,6 +288,11 @@ function addMessage(role, text, attachmentMeta) {
   scrollToBottom();
 }
 
+function removeLastBotStatus() {
+  const el = chatWindow.querySelector('[data-status="true"]');
+  if (el) el.remove();
+}
+
 function scrollToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
@@ -307,30 +314,51 @@ fileInput.addEventListener("change", async () => {
   if (!file) return;
 
   if (file.size > MAX_FILE_BYTES) {
-    addMessage("bot", `⚠️ "${file.name}" is over the 5MB limit. Try a smaller file.`);
+    addMessage("bot", `⚠️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit. Try a smaller file.`);
     return;
   }
+
+  const lowerName = file.name.toLowerCase();
+  const isPdf = file.type === "application/pdf" || lowerName.endsWith(".pdf");
+  const isDocx =
+    file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    lowerName.endsWith(".docx");
 
   try {
     if (IMAGE_TYPES.includes(file.type)) {
       const dataUrl = await readFileAsDataURL(file);
       pendingAttachment = { kind: "image", name: file.name, dataUrl };
+    } else if (isPdf) {
+      addMessage("bot", `Reading "${file.name}"…`, null, true);
+      const text = await extractPdfText(file);
+      setAttachmentFromText(file.name, text);
+      removeLastBotStatus();
+    } else if (isDocx) {
+      addMessage("bot", `Reading "${file.name}"…`, null, true);
+      const text = await extractDocxText(file);
+      setAttachmentFromText(file.name, text);
+      removeLastBotStatus();
     } else {
       const text = await readFileAsText(file);
-      const truncated = text.length > MAX_TEXT_CHARS;
-      pendingAttachment = {
-        kind: "text",
-        name: file.name,
-        content: text.slice(0, MAX_TEXT_CHARS),
-        truncated
-      };
+      setAttachmentFromText(file.name, text);
     }
     renderAttachmentPreview();
   } catch (err) {
     console.error(err);
-    addMessage("bot", `⚠️ Couldn't read "${file.name}". Try a plain text file or an image.`);
+    removeLastBotStatus();
+    addMessage("bot", `⚠️ Couldn't read "${file.name}". ${err.message || "Try a different file."}`);
   }
 });
+
+function setAttachmentFromText(name, text) {
+  const truncated = text.length > MAX_TEXT_CHARS;
+  pendingAttachment = {
+    kind: "text",
+    name,
+    content: text.slice(0, MAX_TEXT_CHARS),
+    truncated
+  };
+}
 
 function readFileAsText(file) {
   return new Promise((resolve, reject) => {
@@ -348,6 +376,31 @@ function readFileAsDataURL(file) {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
+}
+
+async function extractPdfText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let text = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map((item) => item.str).join(" ") + "\n\n";
+    if (text.length > MAX_TEXT_CHARS * 2) break; // don't parse a 300-page PDF fully
+  }
+  if (!text.trim()) {
+    throw new Error("No extractable text found (it may be a scanned/image-only PDF).");
+  }
+  return text;
+}
+
+async function extractDocxText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  if (!result.value.trim()) {
+    throw new Error("No extractable text found in this document.");
+  }
+  return result.value;
 }
 
 function renderAttachmentPreview() {
