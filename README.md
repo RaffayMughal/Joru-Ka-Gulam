@@ -5,10 +5,11 @@ A Vercel-native chatbot: a static frontend (`index.html`, `style.css`, `script.j
 ## ✨ Features
 
 - Animated gradient background orbs + glassmorphism chat panel
+- Left sidebar with conversation history — start new chats, switch between past ones, delete any of them
 - Typing indicator and smooth message animations
 - Full conversation history sent with each request for context
-- Chat history persists across page refreshes (stored in the browser's `localStorage`)
-- "Clear" button in the header wipes the conversation and starts fresh
+- All conversations persist across page refreshes (stored in the browser's `localStorage`)
+- "Clear" button resets the current conversation; the sidebar keeps the rest
 - 📎 File upload: attach images (auto-routed to a vision model) or text-based files (`.txt`, `.md`, `.csv`, `.json`, `.js`, `.py`, `.log`, `.html`, `.css`) — up to 5MB
 - Groq-powered responses via the OpenAI-compatible `/chat/completions` endpoint
 
