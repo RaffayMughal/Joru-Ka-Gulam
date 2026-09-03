@@ -20,7 +20,7 @@ const ACTIVE_ID_KEY = "wazeer_active_id";
 const LEGACY_KEY = "wazeer_chat_history";
 
 const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant. Never use markdown symbols like **, *, #, ##, or - in your responses. Write in plain text only." };
-const GREETING = "Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.";
+const GREETING = "Hey! I'm Wazeer 👋 Ask me anything, I'll treat you as my Badshah.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const MAX_TEXT_CHARS = 12000;
