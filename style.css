@@ -22,10 +22,11 @@ html, body {
   overflow: hidden;
 }
 
-/* ---------- Plus menu (kept at top so it always wins the cascade) ---------- */
+/* ---------- Plus menu ---------- */
 .attach-wrapper {
   position: relative;
   flex-shrink: 0;
+  z-index: 10;
 }
 
 .plus-btn {
@@ -40,6 +41,8 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
+  position: relative;
+  z-index: 10;
 }
 
 .plus-btn svg { width: 18px; height: 18px; }
@@ -69,7 +72,6 @@ html, body {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  /* display is controlled by JS inline style — starts hidden via script.js on load */
 }
 
 .attach-item {
@@ -87,6 +89,7 @@ html, body {
   text-align: left;
   cursor: pointer;
   position: relative;
+  z-index: 10;
   transition: background 0.15s;
 }
 
@@ -120,7 +123,7 @@ html, body {
   filter: blur(80px);
   opacity: 0.55;
   z-index: 0;
-  pointer-events: none;
+  pointer-events: none !important;
   will-change: transform;
 }
 
@@ -168,7 +171,7 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 1;
-  pointer-events: none;
+  pointer-events: none !important;
   background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 3px 3px;
   opacity: 0.5;
@@ -193,6 +196,8 @@ html, body {
   margin: 0 auto;
   width: 100%;
   padding: 24px 16px;
+  position: relative;
+  z-index: 2;
 }
 
 /* ---------- Sidebar ---------- */
@@ -209,6 +214,8 @@ html, body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: transform 0.25s ease;
+  position: relative;
+  z-index: 5;
 }
 
 .sidebar-header {
@@ -232,6 +239,8 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
+  position: relative;
+  z-index: 5;
 }
 
 .icon-btn svg { width: 18px; height: 18px; }
@@ -258,6 +267,8 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  z-index: 5;
 }
 
 .new-chat-btn svg { width: 16px; height: 16px; }
@@ -295,6 +306,7 @@ html, body {
   color: var(--text-dim);
   transition: background 0.15s, color 0.15s;
   position: relative;
+  z-index: 5;
 }
 
 .conversation-item:hover {
@@ -349,10 +361,7 @@ html, body {
   text-align: center;
 }
 
-.sidebar-overlay {
-  display: none;
-}
-
+.sidebar-overlay { display: none; }
 .sidebar-overlay.hidden { display: none; }
 
 @media (max-width: 860px) {
@@ -386,6 +395,8 @@ html, body {
   align-items: center;
   gap: 10px;
   padding: 4px 8px 18px;
+  position: relative;
+  z-index: 3;
 }
 
 .tagline { flex: 1; }
@@ -403,6 +414,8 @@ html, body {
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, transform 0.15s;
+  position: relative;
+  z-index: 3;
 }
 
 .clear-btn svg { width: 14px; height: 14px; }
@@ -438,6 +451,7 @@ html, body {
   color: var(--text-dim);
 }
 
+/* ---------- Chat shell ---------- */
 .chat-shell {
   flex: 1;
   display: flex;
@@ -449,6 +463,8 @@ html, body {
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  position: relative;
+  z-index: 3;
 }
 
 .chat-window {
@@ -459,6 +475,8 @@ html, body {
   flex-direction: column;
   gap: 16px;
   scroll-behavior: smooth;
+  position: relative;
+  z-index: 3;
 }
 
 .chat-window::-webkit-scrollbar { width: 6px; }
@@ -467,6 +485,7 @@ html, body {
   border-radius: 10px;
 }
 
+/* ---------- Messages ---------- */
 .message {
   display: flex;
   gap: 10px;
@@ -513,6 +532,7 @@ html, body {
   line-height: 1.5;
   word-wrap: break-word;
   white-space: pre-wrap;
+  color: var(--text);
 }
 
 .bubble img.msg-image {
@@ -528,11 +548,12 @@ html, body {
   background: var(--bot-bubble);
   border: 1px solid var(--glass-border);
   border-top-left-radius: 4px;
+  color: var(--text);
 }
 
 .message.user .bubble {
   background: var(--user-bubble);
-  color: white;
+  color: #ffffff;
   border-top-right-radius: 4px;
 }
 
@@ -564,7 +585,7 @@ html, body {
   font-style: italic;
 }
 
-/* Typing indicator */
+/* ---------- Typing indicator ---------- */
 .typing-indicator {
   display: flex;
   gap: 10px;
@@ -581,6 +602,7 @@ html, body {
   border: 1px solid var(--glass-border);
   border-top-left-radius: 4px;
   padding: 14px 16px;
+  border-radius: 16px;
 }
 
 .typing-bubble span {
@@ -598,7 +620,7 @@ html, body {
   40% { opacity: 1; transform: scale(1); }
 }
 
-/* Input row */
+/* ---------- Input row ---------- */
 .chat-input-row {
   display: flex;
   align-items: center;
@@ -606,6 +628,8 @@ html, body {
   padding: 14px;
   border-top: 1px solid var(--glass-border);
   background: rgba(255,255,255,0.02);
+  position: relative;
+  z-index: 10;
 }
 
 .attachment-preview {
@@ -619,6 +643,8 @@ html, body {
   border-radius: 12px;
   font-size: 13px;
   color: var(--text-dim);
+  position: relative;
+  z-index: 10;
 }
 
 .attachment-preview.hidden { display: none; }
@@ -676,6 +702,8 @@ html, body {
   font-size: 14.5px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  z-index: 10;
 }
 
 #chat-input:focus {
@@ -698,6 +726,8 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  z-index: 10;
 }
 
 #send-btn svg { width: 18px; height: 18px; }
@@ -710,6 +740,15 @@ html, body {
 #send-btn:active { transform: translateY(0); }
 #send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ---------- Scrollbar ---------- */
+.chat-window::-webkit-scrollbar { width: 6px; }
+.chat-window::-webkit-scrollbar-track { background: transparent; }
+.chat-window::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+/* ---------- Mobile ---------- */
 @media (max-width: 480px) {
   .app { padding: 12px 8px; }
   .message { max-width: 92%; }
