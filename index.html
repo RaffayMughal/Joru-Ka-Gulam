@@ -79,8 +79,7 @@
     </aside>
 
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
-
-    <!-- Main -->
+        <!-- Main -->
     <div class="main-col">
       <header class="app-header">
 
@@ -131,6 +130,12 @@
             </div>
           </div>
         </div>
+
+        <!-- NEW THEME TOGGLE BUTTON -->
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" style="display:none;"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
 
         <button id="clear-btn" class="clear-btn" type="button" aria-label="Clear chat">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -183,8 +188,7 @@
       </main>
     </div>
   </div>
-
-  <script>
+    <script>
     // ── Notification bell ──
     const notifBtn = document.getElementById('notif-btn');
     const notifPanel = document.getElementById('notif-panel');
@@ -246,12 +250,31 @@
       document.getElementById('thinking-steps').innerHTML = '';
       document.getElementById('typing-indicator').classList.add('hidden');
     };
+
+    // ── Theme Toggle Logic ──
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('wazeer_theme');
+
+    // Load saved theme on startup
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+    }
+
+    // Toggle theme on click
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
+    });
   </script>
 
+  <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+  
+  <!-- Main Chat Logic -->
   <script src="script.js"></script>
 </body>
 </html>
