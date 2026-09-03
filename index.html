@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=6" />
+<link rel="stylesheet" href="style.css?v=8" />
 </head>
 <body>
 
@@ -76,6 +76,13 @@
               </div>
             </div>
             <div class="notif-item">
+              <div class="notif-icon">🌍</div>
+              <div class="notif-text">
+                <div class="notif-title">Multi-language support</div>
+                <div class="notif-desc">Talk in any language — Wazeer replies in the same one.</div>
+              </div>
+            </div>
+            <div class="notif-item">
               <div class="notif-icon">📎</div>
               <div class="notif-text">
                 <div class="notif-title">File upload supported</div>
@@ -96,8 +103,7 @@
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
             <div class="bubble">
-              <!-- Removed typing-text class so it doesn't trigger script.js -->
-              <div class="bubble-text">Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.</div>
+              <div class="bubble-text">Assalamu Alaikum! Main hoon Wazeer 🤖 Aap ka apna AI assistant. Aap mujhse kisi bhi zabaan mein baat kar sakte hain — main usi zabaan mein jawab doonga!</div>
             </div>
           </div>
         </div>
@@ -154,7 +160,7 @@
     // ── Thinking animation (called by script.js only when loading) ──
     const THINKING_STEPS = [
       "Reading your message",
-      "Searching knowledge",
+      "Detecting language",
       "Forming a response",
       "Almost ready"
     ];
@@ -165,7 +171,6 @@
       const stepsEl   = document.getElementById('thinking-steps');
       const labelEl   = document.getElementById('thinking-label-text');
 
-      // make sure typing dots are hidden
       document.getElementById('typing-indicator').classList.add('hidden');
 
       indicator.classList.remove('hidden');
@@ -174,7 +179,6 @@
 
       let i = 0;
       function addStep() {
-        // mark previous as done
         const prev = stepsEl.querySelector('.thinking-step.active');
         if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
 
@@ -187,7 +191,6 @@
           _thinkingTimer = setTimeout(addStep, 650);
         } else {
           labelEl.textContent = 'Responding...';
-          // switch to typing dots after steps finish
           setTimeout(() => {
             indicator.classList.add('hidden');
             document.getElementById('typing-indicator').classList.remove('hidden');
