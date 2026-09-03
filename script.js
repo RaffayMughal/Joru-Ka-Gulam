@@ -17,16 +17,32 @@ const conversationList = document.getElementById("conversation-list");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
 const ACTIVE_ID_KEY = "wazeer_active_id";
-const LEGACY_KEY = "wazeer_chat_history"; // single-conversation format from an earlier version
+const LEGACY_KEY = "wazeer_chat_history";
 
-const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant." };
+const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant. Never use markdown symbols like **, *, #, ##, or - in your responses. Write in plain text only." };
 const GREETING = "Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.";
 
-const MAX_FILE_BYTES = 8 * 1024 * 1024; // 8MB
-const MAX_TEXT_CHARS = 12000; // truncate huge text files before sending to the model
+const MAX_FILE_BYTES = 8 * 1024 * 1024;
+const MAX_TEXT_CHARS = 12000;
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
-let pendingAttachment = null; // { kind: "text"|"image", name, content|dataUrl }
+let pendingAttachment = null;
+
+// ---------- Clean markdown from bot replies ----------
+
+function cleanText(text) {
+  return text
+    .replace(/#{1,6}\s*/g, '')           // remove # headings
+    .replace(/\*\*(.*?)\*\*/gs, '$1')    // remove **bold**
+    .replace(/\*(.*?)\*/gs, '$1')        // remove *italic*
+    .replace(/^[\-\*]\s+/gm, '')         // remove - or * bullet points
+    .replace(/^•\s+/gm, '')             // remove • bullets
+    .replace(/`{3}[\s\S]*?`{3}/g, '')   // remove ```code blocks```
+    .replace(/`([^`]+)`/g, '$1')         // remove `inline code`
+    .replace(/_{1,2}(.*?)_{1,2}/g, '$1') // remove _italic_ or __bold__
+    .replace(/\n{3,}/g, '\n\n')          // collapse excessive blank lines
+    .trim();
+}
 
 // ---------- Conversation state ----------
 
@@ -53,11 +69,8 @@ function loadState() {
       const active = saved.find((c) => c.id === activeId) ? activeId : saved[0].id;
       return { conversations: saved, activeId: active };
     }
-  } catch (_) {
-    /* ignore corrupt storage */
-  }
+  } catch (_) {}
 
-  // Migrate the old single-conversation format if present
   try {
     const legacy = JSON.parse(localStorage.getItem(LEGACY_KEY));
     if (Array.isArray(legacy) && legacy.some((m) => m.role !== "system")) {
@@ -68,9 +81,7 @@ function loadState() {
       localStorage.removeItem(LEGACY_KEY);
       return { conversations: [conv], activeId: conv.id };
     }
-  } catch (_) {
-    /* ignore */
-  }
+  } catch (_) {}
 
   const conv = newConversation();
   return { conversations: [conv], activeId: conv.id };
@@ -82,9 +93,7 @@ function saveState() {
   try {
     localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
     localStorage.setItem(ACTIVE_ID_KEY, activeId);
-  } catch (_) {
-    /* storage full (e.g. big base64 images) — chat still works, just won't persist */
-  }
+  } catch (_) {}
 }
 
 function getActive() {
@@ -310,7 +319,7 @@ attachBtn.addEventListener("click", () => fileInput.click());
 
 fileInput.addEventListener("change", async () => {
   const file = fileInput.files?.[0];
-  fileInput.value = ""; // allow re-selecting the same file later
+  fileInput.value = "";
   if (!file) return;
 
   if (file.size > MAX_FILE_BYTES) {
@@ -386,7 +395,7 @@ async function extractPdfText(file) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
     text += content.items.map((item) => item.str).join(" ") + "\n\n";
-    if (text.length > MAX_TEXT_CHARS * 2) break; // don't parse a 300-page PDF fully
+    if (text.length > MAX_TEXT_CHARS * 2) break;
   }
   if (!text.trim()) {
     throw new Error("No extractable text found (it may be a scanned/image-only PDF).");
@@ -489,7 +498,6 @@ async function sendMessage(userText) {
   setLoading(true);
 
   try {
-    // Strip UI-only fields before sending to the API
     const apiMessages = conv.messages.map((m) => ({ role: m.role, content: m.content }));
 
     const res = await fetch("/api/chat", {
@@ -510,7 +518,10 @@ async function sendMessage(userText) {
     }
 
     const data = await res.json();
-    const reply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
+    const rawReply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
+
+    // ── Strip markdown symbols before displaying ──
+    const reply = cleanText(rawReply);
 
     conv.messages.push({ role: "assistant", content: reply });
     conv.updatedAt = Date.now();
@@ -538,3 +549,24 @@ chatForm.addEventListener("submit", (e) => {
 
 renderChatWindow();
 renderSidebar();
+
+// ---------- Plus / attach menu ----------
+
+const attachMenu = document.getElementById("attach-menu");
+const plusBtn = document.getElementById("plus-btn");
+
+if (plusBtn && attachMenu) {
+  attachMenu.style.display = "none";
+
+  plusBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = attachMenu.style.display === "block";
+    attachMenu.style.display = isOpen ? "none" : "block";
+  });
+
+  document.addEventListener("click", () => {
+    if (attachMenu) attachMenu.style.display = "none";
+  });
+
+  attachMenu.addEventListener("click", (e) => e.stopPropagation());
+}
