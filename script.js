@@ -24,7 +24,7 @@ const SYSTEM_PROMPT = {
   content: "You are Wazeer, a friendly, sharp, and concise AI assistant. Always reply in the exact same language the user is using. If they write Urdu, reply in Urdu. If English, reply in English. If Roman Urdu, reply in Roman Urdu. Never use markdown symbols like **, *, #, ##, or - in your responses. Write in plain text only." 
 };
 
-const GREETING = "Assalamu Alaikum! Main hoon Wazeer 🤖 Aap ka apna AI assistant. Aap mujhse kisi bhi zabaan mein baat kar sakte hain — main usi zabaan mein jawab doonga!";
+const GREETING = "Assalamu Alaikum! Main hoon Wazeer 🤖 I'll treat you as my Badshah 👑";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const MAX_TEXT_CHARS = 12000;
