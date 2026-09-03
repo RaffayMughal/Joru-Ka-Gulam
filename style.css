@@ -88,11 +88,206 @@ html, body {
   position: relative;
   z-index: 2;
   height: 100vh;
-  max-width: 720px;
-  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.main-col {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
   padding: 24px 16px;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 268px;
+  flex-shrink: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform 0.25s ease;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px 8px;
+}
+
+.sidebar-close { display: none; }
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn svg { width: 18px; height: 18px; }
+
+.icon-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+}
+
+.sidebar-toggle { display: none; }
+
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, rgba(124,92,255,0.25), rgba(255,92,138,0.2));
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.new-chat-btn svg { width: 16px; height: 16px; }
+
+.new-chat-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(124, 92, 255, 0.25);
+}
+
+.new-chat-btn:active { transform: translateY(0); }
+
+.conversation-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-right: 2px;
+}
+
+.conversation-list::-webkit-scrollbar { width: 6px; }
+.conversation-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+
+.conversation-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+}
+
+.conversation-item.active {
+  background: rgba(124, 92, 255, 0.18);
+  color: var(--text);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+}
+
+.conversation-item .conv-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13.5px;
+}
+
+.conversation-item .conv-delete {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  border-radius: 6px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.conversation-item:hover .conv-delete,
+.conversation-item.active .conv-delete {
+  display: flex;
+}
+
+.conversation-item .conv-delete:hover {
+  background: rgba(255, 92, 138, 0.2);
+  color: #ff9db4;
+}
+
+.conversation-item .conv-delete svg { width: 13px; height: 13px; }
+
+.conversation-empty {
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+.sidebar-overlay.hidden { display: none; }
+
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    transform: translateX(-100%);
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-close { display: flex; }
+  .sidebar-toggle { display: flex; }
+
+  .sidebar-overlay:not(.hidden) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 15;
+  }
+
+  .main-col { padding: 12px 8px; }
 }
 
 .app-header {
@@ -139,8 +334,8 @@ html, body {
   box-shadow: 0 0 12px var(--accent-1);
 }
 
-.app-header h1 {
-  font-size: 20px;
+.sidebar-header h1 {
+  font-size: 18px;
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.02em;
