@@ -39,6 +39,31 @@ body::after {
   pointer-events: none;
   z-index: 0;
   animation: floatB 13s ease-in-out infinite;
+  .orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-pink {
+  width: 320px;
+  height: 320px;
+  background: #ec4899;
+  bottom: 80px;
+  left: 32%;
+  animation: floatA 12s ease-in-out infinite reverse;
+}
+
+.orb-green {
+  width: 220px;
+  height: 220px;
+  background: #10b981;
+  top: 60px;
+  right: 18%;
+  animation: floatB 9s ease-in-out infinite;
 }
 
 @keyframes floatA {
