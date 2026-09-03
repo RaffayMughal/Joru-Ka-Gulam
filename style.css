@@ -180,18 +180,55 @@ body:after {
 
 .chat-input-wrapper { padding: 12px 20px 24px; }
 
-.chat-input-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 10px 14px;
-  width: 100%;
-  max-width: 770px;
-  min-height: 58px;
-  margin: 0 auto;
+/* ── Fix: make chat area transparent so orbs show through ── */
+.chat-container,
+.chat-area,
+.messages,
+#chat-container,
+#messages {
+  background: transparent !important;
+}
+
+/* ── Fix: message text color ── */
+.message,
+.bot-message,
+.assistant-message,
+p {
+  color: #ffffff !important;
+}
+
+/* ── Fix: user message bubble ── */
+.user-message,
+.message.user {
+  background: rgba(124, 58, 237, 0.5) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* ── Fix: bot message bubble ── */
+.bot-message,
+.message.bot,
+.message.assistant {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* ── Fix: input bar ── */
+#user-input,
+.input-bar,
+textarea,
+input[type="text"] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
 textarea[id^="chat-input"] {
