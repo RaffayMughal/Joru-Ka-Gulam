@@ -65,6 +65,10 @@ body::after {
   right: 18%;
   animation: floatB 9s ease-in-out infinite;
 }
+  .container {        /* use whatever your class actually is */
+  position: relative;
+  z-index: 1;
+}
 
 @keyframes floatA {
   0%, 100% { transform: translate(0, 0) scale(1); }
