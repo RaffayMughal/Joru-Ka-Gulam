@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=5" />
+<link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
 
@@ -96,8 +96,8 @@
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
             <div class="bubble">
-              <!-- Added 'typing-text' class for typewriter effect -->
-              <div class="bubble-text typing-text">Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.</div>
+              <!-- Removed typing-text class so it doesn't trigger script.js -->
+              <div class="bubble-text">Hey! I'm Wazeer 👋 Ask me anything and I'll answer at Groq speed.</div>
             </div>
           </div>
         </div>
@@ -139,24 +139,6 @@
   </div>
 
   <script>
-    // ── Typewriter Effect for Initial Message ──
-    document.addEventListener('DOMContentLoaded', () => {
-      const typingEl = document.querySelector('.typing-text');
-      if (typingEl) {
-        const text = typingEl.textContent;
-        typingEl.textContent = '';
-        let i = 0;
-        function type() {
-          if (i < text.length) {
-            typingEl.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, 30);
-          }
-        }
-        type();
-      }
-    });
-
     // ── Notification bell ──
     const notifBtn = document.getElementById('notif-btn');
     const notifPanel = document.getElementById('notif-panel');
