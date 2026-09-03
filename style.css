@@ -517,35 +517,6 @@ html, body {
   background: rgba(255,255,255,0.02);
 }
 
-#attach-btn {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.06);
-  color: var(--text-dim);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-
-#attach-btn svg { width: 18px; height: 18px; }
-
-#attach-btn:hover {
-  background: rgba(124, 92, 255, 0.15);
-  border-color: rgba(124, 92, 255, 0.4);
-  color: #c3b3ff;
-}
-
-#attach-btn.has-file {
-  background: rgba(124, 92, 255, 0.2);
-  border-color: var(--accent-1);
-  color: #c3b3ff;
-}
-
 .attachment-preview {
   display: flex;
   align-items: center;
@@ -652,3 +623,21 @@ html, body {
   .app { padding: 12px 8px; }
   .message { max-width: 92%; }
 }
+
+/* ---------- Plus menu ---------- */
+.attach-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.plus-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor:
