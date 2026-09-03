@@ -307,9 +307,22 @@ function scrollToBottom() {
 }
 
 function setLoading(isLoading) {
-  typingIndicator.classList.toggle("hidden", !isLoading);
   sendBtn.disabled = isLoading;
   chatInput.disabled = isLoading;
+
+  if (isLoading) {
+    // Show thinking steps first, then typing dots after a short delay
+    if (typeof window.startThinking === "function") window.startThinking();
+    setTimeout(() => {
+      if (typeof window.stopThinking === "function") window.stopThinking();
+      typingIndicator.classList.remove("hidden");
+      scrollToBottom();
+    }, 2400);
+  } else {
+    if (typeof window.stopThinking === "function") window.stopThinking();
+    typingIndicator.classList.add("hidden");
+  }
+
   if (isLoading) scrollToBottom();
 }
 
