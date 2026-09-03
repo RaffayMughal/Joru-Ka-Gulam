@@ -1,94 +1,78 @@
-const landingView = document.getElementById('landing-view');
-const chatView = document.getElementById('chat-view');
-const messagesEl = document.getElementById('chat-messages');
+const chatWindow = document.getElementById("chat-window");
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+const sendBtn = document.getElementById("send-btn");
+const typingIndicator = document.getElementById("typing-indicator");
 
-const inputA = document.getElementById('chat-input');
-const sendA = document.getElementById('send-btn');
-const inputB = document.getElementById('chat-input-2');
-const sendB = document.getElementById('send-btn-2');
-
-let started = false;
-let history = []; // { role: 'user' | 'assistant', content: string }
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
-}
-
-function wireInput(inputEl, sendEl) {
-  inputEl.addEventListener('input', () => {
-    autoResize(inputEl);
-    sendEl.disabled = inputEl.value.trim().length === 0;
-  });
-  inputEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (inputEl.value.trim().length > 0) sendMessage(inputEl.value.trim());
-    }
-  });
-  sendEl.addEventListener('click', () => {
-    if (inputEl.value.trim().length > 0) sendMessage(inputEl.value.trim());
-  });
-}
-
-wireInput(inputA, sendA);
-wireInput(inputB, sendB);
+// Keep a running history so the model has context
+const history = [
+  { role: "system", content: "You are Wazeer, a friendly, sharp, and concise AI assistant." }
+];
 
 function addMessage(role, text) {
-  const msg = document.createElement('div');
-  msg.className = 'message ' + (role === 'user' ? 'user' : 'bot');
-  msg.textContent = text;
-  messagesEl.appendChild(msg);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-  return msg;
+  const wrapper = document.createElement("div");
+  wrapper.className = `message ${role === "user" ? "user" : "bot"}`;
+
+  const avatar = document.createElement("div");
+  avatar.className = `avatar ${role === "user" ? "user-avatar" : "bot-avatar"}`;
+  avatar.textContent = role === "user" ? "You" : "W";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(bubble);
+  chatWindow.appendChild(wrapper);
+  scrollToBottom();
 }
 
-async function sendMessage(text) {
-  if (!started) {
-    started = true;
-    landingView.style.display = 'none';
-    chatView.style.display = 'flex';
-  }
+function scrollToBottom() {
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
 
-  inputA.value = '';
-  inputB.value = '';
-  autoResize(inputA);
-  autoResize(inputB);
-  sendA.disabled = true;
-  sendB.disabled = true;
+function setLoading(isLoading) {
+  typingIndicator.classList.toggle("hidden", !isLoading);
+  sendBtn.disabled = isLoading;
+  chatInput.disabled = isLoading;
+  if (isLoading) scrollToBottom();
+}
 
-  addMessage('user', text);
-  history.push({ role: 'user', content: text });
-
-  const typingMsg = addMessage('bot', 'Thinking…');
+async function sendMessage(userText) {
+  history.push({ role: "user", content: userText });
+  setLoading(true);
 
   try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages: history })
     });
 
-    const data = await res.json();
-
-    if (!res.ok || data.error) {
-      typingMsg.textContent = 'Error: ' + (data.error || 'Request failed');
-      return;
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || `Request failed with ${res.status}`);
     }
 
-    typingMsg.textContent = data.reply;
-    history.push({ role: 'assistant', content: data.reply });
+    const data = await res.json();
+    const reply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
 
+    history.push({ role: "assistant", content: reply });
+    addMessage("bot", reply);
   } catch (err) {
-    typingMsg.textContent = 'Error: could not reach the server.';
+    console.error(err);
+    addMessage("bot", "⚠️ Something went wrong reaching the model. Please try again.");
+  } finally {
+    setLoading(false);
   }
 }
 
-document.getElementById('new-chat-btn').addEventListener('click', (e) => {
+chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  history = [];
-  messagesEl.innerHTML = '';
-  started = false;
-  chatView.style.display = 'none';
-  landingView.style.display = 'flex';
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  chatInput.value = "";
+  sendMessage(text);
 });
