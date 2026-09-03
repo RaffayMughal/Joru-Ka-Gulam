@@ -9,6 +9,7 @@ A Vercel-native chatbot: a static frontend (`index.html`, `style.css`, `script.j
 - Full conversation history sent with each request for context
 - Chat history persists across page refreshes (stored in the browser's `localStorage`)
 - "Clear" button in the header wipes the conversation and starts fresh
+- 📎 File upload: attach images (auto-routed to a vision model) or text-based files (`.txt`, `.md`, `.csv`, `.json`, `.js`, `.py`, `.log`, `.html`, `.css`) — up to 5MB
 - Groq-powered responses via the OpenAI-compatible `/chat/completions` endpoint
 
 ## 📁 Structure
@@ -37,7 +38,14 @@ A Vercel-native chatbot: a static frontend (`index.html`, `style.css`, `script.j
 
 ## 🧠 Changing the model
 
-`api/chat.js` currently calls `openai/gpt-oss-20b`. Swap the `model` field for any other Groq-hosted model (e.g. `llama-3.3-70b-versatile`, `mixtral-8x7b-32768`) depending on speed/quality trade-offs.
+`api/chat.js` currently calls `openai/gpt-oss-20b` for regular text chat. Swap the `model` field for any other Groq-hosted model (e.g. `llama-3.3-70b-versatile`, `mixtral-8x7b-32768`) depending on speed/quality trade-offs.
+
+## 📎 File uploads
+
+- **Images** (`png`, `jpg`, `webp`, `gif`) are sent as base64 data URLs. `api/chat.js` automatically detects an image in the request and switches the model to `meta-llama/llama-4-scout-17b-16e-instruct` (Groq's vision-capable model) for that request only.
+- **Text-based files** (`.txt`, `.md`, `.csv`, `.json`, `.js`, `.ts`, `.py`, `.log`, `.html`, `.css`) are read client-side and included as context alongside your message, truncated to ~12,000 characters to keep requests fast.
+- Max file size is 5MB (adjust `MAX_FILE_BYTES` in `script.js`).
+- Files are **not** uploaded anywhere persistent — they're read in the browser and sent directly to Groq as part of that one request.
 
 ## 🔒 Notes
 
