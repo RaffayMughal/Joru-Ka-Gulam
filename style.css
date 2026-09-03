@@ -363,4 +363,61 @@ html, body {
 @media (max-width: 480px) {
   .message { max-width: 92%; }
   .chat-shell { border-radius: 16px; }
+  /* ══════════════════════════════════
+   LIGHT MODE OVERRIDES
+══════════════════════════════════ */
+body.light-mode {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --text-dim: #64748b;
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --bot-bubble: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode html, 
+body.light-mode body {
+  background: linear-gradient(-45deg, #f1f5f9, #e2e8f0, #cbd5e1, #f8fafc);
+}
+
+body.light-mode .sidebar {
+  background: rgba(255, 255, 255, 0.85);
+  border-right-color: rgba(0,0,0,0.08);
+}
+
+body.light-mode .chat-shell {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+}
+
+body.light-mode .chat-input-row {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+body.light-mode #chat-input {
+  background: rgba(0,0,0,0.03);
+  border-color: rgba(0,0,0,0.1);
+  color: #0f172a;
+}
+body.light-mode #chat-input::placeholder { color: #94a3b8; }
+
+body.light-mode .conversation-item:hover { background: rgba(0,0,0,0.05); }
+body.light-mode .conversation-item.active { background: rgba(6,182,212,0.1); }
+
+body.light-mode .message.bot .bubble {
+  background: var(--bot-bubble);
+  border-color: rgba(0,0,0,0.08);
+  color: #0f172a;
+}
+
+body.light-mode .notif-panel {
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(0,0,0,0.1);
+}
+body.light-mode .notif-title { color: #0f172a; }
+
+/* Toggle Button Icons Switch */
+.sun-icon, .moon-icon { width: 18px; height: 18px; }
+body.light-mode .sun-icon { display: none; }
+body.light-mode .moon-icon { display: block; }
 }
