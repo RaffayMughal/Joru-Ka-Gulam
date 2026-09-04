@@ -10,9 +10,9 @@ const attachmentPreview = document.getElementById("attachment-preview");
 
 const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
-const sidebarClose = document.getElementById("sidebar-close");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
-const newChatBtn = document.getElementById("new-chat-btn");
+const newChatIconBtn = document.getElementById("new-chat-icon-btn"); // NEW
+const themeToggleSidebar = document.getElementById("theme-toggle-sidebar"); // NEW
 const conversationList = document.getElementById("conversation-list");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
@@ -23,7 +23,7 @@ const SYSTEM_PROMPT = {
   content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only." 
 };
 
-const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.";
+const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const MAX_TEXT_CHARS = 4000;
@@ -170,7 +170,7 @@ function deleteConversation(id) {
   renderSidebar();
 }
 
-// SIDEBAR FUNCTIONS - THIS IS WHAT YOU NEED!
+// ── SIDEBAR FUNCTIONS ──
 function openSidebar() {
   sidebar.classList.add("open");
   sidebarOverlay.classList.remove("hidden");
@@ -185,26 +185,46 @@ function closeSidebarOnMobile() {
   if (window.innerWidth <= 860) closeSidebar();
 }
 
-// Event listeners for sidebar buttons
+// ── EVENT LISTENERS ──
+
+// 1. Menu (Hamburger) Button
 if (sidebarToggle) {
   sidebarToggle.addEventListener("click", () => {
-    if (sidebar.classList.contains("open")) {
-      closeSidebar();
-    } else {
-      openSidebar();
-    }
+    sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
   });
 }
 
-if (sidebarClose) {
-  sidebarClose.addEventListener("click", closeSidebar);
-}
-
+// 2. Overlay (Click outside to close)
 if (sidebarOverlay) {
   sidebarOverlay.addEventListener("click", closeSidebar);
 }
 
-newChatBtn.addEventListener("click", createConversation);
+// 3. New Chat Icon Button (Inside Sidebar Header)
+if (newChatIconBtn) {
+  newChatIconBtn.addEventListener("click", () => {
+    createConversation();
+  });
+}
+
+// 4. Theme Toggle Button (Inside Sidebar Header)
+const themeIcon = themeToggleSidebar ? themeToggleSidebar.querySelector('.theme-icon') : null;
+const savedTheme = localStorage.getItem('wazeer_theme');
+
+if (savedTheme === 'light') {
+  document.body.classList.add('light-mode');
+  if (themeIcon) themeIcon.textContent = '🌙';
+}
+
+if (themeToggleSidebar) {
+  themeToggleSidebar.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
+  });
+}
+
+// ── CHAT FUNCTIONS ──
 
 function renderChatWindow() {
   chatWindow.innerHTML = "";
@@ -253,7 +273,7 @@ function addMessage(role, text, attachmentMeta, isStatus) {
     } else {
       const chip = document.createElement("div");
       chip.className = "bubble-file-chip";
-      chip.textContent = ` ${attachmentMeta.name}`;
+      chip.textContent = `📄 ${attachmentMeta.name}`;
       bubble.appendChild(chip);
     }
   }
@@ -302,7 +322,7 @@ fileInput.addEventListener("change", async () => {
   fileInput.value = "";
   if (!file) return;
   if (file.size > MAX_FILE_BYTES) {
-    addMessage("bot", `️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
+    addMessage("bot", `⚠️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
     return;
   }
   const lowerName = file.name.toLowerCase();
