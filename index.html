@@ -4,31 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=14" />
-<style>
-  /* Critical fixes for images and notifications */
-  .bubble-image { display: block; max-width: 240px; max-height: 240px; width: auto; height: auto; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 1px solid rgba(148,163,184,.3); }
-  .bubble-file-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 6px 10px; border-radius: 8px; background: rgba(148,163,184,.15); margin-bottom: 8px; }
-  .notif-icon { width: 34px; height: 34px; border-radius: 8px; background: rgba(148,163,184,.15); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-  .notif-item { align-items: center; }
-  .notif-panel { max-height: 340px; overflow-y: auto; }
-  .attachment-preview .thumb { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
-  .attachment-preview .remove-file { background: none; border: none; cursor: pointer; font-size: 16px; }
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <div class="particles">
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span......
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 
   <div class="app">
@@ -42,8 +27,7 @@
             <p class="logo-sub">AI Assistant</p>
           </div>
         </div>
-        <!-- NEW CHAT ICON BUTTON -->
-        <button id="new-chat-icon-btn" class="icon-btn" type="button" title="New Chat">
+        <button id="new-chat-icon-btn" class="icon-btn" title="New Chat">
           <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
@@ -71,7 +55,7 @@
     <!-- MAIN CONTENT -->
     <div class="main-col">
       <header class="app-header">
-        <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button">
+        <button id="sidebar-toggle" class="icon-btn sidebar-toggle">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
 
@@ -84,13 +68,12 @@
         </div>
 
         <div class="header-actions">
-          <!-- THEME TOGGLE IN HEADER -->
-          <button id="theme-toggle-header" class="icon-btn theme-btn" type="button" title="Toggle Theme">
+          <button id="theme-toggle-header" class="icon-btn" title="Toggle Theme">
             <span class="theme-icon">☀️</span>
           </button>
 
           <div class="notif-wrapper">
-            <button class="notif-btn" id="notif-btn" type="button">
+            <button class="notif-btn" id="notif-btn">
               <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -99,15 +82,45 @@
             </button>
             <div class="notif-panel" id="notif-panel">
               <div class="notif-header">Notifications</div>
-              <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready to help.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses powered by Groq.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language support</div><div class="notif-desc">Talk in any language — Wazeer replies in the same one.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads supported</div><div class="notif-desc">Attach PDFs, images, and documents.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode ON</div><div class="notif-desc">Wazeer treats you like royalty, always.</div></div></div>
+              <div class="notif-item">
+                <div class="notif-icon">🚀</div>
+                <div class="notif-text">
+                  <div class="notif-title">Wazeer is live!</div>
+                  <div class="notif-desc">Your AI assistant is ready to help.</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">⚡</div>
+                <div class="notif-text">
+                  <div class="notif-title">Groq speed enabled</div>
+                  <div class="notif-desc">Lightning-fast responses powered by Groq.</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">🌍</div>
+                <div class="notif-text">
+                  <div class="notif-title">Multi-language support</div>
+                  <div class="notif-desc">Talk in any language.</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">📎</div>
+                <div class="notif-text">
+                  <div class="notif-title">File uploads supported</div>
+                  <div class="notif-desc">Attach PDFs, images, and documents.</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon">👑</div>
+                <div class="notif-text">
+                  <div class="notif-title">Badshah Mode ON</div>
+                  <div class="notif-desc">Wazeer treats you like royalty.</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <button id="clear-btn" class="clear-btn" type="button">
+          <button id="clear-btn" class="clear-btn">
             <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
               <path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -121,7 +134,7 @@
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
             <div class="bubble">
-              <div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div>
+              <div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.</div>
             </div>
           </div>
         </div>
@@ -164,42 +177,44 @@
     </div>
   </div>
 
-  <!-- Inline scripts for UI elements (Theme, Notifs, Thinking) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="script.js"></script>
+  
   <script>
-    // Theme Toggle Logic
+    // Theme Toggle
     const themeBtn = document.getElementById('theme-toggle-header');
     const themeIcon = themeBtn ? themeBtn.querySelector('.theme-icon') : null;
     const savedTheme = localStorage.getItem('wazeer_theme');
-
     if (savedTheme === 'light') {
       document.body.classList.add('light-mode');
       if (themeIcon) themeIcon.textContent = '🌙';
     }
-
     if (themeBtn) {
       themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         const isLight = document.body.classList.contains('light-mode');
-        if (themeIcon) themeIcon.textContent = isLight ? '' : '☀️';
+        if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
         localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
       });
     }
 
-    // Notifications Logic
+    // Notifications
     const notifBtn = document.getElementById('notif-btn');
     const notifPanel = document.getElementById('notif-panel');
     const notifDot = document.getElementById('notif-dot');
-    if(notifBtn && notifPanel) {
+    if (notifBtn && notifPanel) {
       notifBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         notifPanel.classList.toggle('open');
-        if(notifPanel.classList.contains('open')) notifDot.style.display = 'none';
+        if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none';
       });
       document.addEventListener('click', () => notifPanel.classList.remove('open'));
       notifPanel.addEventListener('click', (e) => e.stopPropagation());
     }
 
-    // Thinking Animation Logic
+    // Thinking Animation
     const THINKING_STEPS = ["Reading message", "Detecting language", "Forming response", "Almost ready"];
     let _tTimer = null;
     window.startThinking = function() {
@@ -213,38 +228,29 @@
       let i = 0;
       function add() {
         const prev = steps.querySelector('.thinking-step.active');
-        if(prev) { prev.classList.remove('active'); prev.classList.add('done'); }
-        if(i < THINKING_STEPS.length) {
-          const s = document.createElement('div'); 
-          s.className = 'thinking-step active'; 
+        if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+        if (i < THINKING_STEPS.length) {
+          const s = document.createElement('div');
+          s.className = 'thinking-step active';
           s.textContent = THINKING_STEPS[i];
-          steps.appendChild(s); 
-          i++; 
+          steps.appendChild(s);
+          i++;
           _tTimer = setTimeout(add, 600);
         } else {
           lbl.textContent = 'Responding...';
-          setTimeout(() => { 
-            ind.classList.add('hidden'); 
-            document.getElementById('typing-indicator').classList.remove('hidden'); 
+          setTimeout(() => {
+            ind.classList.add('hidden');
+            document.getElementById('typing-indicator').classList.remove('hidden');
           }, 400);
         }
       }
       add();
     };
-    
     window.stopThinking = function() {
       clearTimeout(_tTimer);
       document.getElementById('thinking-indicator').classList.add('hidden');
       document.getElementById('typing-indicator').classList.add('hidden');
     };
   </script>
-
-  <!-- External Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  
-  <!-- Main Chat Logic -->
-  <script src="script.js"></script>
 </body>
 </html>
