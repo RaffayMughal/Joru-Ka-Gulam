@@ -57,33 +57,40 @@
 
     <div class="main-col">
       <header class="app-header">
-        <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </button>
+  <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+  </button>
 
-        <p class="tagline">Powered by Groq</p>
+  <div class="logo-area">
+    <div class="logo-icon-small">W</div>
+    <div class="brand-text">
+      <span class="brand-name">Wazeer</span>
+      <span class="brand-sub">for Badshah</span>
+    </div>
+  </div>
 
-        <div class="notif-wrapper">
-          <button class="notif-btn" id="notif-btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="notif-dot" id="notif-dot"></span>
-          </button>
-          <div class="notif-panel" id="notif-panel">
-            <div class="notif-header">Notifications</div>
-            <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
-          </div>
-        </div>
+  <div class="header-actions">
+    <button id="theme-toggle" class="icon-btn theme-btn" type="button">
+      <span class="theme-icon">☀️</span>
+    </button>
 
-        <!-- THEME TOGGLE BUTTON -->
-        <button id="theme-toggle" class="icon-btn theme-btn" type="button">
-          <span class="theme-icon">☀️</span>
-        </button>
+    <div class="notif-wrapper">
+      <button class="notif-btn" id="notif-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="notif-dot" id="notif-dot"></span>
+      </button>
+      <div class="notif-panel" id="notif-panel">
+        <div class="notif-header">Notifications</div>
+        <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
+      </div>
+    </div>
 
-        <button id="clear-btn" class="clear-btn" type="button">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Clear
-        </button>
-      </header>
+    <button id="clear-btn" class="clear-btn" type="button">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Clear
+    </button>
+  </div>
+</header>
 
       <main class="chat-shell">
         <div id="chat-window" class="chat-window">
