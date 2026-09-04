@@ -492,5 +492,8 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
   .sidebar-overlay {
     display: none !important;
   }
+/* Force sidebar buttons to be visible */
+.sidebar-toggle, .sidebar-close {
+  display: flex !important;
 }
 }
