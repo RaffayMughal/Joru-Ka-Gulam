@@ -242,4 +242,61 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .tagline {
   display: none;
 }
+/* ── Fix Bell Button (match other buttons) ── */
+.notif-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.notif-btn:hover {
+  background: var(--input-bg);
+  color: var(--text);
+}
+.notif-btn svg { width: 18px; height: 18px; }
+
+.notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+/* ── Fix Badshah Layout (B beside name, Online below) ── */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
 }
