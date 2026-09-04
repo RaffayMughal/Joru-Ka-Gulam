@@ -77,7 +77,7 @@ export default async function handler(req, res) {
         model: model,
         messages: finalMessages,
         temperature: 0.7,
-        max_tokens: 1024
+        max_tokens: 800
       })
     });
 
