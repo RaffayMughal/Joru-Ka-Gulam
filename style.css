@@ -122,3 +122,124 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
   .sidebar-toggle { display: flex; }
   .sidebar-close { display: flex; }
 }
+  /* Header Layout Fixes */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+  margin-left: 10px;
+}
+
+.logo-icon-small {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Fix Notifications Panel Positioning */
+.notif-wrapper {
+  position: relative;
+}
+
+.notif-panel {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 280px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  display: none;
+}
+
+.notif-panel.open {
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  padding: 5px 10px 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 5px;
+}
+
+.notif-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.notif-item:hover {
+  background: var(--input-bg);
+}
+
+.notif-icon {
+  font-size: 20px;
+}
+
+.notif-text {
+  flex: 1;
+}
+
+.notif-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.notif-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Hide old tagline */
+.tagline {
+  display: none;
+}
+}
