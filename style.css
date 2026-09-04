@@ -437,4 +437,60 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .attachment-preview .remove-file:hover {
   color: #ef4444;
 }
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.sidebar-overlay:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Sidebar Mobile Behavior */
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    height: 100vh;
+    z-index: 100;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .sidebar-toggle {
+    display: flex !important;
+  }
+  
+  .sidebar-close {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 861px) {
+  .sidebar-toggle {
+    display: none !important;
+  }
+  
+  .sidebar-close {
+    display: none !important;
+  }
+  
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
 }
