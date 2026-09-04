@@ -1,3 +1,17 @@
+// 1. Generate 100 Floating Particles
+const particlesContainer = document.getElementById('particles-container');
+if (particlesContainer) {
+  for (let i = 0; i < 100; i++) {
+    const span = document.createElement('span');
+    span.style.left = Math.random() * 100 + '%';
+    span.style.width = (Math.random() * 4 + 2) + 'px';
+    span.style.height = span.style.width;
+    span.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    span.style.animationDelay = (Math.random() * 10) + 's';
+    particlesContainer.appendChild(span);
+  }
+}
+
 const chatWindow = document.getElementById("chat-window");
 const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
@@ -53,7 +67,6 @@ function getActive() { return conversations.find((c) => c.id === activeId) || co
 function titleFromText(text) { if (!text) return "New chat"; const clean = text.trim().replace(/\s+/g, " "); return clean.length > 40 ? `${clean.slice(0, 40)}…` : clean; }
 
 function renderSidebar() {
-  // Update the chat count badge
   const countEl = document.getElementById('conv-count');
   if (countEl) countEl.textContent = conversations.length;
 
@@ -75,19 +88,11 @@ function renderSidebar() {
     title.className = "conv-title";
     title.textContent = conv.title || "New chat";
     
-    // TRASH BIN ICON BUTTON
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
     deleteBtn.className = "conv-delete";
-    deleteBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-        <path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    `;
-    deleteBtn.addEventListener("click", (e) => { 
-      e.stopPropagation(); 
-      deleteConversation(conv.id); 
-    });
+    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    deleteBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteConversation(conv.id); });
     
     item.appendChild(title);
     item.appendChild(deleteBtn);
@@ -95,6 +100,7 @@ function renderSidebar() {
     conversationList.appendChild(item);
   });
 }
+
 function switchConversation(id) { if (id === activeId) return; activeId = id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); closeSidebarOnMobile(); }
 function createConversation() { const conv = newConversation(); conversations.push(conv); activeId = conv.id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); closeSidebarOnMobile(); chatInput.focus(); }
 function deleteConversation(id) { conversations = conversations.filter((c) => c.id !== id); if (conversations.length === 0) conversations = [newConversation()]; if (id === activeId) activeId = conversations[0].id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); }
@@ -112,7 +118,7 @@ if (settingsBtn && settingsPanel) {
 const themeToggleSettings = document.getElementById('theme-toggle-settings');
 const themeIcon = themeToggleSettings ? themeToggleSettings.querySelector('.theme-icon') : null;
 const savedTheme = localStorage.getItem('wazeer_theme');
-if (savedTheme === 'light') { document.body.classList.add('light-mode'); if (themeIcon) themeIcon.textContent = ''; }
+if (savedTheme === 'light') { document.body.classList.add('light-mode'); if (themeIcon) themeIcon.textContent = '🌙'; }
 if (themeToggleSettings) {
   themeToggleSettings.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
@@ -122,15 +128,39 @@ if (themeToggleSettings) {
   });
 }
 
-// ─ NOTIFICATIONS ──
+// ─ NOTIFICATIONS & MARK ALL READ ──
 const notifBtn = document.getElementById('notif-btn');
 const notifPanel = document.getElementById('notif-panel');
 const notifDot = document.getElementById('notif-dot');
+const markAllReadBtn = document.getElementById('mark-all-read');
+const notifItems = document.querySelectorAll('.notif-item');
+
 if (notifBtn && notifPanel) {
-  notifBtn.addEventListener('click', (e) => { e.stopPropagation(); notifPanel.classList.toggle('open'); if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none'; if(settingsPanel) settingsPanel.classList.remove('open'); });
+  notifBtn.addEventListener('click', (e) => { 
+    e.stopPropagation(); 
+    notifPanel.classList.toggle('open'); 
+    if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none'; 
+    if(settingsPanel) settingsPanel.classList.remove('open'); 
+  });
   document.addEventListener('click', (e) => { if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) notifPanel.classList.remove('open'); });
   notifPanel.addEventListener('click', (e) => e.stopPropagation());
 }
+
+// Mark all as read functionality
+if (markAllReadBtn) {
+  markAllReadBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    notifItems.forEach(item => item.classList.remove('unread'));
+    if (notifDot) notifDot.style.display = 'none';
+  });
+}
+
+// Click individual notification to mark as read
+notifItems.forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.remove('unread');
+  });
+});
 
 // ─ CHAT FUNCTIONS ──
 function renderChatWindow() {
@@ -214,7 +244,7 @@ async function sendMessage(userText) {
     const data = await res.json();
     const reply = cleanText(data.reply?.trim() || "Hmm, I didn't get a response.");
     conv.messages.push({ role: "assistant", content: reply }); conv.updatedAt = Date.now(); saveState(); renderSidebar(); addMessage("bot", reply);
-  } catch (err) { addMessage("bot", `️ ${err.message || "Something went wrong."}`); } 
+  } catch (err) { addMessage("bot", `⚠️ ${err.message || "Something went wrong."}`); } 
   finally { setLoading(false); }
 }
 
