@@ -68,6 +68,10 @@ function titleFromText(text) {
 }
 
 function renderSidebar() {
+  // FIX: Update the chat count badge
+  const countEl = document.getElementById('conv-count');
+  if (countEl) countEl.textContent = conversations.length;
+
   conversationList.innerHTML = "";
   if (conversations.length === 0) {
     const empty = document.createElement("div");
@@ -86,13 +90,14 @@ function renderSidebar() {
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
     deleteBtn.className = "conv-delete";
-    deleteBtn.innerHTML = '✕';
+    deleteBtn.innerHTML = '';
     deleteBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteConversation(conv.id); });
     item.appendChild(title);
     item.appendChild(deleteBtn);
     item.addEventListener("click", () => switchConversation(conv.id));
     conversationList.appendChild(item);
   });
+}
 }
 
 function switchConversation(id) {
