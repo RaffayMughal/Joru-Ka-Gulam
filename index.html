@@ -17,7 +17,7 @@
   </div>
 
   <div class="app">
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (MENU) -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
         <div class="logo">
@@ -27,9 +27,20 @@
             <p class="logo-sub">AI Assistant</p>
           </div>
         </div>
-        <button id="new-chat-icon-btn" class="icon-btn" title="New Chat">
-          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
+        <!-- BUTTONS INSIDE MENU -->
+        <div class="sidebar-header-actions">
+          <!-- ChatGPT Style New Chat Icon (Pencil) -->
+          <button id="new-chat-icon-btn" class="icon-btn" title="New Chat">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+              <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <!-- Dark/Light Mode Toggle Inside Menu -->
+          <button id="theme-toggle-sidebar" class="icon-btn" title="Toggle Theme">
+            <span class="theme-icon">☀️</span>
+          </button>
+        </div>
       </div>
 
       <div class="conv-section-label">
@@ -68,9 +79,7 @@
         </div>
 
         <div class="header-actions">
-          <button id="theme-toggle-header" class="icon-btn" title="Toggle Theme">
-            <span class="theme-icon">☀️</span>
-          </button>
+          <!-- Theme button removed from here, now inside the sidebar -->
 
           <div class="notif-wrapper">
             <button class="notif-btn" id="notif-btn">
@@ -82,41 +91,11 @@
             </button>
             <div class="notif-panel" id="notif-panel">
               <div class="notif-header">Notifications</div>
-              <div class="notif-item">
-                <div class="notif-icon">🚀</div>
-                <div class="notif-text">
-                  <div class="notif-title">Wazeer is live!</div>
-                  <div class="notif-desc">Your AI assistant is ready to help.</div>
-                </div>
-              </div>
-              <div class="notif-item">
-                <div class="notif-icon">⚡</div>
-                <div class="notif-text">
-                  <div class="notif-title">Groq speed enabled</div>
-                  <div class="notif-desc">Lightning-fast responses powered by Groq.</div>
-                </div>
-              </div>
-              <div class="notif-item">
-                <div class="notif-icon">🌍</div>
-                <div class="notif-text">
-                  <div class="notif-title">Multi-language support</div>
-                  <div class="notif-desc">Talk in any language.</div>
-                </div>
-              </div>
-              <div class="notif-item">
-                <div class="notif-icon">📎</div>
-                <div class="notif-text">
-                  <div class="notif-title">File uploads supported</div>
-                  <div class="notif-desc">Attach PDFs, images, and documents.</div>
-                </div>
-              </div>
-              <div class="notif-item">
-                <div class="notif-icon">👑</div>
-                <div class="notif-text">
-                  <div class="notif-title">Badshah Mode ON</div>
-                  <div class="notif-desc">Wazeer treats you like royalty.</div>
-                </div>
-              </div>
+              <div class="notif-item"><div class="notif-icon"></div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready to help.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses powered by Groq.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language support</div><div class="notif-desc">Talk in any language.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads supported</div><div class="notif-desc">Attach PDFs, images, and documents.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode ON</div><div class="notif-desc">Wazeer treats you like royalty.</div></div></div>
             </div>
           </div>
 
@@ -134,7 +113,7 @@
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
             <div class="bubble">
-              <div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.</div>
+              <div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div>
             </div>
           </div>
         </div>
@@ -183,8 +162,8 @@
   <script src="script.js"></script>
   
   <script>
-    // Theme Toggle
-    const themeBtn = document.getElementById('theme-toggle-header');
+    // Theme Toggle (Now inside Sidebar)
+    const themeBtn = document.getElementById('theme-toggle-sidebar');
     const themeIcon = themeBtn ? themeBtn.querySelector('.theme-icon') : null;
     const savedTheme = localStorage.getItem('wazeer_theme');
     if (savedTheme === 'light') {
