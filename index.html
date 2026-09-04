@@ -31,7 +31,7 @@
   </div>
 
   <div class="app">
-    <aside id="sidebar" class="sidebar">
+       <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
         <div class="logo">
           <div class="logo-icon">W</div>
@@ -40,15 +40,15 @@
             <p class="logo-sub">AI Assistant</p>
           </div>
         </div>
-        <button id="sidebar-close" class="icon-btn sidebar-close" type="button">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </button>
+        <div class="sidebar-header-actions">
+          <button id="new-chat-icon-btn" class="icon-btn" type="button" title="New Chat">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button id="theme-toggle-sidebar" class="icon-btn" type="button" title="Toggle Theme">
+            <span class="theme-icon">☀️</span>
+          </button>
+        </div>
       </div>
-
-      <button id="new-chat-btn" class="new-chat-btn" type="button">
-        <div class="new-chat-icon">+</div>
-        <span>New Chat</span>
-      </button>
 
       <div class="conv-section-label">
         <span>Recent Chats</span>
@@ -67,7 +67,6 @@
         </div>
       </div>
     </aside>
-
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
 
     <div class="main-col">
