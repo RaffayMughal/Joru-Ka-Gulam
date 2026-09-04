@@ -137,10 +137,10 @@ const savedTheme = localStorage.getItem('wazeer_theme');
 // Set correct label and icon on page load
 if (savedTheme === 'light') {
   document.body.classList.add('light-mode');
-  if (themeIcon) themeIcon.textContent = '☀️';
+  if (themeIcon) themeIcon.textContent = '🌙';
   if (themeLabel) themeLabel.textContent = 'Dark Mode';
 } else {
-  if (themeIcon) themeIcon.textContent = '🌙';
+  if (themeIcon) themeIcon.textContent = '☀️';
   if (themeLabel) themeLabel.textContent = 'Light Mode';
 }
 
@@ -150,10 +150,10 @@ if (themeToggleSettings) {
     const isLight = document.body.classList.contains('light-mode');
     
     if (isLight) {
-      if (themeIcon) themeIcon.textContent = '☀️';
+      if (themeIcon) themeIcon.textContent = '🌙';
       if (themeLabel) themeLabel.textContent = 'Dark Mode';
     } else {
-      if (themeIcon) themeIcon.textContent = '🌙';
+      if (themeIcon) themeIcon.textContent = '☀️';
       if (themeLabel) themeLabel.textContent = 'Light Mode';
     }
     
