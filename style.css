@@ -402,4 +402,25 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .particles span:nth-child(98){left:60%;animation-duration:23s;animation-delay:7s}
 .particles span:nth-child(99){left:70%;animation-duration:15s;animation-delay:0s;width:5px;height:5px}
 .particles span:nth-child(100){left:80%;animation-duration:25s;animation-delay:0s;width:2px;height:2px}
+.notif-panel {
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  align-items: center;
+}
+
+.notif-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
 }
