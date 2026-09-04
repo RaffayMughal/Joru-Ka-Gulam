@@ -3,231 +3,186 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Wazeer - AI Assistant</title>
+<title>Wazeer</title>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- 100 Floating Particles Background -->
-  <div class="particles-container" id="particles-container"></div>
+  <div class="particles">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
 
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
+  <div class="app">
+    <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
-        <div class="brand">
-          <div class="brand-icon">W</div>
-          <div class="brand-info">
-            <h2>Wazeer</h2>
-            <span>AI Assistant</span>
+        <div class="logo">
+          <div class="logo-icon">W</div>
+          <div class="logo-text">
+            <h1>Wazeer</h1>
+            <p class="logo-sub">AI Assistant</p>
           </div>
         </div>
-        <button class="close-sidebar" id="close-sidebar">
-          <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-
-      <div class="sidebar-content">
-        <button class="new-chat-btn" id="new-chat-btn">
-          <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          New Chat
-        </button>
-
-        <div class="sidebar-section">
-          <h3>Menu</h3>
-          <nav class="nav-menu">
-            <a href="#" class="nav-link active">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M21 15C21 15.5523 20.5523 16 20 16H7L3 20V5C3 4.44772 3.44772 4 4 4H20C20.5523 4 21 4.44772 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Chat
-            </a>
-            <a href="#" class="nav-link">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              Search
-            </a>
-            <a href="#" class="nav-link">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Community
-            </a>
-            <a href="#" class="nav-link">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M16 18L22 12L16 6M8 6L2 12L8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Coder
-            </a>
-          </nav>
-        </div>
-
-        <div class="sidebar-section">
-          <h3>Projects</h3>
-          <div class="projects-list">
-            <div class="project-item">No projects yet</div>
-          </div>
-        </div>
-
-        <div class="sidebar-section">
-          <h3>Recent Chats</h3>
-          <div id="conversation-list" class="chats-list"></div>
+        <div class="sidebar-header-actions">
+          <button id="new-chat-icon-btn" class="icon-btn" title="New Chat">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+              <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
-
+      <div class="conv-section-label">
+        <span>Recent Chats</span>
+        <span class="conv-count" id="conv-count">0</span>
+      </div>
+      <div id="conversation-list" class="conversation-list"></div>
       <div class="sidebar-footer">
         <div class="user-profile">
-          <div class="user-avatar">B</div>
+          <div class="user-avatar-sidebar">B</div>
           <div class="user-info">
             <span class="user-name">Badshah</span>
-            <span class="user-status">● Online</span>
+            <span class="user-status"><span class="status-dot"></span> Online</span>
           </div>
         </div>
       </div>
     </aside>
+    <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Top Bar -->
-      <header class="top-bar">
-        <button class="menu-toggle" id="menu-toggle">
-          <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-        
-        <div class="top-bar-center">
-          <div class="model-selector">
-            <button class="model-btn" id="model-btn">
-              <span id="model-name-text">Wazeer AI</span>
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="model-dropdown" id="model-dropdown">
-              <div class="model-option active" data-model="Wazeer AI">Wazeer AI</div>
-              <div class="model-option" data-model="Wazeer Pro">Wazeer Pro</div>
-              <div class="model-option" data-model="Wazeer Lite">Wazeer Lite</div>
-            </div>
+    <div class="main-col">
+      <header class="app-header">
+        <div class="logo-area">
+          <div class="logo-icon-small">W</div>
+          <div class="brand-text">
+            <span class="brand-name">Wazeer</span>
+            <span class="brand-sub">for Badshah</span>
           </div>
         </div>
+        <div class="header-actions">
+          <div class="settings-wrapper">
+            <button class="icon-btn" id="settings-btn" title="Settings">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <div class="settings-panel" id="settings-panel">
+              <div class="settings-header">Settings</div>
+              <div class="settings-item" id="theme-toggle-settings">
+                <span class="settings-label">Dark Mode</span>
+                <span class="theme-icon">☀️</span>
+              </div>
+            </div>
+          </div>
 
-        <div class="top-bar-actions">
-          <button class="action-btn" id="theme-btn" title="Toggle Theme">
-            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" width="20" height="20" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="notif-wrapper">
+            <button class="notif-btn" id="notif-btn" title="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="notif-dot" id="notif-dot"></span>
+            </button>
+            <div class="notif-panel" id="notif-panel">
+              <div class="notif-header">Notifications</div>
+              <div class="notif-item"><div class="notif-icon"></div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language</div><div class="notif-desc">Talk in any language.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads</div><div class="notif-desc">Attach PDFs & images.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode</div><div class="notif-desc">Treats you like royalty.</div></div></div>
+            </div>
+          </div>
+
+          <button id="clear-btn" class="clear-btn" title="Clear Chat">
+            <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+              <path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Clear
           </button>
-          
-          <!-- NOTIFICATIONS -->
-          <div class="dropdown-wrapper">
-            <button class="action-btn" id="notif-btn" title="Notifications">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span class="notif-badge" id="notif-badge"></span>
-            </button>
-            <div class="notif-dropdown" id="notif-dropdown">
-              <div class="notif-header">
-                <h4>Notifications</h4>
-                <button class="mark-read" id="mark-read">Mark all read</button>
-              </div>
-              <div class="notif-list" id="notif-list">
-                <div class="notif-item unread">
-                  <div class="notif-icon">🚀</div>
-                  <div class="notif-text">
-                    <div class="notif-title">Wazeer is live!</div>
-                    <div class="notif-desc">Your AI assistant is ready to help.</div>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon">⚡</div>
-                  <div class="notif-text">
-                    <div class="notif-title">Groq speed enabled</div>
-                    <div class="notif-desc">Lightning-fast responses.</div>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon">🌍</div>
-                  <div class="notif-text">
-                    <div class="notif-title">Multi-language support</div>
-                    <div class="notif-desc">Talk in any language.</div>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon"></div>
-                  <div class="notif-text">
-                    <div class="notif-title">File uploads supported</div>
-                    <div class="notif-desc">Attach PDFs, images, and docs.</div>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon">👑</div>
-                  <div class="notif-text">
-                    <div class="notif-title">Badshah Mode ON</div>
-                    <div class="notif-desc">Wazeer treats you like royalty.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MORE OPTIONS -->
-          <div class="dropdown-wrapper">
-            <button class="action-btn" id="more-btn" title="More Options">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>
-            </button>
-            <div class="dropdown-menu" id="dropdown-menu">
-              <button class="dropdown-item" id="menu-pin"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Pin</button>
-              <button class="dropdown-item" id="menu-rename"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 20h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Rename</button>
-              <button class="dropdown-item" id="menu-clone"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.5"/></svg> Clone</button>
-              <button class="dropdown-item" id="menu-archive"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M21 8V21H3V8M1 3H23V8H1V3ZM10 12H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Archive</button>
-              <button class="dropdown-item danger" id="menu-delete"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M4 7H20M9 7V4.5C9 4.22 9.22 4 9.5 4H14.5C14.78 4 15 4.22 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Delete</button>
-            </div>
-          </div>
         </div>
       </header>
 
-      <!-- Chat Container -->
-      <div class="chat-container">
-        <!-- Welcome Screen -->
-        <div class="welcome-screen" id="welcome-screen">
-          <div class="welcome-logo">
-            <div class="welcome-icon">W</div>
+      <main class="chat-shell">
+        <div id="chat-window" class="chat-window">
+          <div class="message bot">
+            <div class="avatar bot-avatar">W</div>
+            <div class="bubble"><div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div></div>
           </div>
-          <h1>How can I help you today?</h1>
-          <p>Ask me anything, upload files, or start a conversation</p>
         </div>
 
-        <!-- Messages -->
-        <div class="messages-container" id="messages-container" style="display:none;">
-          <div id="chat-window" class="chat-window"></div>
+        <div id="thinking-indicator" class="thinking-indicator hidden">
+          <div class="avatar bot-avatar">W</div>
+          <div class="thinking-bubble">
+            <div class="thinking-label"><div class="thinking-spinner"></div><span id="thinking-label-text">Thinking...</span></div>
+            <div class="thinking-steps" id="thinking-steps"></div>
+          </div>
         </div>
 
-        <!-- Typing Indicator -->
         <div id="typing-indicator" class="typing-indicator hidden">
-          <div class="typing-avatar">W</div>
-          <div class="typing-dots">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="avatar bot-avatar">W</div>
+          <div class="bubble typing-bubble"><span></span><span></span><span></span></div>
         </div>
 
-        <!-- Attachment Preview -->
         <div id="attachment-preview" class="attachment-preview hidden"></div>
 
-        <!-- Input Area -->
-        <div class="input-area">
-          <form id="chat-form" class="input-form" autocomplete="off">
-            <input id="file-input" type="file" accept="image/*,.txt,.pdf,.docx" hidden />
-            
-            <button type="button" class="input-btn attach-btn" id="attach-btn" title="Attach File">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M21 11.5L12.5 20C10.6 21.9 7.5 21.9 5.6 20C3.7 18.1 3.7 15 5.6 13.1L14.1 4.6C15.4 3.3 17.5 3.3 18.8 4.6C20.1 5.9 20.1 8 18.8 9.3L10.6 17.5C9.9 18.2 8.8 18.2 8.1 17.5C7.4 16.8 7.4 15.7 8.1 15L15.5 7.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            
-            <input type="text" id="chat-input" class="input-field" placeholder="Message Wazeer..." autocomplete="off" />
-            
-            <button type="submit" class="input-btn send-btn" id="send-btn" title="Send">
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
-            </button>
-          </form>
-          <p class="input-hint">Wazeer can make mistakes. Check important info.</p>
-        </div>
-      </div>
-    </main>
+        <form id="chat-form" class="chat-input-row" autocomplete="off">
+          <input id="file-input" type="file" accept="image/*,.txt,.pdf,.docx" hidden />
+          <button id="attach-btn" type="button" title="Attach File">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+              <path d="M21 11.5L12.5 20C10.6 21.9 7.5 21.9 5.6 20C3.7 18.1 3.7 15 5.6 13.1L14.1 4.6C15.4 3.3 17.5 3.3 18.8 4.6C20.1 5.9 20.1 8 18.8 9.3L10.6 17.5C9.9 18.2 8.8 18.2 8.1 17.5C7.4 16.8 7.4 15.7 8.1 15L15.5 7.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
+          <button id="send-btn" type="submit" title="Send Message">
+            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+              <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+      </main>
+    </div>
   </div>
-
-  <!-- Toast Notification -->
-  <div class="toast" id="toast"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="script.js?v=2"></script>
+  
+  <!-- Thinking Animation Script -->
+  <script>
+    const THINKING_STEPS = ["Reading message", "Detecting language", "Forming response", "Almost ready"];
+    let _tTimer = null;
+    window.startThinking = function() {
+      const ind = document.getElementById('thinking-indicator');
+      const steps = document.getElementById('thinking-steps');
+      const lbl = document.getElementById('thinking-label-text');
+      document.getElementById('typing-indicator').classList.add('hidden');
+      ind.classList.remove('hidden');
+      steps.innerHTML = '';
+      lbl.textContent = 'Thinking...';
+      let i = 0;
+      function add() {
+        const prev = steps.querySelector('.thinking-step.active');
+        if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+        if (i < THINKING_STEPS.length) {
+          const s = document.createElement('div'); s.className = 'thinking-step active'; s.textContent = THINKING_STEPS[i];
+          steps.appendChild(s); i++; _tTimer = setTimeout(add, 600);
+        } else {
+          lbl.textContent = 'Responding...';
+          setTimeout(() => { ind.classList.add('hidden'); document.getElementById('typing-indicator').classList.remove('hidden'); }, 400);
+        }
+      }
+      add();
+    };
+    window.stopThinking = function() {
+      clearTimeout(_tTimer);
+      document.getElementById('thinking-indicator').classList.add('hidden');
+      document.getElementById('typing-indicator').classList.add('hidden');
+    };
+  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
