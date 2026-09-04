@@ -43,8 +43,20 @@ const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 let pendingAttachment = null;
 let loadingTimeoutId = null;
 
-function cleanText(text) { return text.replace(/#{1,6}\s*/g, '').replace(/\*\*(.*?)\*\*/gs, '$1').replace(/\*(.*?)\*/gs, '$1').replace(/^[\-\*]\s+/gm, '').replace(/`{3}[\s\S]*?`{3}/g, '').replace(/`([^`]+)`/g, '$1').replace(/\n{3,}/g, '\n\n').trim(); }
-function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
+function cleanText(text) {
+  return text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')   // remove closed think blocks
+    .replace(/<think>[\s\S]*$/gi, '')             // remove unclosed think blocks (to the end)
+    .replace(/<\/?think>/gi, '')                  // remove any stray think tags
+    .replace(/#{1,6}\s*/g, '')
+    .replace(/\*\*(.*?)\*\*/gs, '$1')
+    .replace(/\*(.*?)\*/gs, '$1')
+    .replace(/^[\-\*]\s+/gm, '')
+    .replace(/`{3}[\s\S]*?`{3}/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
 function newConversation() { return { id: uid(), title: "New chat", createdAt: Date.now(), updatedAt: Date.now(), messages: [SYSTEM_PROMPT] }; }
 
 function loadState() {
