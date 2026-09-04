@@ -26,7 +26,7 @@ const SYSTEM_PROMPT = {
 const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
-const MAX_TEXT_CHARS = 12000;
+const MAX_TEXT_CHARS = 4000;
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
 let pendingAttachment = null;
