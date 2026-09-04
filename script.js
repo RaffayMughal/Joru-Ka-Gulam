@@ -12,6 +12,7 @@ const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const newChatIconBtn = document.getElementById("new-chat-icon-btn");
+const themeToggleSidebar = document.getElementById("theme-toggle-sidebar"); // Added
 const conversationList = document.getElementById("conversation-list");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
@@ -198,10 +199,28 @@ if (sidebarOverlay) {
   sidebarOverlay.addEventListener("click", closeSidebar);
 }
 
-// 3. New Chat Icon Button (Inside Sidebar Header)
+// 3. New Chat Icon Button (ChatGPT Pencil Icon)
 if (newChatIconBtn) {
   newChatIconBtn.addEventListener("click", () => {
     createConversation();
+  });
+}
+
+// 4. Theme Toggle Button (Sun/Moon inside Sidebar)
+const themeIcon = themeToggleSidebar ? themeToggleSidebar.querySelector('.theme-icon') : null;
+const savedTheme = localStorage.getItem('wazeer_theme');
+
+if (savedTheme === 'light') {
+  document.body.classList.add('light-mode');
+  if (themeIcon) themeIcon.textContent = '🌙';
+}
+
+if (themeToggleSidebar) {
+  themeToggleSidebar.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
   });
 }
 
@@ -303,7 +322,7 @@ fileInput.addEventListener("change", async () => {
   fileInput.value = "";
   if (!file) return;
   if (file.size > MAX_FILE_BYTES) {
-    addMessage("bot", `️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
+    addMessage("bot", `⚠️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
     return;
   }
   const lowerName = file.name.toLowerCase();
@@ -476,7 +495,7 @@ async function sendMessage(userText) {
     addMessage("bot", reply);
   } catch (err) {
     console.error(err);
-    addMessage("bot", `️ ${err.message || "Something went wrong."}`);
+    addMessage("bot", `⚠️ ${err.message || "Something went wrong."}`);
   } finally {
     setLoading(false);
   }
