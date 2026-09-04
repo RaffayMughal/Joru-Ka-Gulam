@@ -12,7 +12,7 @@ const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const newChatIconBtn = document.getElementById("new-chat-icon-btn");
-const themeToggleSidebar = document.getElementById("theme-toggle-sidebar"); // Added
+const themeToggleSidebar = document.getElementById("theme-toggle-sidebar");
 const conversationList = document.getElementById("conversation-list");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
@@ -33,30 +33,13 @@ let pendingAttachment = null;
 let loadingTimeoutId = null;
 
 function cleanText(text) {
-  return text
-    .replace(/#{1,6}\s*/g, '')
-    .replace(/\*\*(.*?)\*\*/gs, '$1')
-    .replace(/\*(.*?)\*/gs, '$1')
-    .replace(/^[\-\*]\s+/gm, '')
-    .replace(/`{3}[\s\S]*?`{3}/g, '')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return text.replace(/#{1,6}\s*/g, '').replace(/\*\*(.*?)\*\*/gs, '$1').replace(/\*(.*?)\*/gs, '$1').replace(/^[\-\*]\s+/gm, '').replace(/`{3}[\s\S]*?`{3}/g, '').replace(/`([^`]+)`/g, '$1').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-function uid() {
-  return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
+function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
 
 function newConversation() {
-  const now = Date.now();
-  return {
-    id: uid(),
-    title: "New chat",
-    createdAt: now,
-    updatedAt: now,
-    messages: [SYSTEM_PROMPT]
-  };
+  return { id: uid(), title: "New chat", createdAt: Date.now(), updatedAt: Date.now(), messages: [SYSTEM_PROMPT] };
 }
 
 function loadState() {
@@ -81,26 +64,12 @@ function saveState() {
   } catch (_) {}
 }
 
-function getActive() {
-  return conversations.find((c) => c.id === activeId) || conversations[0];
-}
+function getActive() { return conversations.find((c) => c.id === activeId) || conversations[0]; }
 
 function titleFromText(text) {
   if (!text) return "New chat";
   const clean = text.trim().replace(/\s+/g, " ");
   return clean.length > 40 ? `${clean.slice(0, 40)}…` : clean;
-}
-
-function timeAgo(ts) {
-  const diff = Date.now() - ts;
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
-  if (days < 7) return `${days}d ago`;
-  return new Date(ts).toLocaleDateString();
 }
 
 function renderSidebar() {
@@ -123,10 +92,7 @@ function renderSidebar() {
     deleteBtn.type = "button";
     deleteBtn.className = "conv-delete";
     deleteBtn.innerHTML = '✕';
-    deleteBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      deleteConversation(conv.id);
-    });
+    deleteBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteConversation(conv.id); });
     item.appendChild(title);
     item.appendChild(deleteBtn);
     item.addEventListener("click", () => switchConversation(conv.id));
@@ -158,63 +124,30 @@ function createConversation() {
 
 function deleteConversation(id) {
   conversations = conversations.filter((c) => c.id !== id);
-  if (conversations.length === 0) {
-    conversations = [newConversation()];
-  }
-  if (id === activeId) {
-    activeId = conversations[0].id;
-  }
+  if (conversations.length === 0) conversations = [newConversation()];
+  if (id === activeId) activeId = conversations[0].id;
   saveState();
   clearAttachment();
   renderChatWindow();
   renderSidebar();
 }
 
-// ── SIDEBAR FUNCTIONS ──
-function openSidebar() {
-  sidebar.classList.add("open");
-  sidebarOverlay.classList.remove("hidden");
-}
-
-function closeSidebar() {
-  sidebar.classList.remove("open");
-  sidebarOverlay.classList.add("hidden");
-}
-
-function closeSidebarOnMobile() {
-  if (window.innerWidth <= 860) closeSidebar();
-}
+function openSidebar() { sidebar.classList.add("open"); sidebarOverlay.classList.remove("hidden"); }
+function closeSidebar() { sidebar.classList.remove("open"); sidebarOverlay.classList.add("hidden"); }
+function closeSidebarOnMobile() { if (window.innerWidth <= 860) closeSidebar(); }
 
 // ── EVENT LISTENERS ──
+if (sidebarToggle) sidebarToggle.addEventListener("click", () => sidebar.classList.contains("open") ? closeSidebar() : openSidebar());
+if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
+if (newChatIconBtn) newChatIconBtn.addEventListener("click", createConversation);
 
-// 1. Menu (Hamburger) Button
-if (sidebarToggle) {
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
-  });
-}
-
-// 2. Overlay (Click outside to close)
-if (sidebarOverlay) {
-  sidebarOverlay.addEventListener("click", closeSidebar);
-}
-
-// 3. New Chat Icon Button (ChatGPT Pencil Icon)
-if (newChatIconBtn) {
-  newChatIconBtn.addEventListener("click", () => {
-    createConversation();
-  });
-}
-
-// 4. Theme Toggle Button (Sun/Moon inside Sidebar)
+// THEME TOGGLE INSIDE MENU
 const themeIcon = themeToggleSidebar ? themeToggleSidebar.querySelector('.theme-icon') : null;
 const savedTheme = localStorage.getItem('wazeer_theme');
-
 if (savedTheme === 'light') {
   document.body.classList.add('light-mode');
   if (themeIcon) themeIcon.textContent = '🌙';
 }
-
 if (themeToggleSidebar) {
   themeToggleSidebar.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
@@ -224,19 +157,29 @@ if (themeToggleSidebar) {
   });
 }
 
-// ── CHAT FUNCTIONS ──
+// NOTIFICATIONS
+const notifBtn = document.getElementById('notif-btn');
+const notifPanel = document.getElementById('notif-panel');
+const notifDot = document.getElementById('notif-dot');
+if (notifBtn && notifPanel) {
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    notifPanel.classList.toggle('open');
+    if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none';
+  });
+  document.addEventListener('click', (e) => {
+    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) notifPanel.classList.remove('open');
+  });
+  notifPanel.addEventListener('click', (e) => e.stopPropagation());
+}
 
+// CHAT FUNCTIONS
 function renderChatWindow() {
   chatWindow.innerHTML = "";
   const conv = getActive();
   const visible = conv.messages.filter((m) => m.role !== "system");
-  if (visible.length === 0) {
-    addMessage("bot", GREETING);
-    return;
-  }
-  visible.forEach((m) =>
-    addMessage(m.role === "assistant" ? "bot" : "user", m.displayText ?? m.content, m.attachmentMeta)
-  );
+  if (visible.length === 0) { addMessage("bot", GREETING); return; }
+  visible.forEach((m) => addMessage(m.role === "assistant" ? "bot" : "user", m.displayText ?? m.content, m.attachmentMeta));
 }
 
 function clearChat() {
@@ -250,7 +193,6 @@ function clearChat() {
   addMessage("bot", GREETING);
   renderSidebar();
 }
-
 clearBtn.addEventListener("click", clearChat);
 
 function addMessage(role, text, attachmentMeta, isStatus) {
@@ -267,7 +209,6 @@ function addMessage(role, text, attachmentMeta, isStatus) {
     if (attachmentMeta.kind === "image" && attachmentMeta.dataUrl) {
       const img = document.createElement("img");
       img.src = attachmentMeta.dataUrl;
-      img.alt = attachmentMeta.name || "attached image";
       img.className = "bubble-image";
       bubble.appendChild(img);
     } else {
@@ -286,10 +227,6 @@ function addMessage(role, text, attachmentMeta, isStatus) {
   wrapper.appendChild(avatar);
   wrapper.appendChild(bubble);
   chatWindow.appendChild(wrapper);
-  scrollToBottom();
-}
-
-function scrollToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
@@ -302,103 +239,32 @@ function setLoading(isLoading) {
     loadingTimeoutId = setTimeout(() => {
       if (typeof window.stopThinking === "function") window.stopThinking();
       typingIndicator.classList.remove("hidden");
-      scrollToBottom();
+      chatWindow.scrollTop = chatWindow.scrollHeight;
     }, 2400);
   } else {
-    if (loadingTimeoutId) {
-      clearTimeout(loadingTimeoutId);
-      loadingTimeoutId = null;
-    }
+    if (loadingTimeoutId) { clearTimeout(loadingTimeoutId); loadingTimeoutId = null; }
     if (typeof window.stopThinking === "function") window.stopThinking();
     typingIndicator.classList.add("hidden");
   }
-  if (isLoading) scrollToBottom();
 }
 
 attachBtn.addEventListener("click", () => fileInput.click());
-
 fileInput.addEventListener("change", async () => {
   const file = fileInput.files?.[0];
   fileInput.value = "";
   if (!file) return;
-  if (file.size > MAX_FILE_BYTES) {
-    addMessage("bot", `⚠️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
-    return;
-  }
-  const lowerName = file.name.toLowerCase();
-  const isPdf = file.type === "application/pdf" || lowerName.endsWith(".pdf");
-  const isDocx = file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || lowerName.endsWith(".docx");
+  if (file.size > MAX_FILE_BYTES) { addMessage("bot", `⚠️ "${file.name}" is over the 8MB limit.`); return; }
   try {
     if (IMAGE_TYPES.includes(file.type)) {
-      const dataUrl = await readFileAsDataURL(file);
+      const dataUrl = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
       pendingAttachment = { kind: "image", name: file.name, dataUrl };
-    } else if (isPdf) {
-      addMessage("bot", `Reading "${file.name}"…`, null, true);
-      const text = await extractPdfText(file);
-      setAttachmentFromText(file.name, text);
-    } else if (isDocx) {
-      addMessage("bot", `Reading "${file.name}"…`, null, true);
-      const text = await extractDocxText(file);
-      setAttachmentFromText(file.name, text);
     } else {
-      const text = await readFileAsText(file);
-      setAttachmentFromText(file.name, text);
+      const text = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsText(file); });
+      pendingAttachment = { kind: "text", name: file.name, content: text.slice(0, MAX_TEXT_CHARS), truncated: text.length > MAX_TEXT_CHARS };
     }
     renderAttachmentPreview();
-  } catch (err) {
-    console.error(err);
-    addMessage("bot", `⚠️ Couldn't read "${file.name}".`);
-  }
+  } catch (err) { addMessage("bot", `⚠️ Couldn't read "${file.name}".`); }
 });
-
-function setAttachmentFromText(name, text) {
-  const truncated = text.length > MAX_TEXT_CHARS;
-  pendingAttachment = {
-    kind: "text",
-    name,
-    content: text.slice(0, MAX_TEXT_CHARS),
-    truncated
-  };
-}
-
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsText(file);
-  });
-}
-
-function readFileAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-async function extractPdfText(file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  let text = "";
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    text += content.items.map((item) => item.str).join(" ") + "\n\n";
-    if (text.length > MAX_TEXT_CHARS * 2) break;
-  }
-  if (!text.trim()) throw new Error("No extractable text found.");
-  return text;
-}
-
-async function extractDocxText(file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const result = await mammoth.extractRawText({ arrayBuffer });
-  if (!result.value.trim()) throw new Error("No extractable text found.");
-  return result.value;
-}
 
 function renderAttachmentPreview() {
   attachmentPreview.innerHTML = "";
@@ -412,8 +278,7 @@ function renderAttachmentPreview() {
   } else {
     const icon = document.createElement("div");
     icon.className = "file-icon";
-    const ext = pendingAttachment.name.split(".").pop()?.toUpperCase().slice(0, 4) || "FILE";
-    icon.textContent = ext;
+    icon.textContent = pendingAttachment.name.split(".").pop()?.toUpperCase().slice(0, 4) || "FILE";
     attachmentPreview.appendChild(icon);
   }
   const name = document.createElement("div");
@@ -424,7 +289,7 @@ function renderAttachmentPreview() {
   removeBtn.type = "button";
   removeBtn.className = "remove-file";
   removeBtn.textContent = "✕";
-  removeBtn.addEventListener("click", clearAttachment);
+  removeBtn.addEventListener("click", () => { pendingAttachment = null; attachmentPreview.classList.add("hidden"); attachmentPreview.innerHTML = ""; attachBtn.classList.remove("has-file"); });
   attachmentPreview.appendChild(removeBtn);
 }
 
@@ -442,59 +307,39 @@ async function sendMessage(userText) {
   let apiContent = userText;
   let displayText = userText;
   let attachmentMeta = null;
+  
   if (attachment?.kind === "image") {
-    apiContent = [
-      { type: "text", text: userText || "Describe this image." },
-      { type: "image_url", image_url: { url: attachment.dataUrl } }
-    ];
+    apiContent = [{ type: "text", text: userText || "Describe this image." }, { type: "image_url", image_url: { url: attachment.dataUrl } }];
     attachmentMeta = { kind: "image", name: attachment.name, dataUrl: attachment.dataUrl };
   } else if (attachment?.kind === "text") {
-    const label = attachment.truncated ? `(truncated to ${MAX_TEXT_CHARS} characters)` : "";
-    apiContent = `Attached file "${attachment.name}" ${label}:\n\`\`\`\n${attachment.content}\n\`\`\`\n\n${userText || "Please review the attached file."}`;
+    apiContent = `Attached file "${attachment.name}"${attachment.truncated ? ' (truncated)' : ''}:\n\`\`\`\n${attachment.content}\n\`\`\`\n\n${userText || "Please review."}`;
     attachmentMeta = { kind: "text", name: attachment.name };
   }
+  
   addMessage("user", displayText, attachmentMeta);
-  const wasFirstUserMessage = !conv.messages.some((m) => m.role === "user");
-  conv.messages.push({
-    role: "user",
-    content: apiContent,
-    displayText,
-    attachmentMeta
-  });
-  if (wasFirstUserMessage) {
-    conv.title = titleFromText(displayText || attachment?.name || "New chat");
-  }
+  const wasFirst = !conv.messages.some((m) => m.role === "user");
+  conv.messages.push({ role: "user", content: apiContent, displayText, attachmentMeta });
+  if (wasFirst) conv.title = titleFromText(displayText || attachment?.name || "New chat");
   conv.updatedAt = Date.now();
   saveState();
   renderSidebar();
   setLoading(true);
+  
   try {
-    const apiMessages = conv.messages.map((m) => ({ role: m.role, content: m.content }));
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: apiMessages })
+      body: JSON.stringify({ messages: conv.messages.map((m) => ({ role: m.role, content: m.content })) })
     });
-    if (!res.ok) {
-      const errText = await res.text();
-      let message = `Request failed with ${res.status}`;
-      try {
-        message = JSON.parse(errText)?.error || message;
-      } catch (_) {
-        if (errText) message = errText;
-      }
-      throw new Error(message);
-    }
+    if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
-    const rawReply = data.reply?.trim() || "Hmm, I didn't get a response. Try again?";
-    const reply = cleanText(rawReply);
+    const reply = cleanText(data.reply?.trim() || "Hmm, I didn't get a response.");
     conv.messages.push({ role: "assistant", content: reply });
     conv.updatedAt = Date.now();
     saveState();
     renderSidebar();
     addMessage("bot", reply);
   } catch (err) {
-    console.error(err);
     addMessage("bot", `⚠️ ${err.message || "Something went wrong."}`);
   } finally {
     setLoading(false);
@@ -508,40 +353,7 @@ chatForm.addEventListener("submit", (e) => {
   chatInput.value = "";
   sendMessage(text);
 });
-// ── NOTIFICATIONS LOGIC ──
-const notifBtn = document.getElementById('notif-btn');
-const notifPanel = document.getElementById('notif-panel');
-const notifDot = document.getElementById('notif-dot');
 
-if (notifBtn && notifPanel) {
-  // Toggle panel on bell click
-  notifBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent document click from immediately closing it
-    notifPanel.classList.toggle('open');
-    
-    // Hide the red dot when opened
-    if (notifPanel.classList.contains('open') && notifDot) {
-      notifDot.style.display = 'none';
-    }
-  });
-
-  // Close panel when clicking anywhere else on the screen
-  document.addEventListener('click', (e) => {
-    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
-      notifPanel.classList.remove('open');
-    }
-  });
-
-  // Prevent clicks inside the panel from closing it
-  notifPanel.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-}
-
-// Init
-typingIndicator.classList.add("hidden");
-renderChatWindow();
-renderSidebar();
 // Init
 typingIndicator.classList.add("hidden");
 renderChatWindow();
