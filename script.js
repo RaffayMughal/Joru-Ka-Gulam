@@ -150,7 +150,7 @@ function addMessage(role, text, attachmentMeta, isStatus) {
   if (isStatus) wrapper.dataset.status = "true";
   const avatar = document.createElement("div");
   avatar.className = `avatar ${role === "user" ? "user-avatar" : "bot-avatar"}`;
-  avatar.textContent = role === "user" ? "You" : "W";
+  avatar.textContent = role === "user" ? "B" : "W";
   const bubble = document.createElement("div");
   bubble.className = "bubble";
   if (isStatus) bubble.classList.add("bubble-status");
