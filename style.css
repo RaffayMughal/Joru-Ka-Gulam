@@ -38,8 +38,8 @@ html, body {
   background: var(--bg-dark);
 }
 
-/* Animated Background */
-.bg-animation {
+/* 100 Floating Particles */
+.particles-container {
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -47,24 +47,30 @@ html, body {
   pointer-events: none;
 }
 
-.bg-circle {
+.particle {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.3;
-  animation: float 20s infinite ease-in-out;
+  background: var(--primary);
+  opacity: 0.4;
+  animation: floatParticle linear infinite;
+  box-shadow: 0 0 10px var(--primary);
 }
 
-.c1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; animation-delay: 0s; }
-.c2 { width: 300px; height: 300px; background: var(--secondary); top: 50%; right: -50px; animation-delay: -5s; }
-.c3 { width: 350px; height: 350px; background: var(--primary-dark); bottom: -100px; left: 30%; animation-delay: -10s; }
-.c4 { width: 250px; height: 250px; background: var(--secondary); top: 30%; left: 60%; animation-delay: -15s; }
-.c5 { width: 200px; height: 200px; background: var(--primary); bottom: 20%; right: 20%; animation-delay: -20s; }
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -30px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
+@keyframes floatParticle {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) scale(1);
+    opacity: 0;
+  }
 }
 
 /* App Container */
@@ -480,7 +486,12 @@ html, body {
 
 .notif-dropdown.open {
   display: block;
-  animation: slideDown 0.2s ease;
+  animation: slideDownRight 0.2s ease;
+}
+
+@keyframes slideDownRight {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .notif-header {
@@ -585,7 +596,7 @@ html, body {
 
 .dropdown-menu.open {
   display: block;
-  animation: slideDown 0.2s ease;
+  animation: slideDownRight 0.2s ease;
 }
 
 .dropdown-item {
