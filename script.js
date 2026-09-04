@@ -130,14 +130,33 @@ if (settingsBtn && settingsPanel) {
 }
 
 const themeToggleSettings = document.getElementById('theme-toggle-settings');
-const themeIcon = themeToggleSettings ? themeToggleSettings.querySelector('.theme-icon') : null;
+const themeIcon = document.getElementById('theme-icon');
+const themeLabel = document.getElementById('theme-label');
 const savedTheme = localStorage.getItem('wazeer_theme');
-if (savedTheme === 'light') { document.body.classList.add('light-mode'); if (themeIcon) themeIcon.textContent = '🌙'; }
+
+// Set correct label and icon on page load
+if (savedTheme === 'light') {
+  document.body.classList.add('light-mode');
+  if (themeIcon) themeIcon.textContent = '☀️';
+  if (themeLabel) themeLabel.textContent = 'Dark Mode';
+} else {
+  if (themeIcon) themeIcon.textContent = '🌙';
+  if (themeLabel) themeLabel.textContent = 'Light Mode';
+}
+
 if (themeToggleSettings) {
   themeToggleSettings.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
-    if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+    
+    if (isLight) {
+      if (themeIcon) themeIcon.textContent = '☀️';
+      if (themeLabel) themeLabel.textContent = 'Dark Mode';
+    } else {
+      if (themeIcon) themeIcon.textContent = '🌙';
+      if (themeLabel) themeLabel.textContent = 'Light Mode';
+    }
+    
     localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
   });
 }
