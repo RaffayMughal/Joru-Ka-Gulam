@@ -8,14 +8,8 @@
 </head>
 <body>
 
-  <!-- Animated Background -->
-  <div class="bg-animation">
-    <div class="bg-circle c1"></div>
-    <div class="bg-circle c2"></div>
-    <div class="bg-circle c3"></div>
-    <div class="bg-circle c4"></div>
-    <div class="bg-circle c5"></div>
-  </div>
+  <!-- 100 Floating Particles Background -->
+  <div class="particles-container" id="particles-container"></div>
 
   <div class="app-container">
     <!-- Sidebar -->
@@ -96,13 +90,13 @@
         <div class="top-bar-center">
           <div class="model-selector">
             <button class="model-btn" id="model-btn">
-              <span>Wazeer AI</span>
+              <span id="model-name-text">Wazeer AI</span>
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="model-dropdown" id="model-dropdown">
-              <div class="model-option active">Wazeer AI</div>
-              <div class="model-option">Wazeer Pro</div>
-              <div class="model-option">Wazeer Lite</div>
+              <div class="model-option active" data-model="Wazeer AI">Wazeer AI</div>
+              <div class="model-option" data-model="Wazeer Pro">Wazeer Pro</div>
+              <div class="model-option" data-model="Wazeer Lite">Wazeer Lite</div>
             </div>
           </div>
         </div>
@@ -147,7 +141,7 @@
                   </div>
                 </div>
                 <div class="notif-item unread">
-                  <div class="notif-icon">📎</div>
+                  <div class="notif-icon"></div>
                   <div class="notif-text">
                     <div class="notif-title">File uploads supported</div>
                     <div class="notif-desc">Attach PDFs, images, and docs.</div>
