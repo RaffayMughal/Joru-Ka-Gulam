@@ -53,7 +53,7 @@ function getActive() { return conversations.find((c) => c.id === activeId) || co
 function titleFromText(text) { if (!text) return "New chat"; const clean = text.trim().replace(/\s+/g, " "); return clean.length > 40 ? `${clean.slice(0, 40)}…` : clean; }
 
 function renderSidebar() {
-  // FIX: Update the chat count badge
+  // Update the chat count badge
   const countEl = document.getElementById('conv-count');
   if (countEl) countEl.textContent = conversations.length;
 
@@ -65,18 +65,30 @@ function renderSidebar() {
     conversationList.appendChild(empty);
     return;
   }
+  
   const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
   sorted.forEach((conv) => {
     const item = document.createElement("div");
     item.className = `conversation-item${conv.id === activeId ? " active" : ""}`;
+    
     const title = document.createElement("div");
     title.className = "conv-title";
     title.textContent = conv.title || "New chat";
+    
+    // TRASH BIN ICON BUTTON
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
     deleteBtn.className = "conv-delete";
-    deleteBtn.innerHTML = '';
-    deleteBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteConversation(conv.id); });
+    deleteBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+        <path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+    deleteBtn.addEventListener("click", (e) => { 
+      e.stopPropagation(); 
+      deleteConversation(conv.id); 
+    });
+    
     item.appendChild(title);
     item.appendChild(deleteBtn);
     item.addEventListener("click", () => switchConversation(conv.id));
