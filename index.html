@@ -8,13 +8,8 @@
 </head>
 <body>
 
-  <div class="particles">
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
+  <!-- 100 Floating Particles will be generated here by JS -->
+  <div class="particles" id="particles-container"></div>
 
   <div class="app">
     <aside id="sidebar" class="sidebar">
@@ -87,12 +82,17 @@
               <span class="notif-dot" id="notif-dot"></span>
             </button>
             <div class="notif-panel" id="notif-panel">
-              <div class="notif-header">Notifications</div>
-              <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language</div><div class="notif-desc">Talk in any language.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads</div><div class="notif-desc">Attach PDFs & images.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode</div><div class="notif-desc">Treats you like royalty.</div></div></div>
+              <div class="notif-header">
+                <span>Notifications</span>
+                <button id="mark-all-read" class="mark-read-btn">Mark all read</button>
+              </div>
+              <div class="notif-list">
+                <div class="notif-item unread"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
+                <div class="notif-item unread"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses.</div></div></div>
+                <div class="notif-item unread"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language</div><div class="notif-desc">Talk in any language.</div></div></div>
+                <div class="notif-item unread"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads</div><div class="notif-desc">Attach PDFs & images.</div></div></div>
+                <div class="notif-item unread"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode</div><div class="notif-desc">Treats you like royalty.</div></div></div>
+              </div>
             </div>
           </div>
 
@@ -150,7 +150,6 @@
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   
-  <!-- Thinking Animation Script -->
   <script>
     const THINKING_STEPS = ["Reading message", "Detecting language", "Forming response", "Almost ready"];
     let _tTimer = null;
@@ -183,6 +182,6 @@
     };
   </script>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
