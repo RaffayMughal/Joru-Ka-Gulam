@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "messages array is required" });
   }
 
-  // ── LANGUAGE MIRRORING SYSTEM PROMPT ──
+  // ── LANGUAGE MIRRORING + BEHAVIOR SYSTEM PROMPT ──
   const LANGUAGE_SYSTEM_PROMPT = {
     role: "system",
     content: [
@@ -41,7 +41,13 @@ export default async function handler(req, res) {
       "FORMATTING RULE:",
       "- Never use markdown symbols like **, *, #, ##, or - in your responses.",
       "- Write in plain text only.",
-      "- Keep responses concise and helpful."
+      "",
+      "BEHAVIOR RULE (VERY IMPORTANT):",
+      "- Never show or repeat your internal reasoning or thinking in the reply.",
+      "- When the user sends an image or asks for analysis or a big task, do NOT give a long direct answer.",
+      "- Instead, first ask 1 or 2 short questions about what exactly they want to know.",
+      "- Keep replies short and friendly, around 2 to 3 sentences.",
+      "- Only give a longer answer if the user clearly asks for full details."
     ].join("\n")
   };
 
@@ -100,6 +106,11 @@ export default async function handler(req, res) {
     var reply = "";
     if (data && data.choices && data.choices[0] && data.choices[0].message) {
       reply = data.choices[0].message.content || "";
+      // Remove the model's internal thinking so it NEVER shows to Badshah
+      reply = reply
+        .replace(/<think>[\s\S]*?<\/think>/gi, "")
+        .replace(/<think>[\s\S]*/gi, "")
+        .trim();
     }
 
     return res.status(200).json({ reply: reply });
