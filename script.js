@@ -508,7 +508,40 @@ chatForm.addEventListener("submit", (e) => {
   chatInput.value = "";
   sendMessage(text);
 });
+// ── NOTIFICATIONS LOGIC ──
+const notifBtn = document.getElementById('notif-btn');
+const notifPanel = document.getElementById('notif-panel');
+const notifDot = document.getElementById('notif-dot');
 
+if (notifBtn && notifPanel) {
+  // Toggle panel on bell click
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent document click from immediately closing it
+    notifPanel.classList.toggle('open');
+    
+    // Hide the red dot when opened
+    if (notifPanel.classList.contains('open') && notifDot) {
+      notifDot.style.display = 'none';
+    }
+  });
+
+  // Close panel when clicking anywhere else on the screen
+  document.addEventListener('click', (e) => {
+    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+      notifPanel.classList.remove('open');
+    }
+  });
+
+  // Prevent clicks inside the panel from closing it
+  notifPanel.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+}
+
+// Init
+typingIndicator.classList.add("hidden");
+renderChatWindow();
+renderSidebar();
 // Init
 typingIndicator.classList.add("hidden");
 renderChatWindow();
