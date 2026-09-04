@@ -130,7 +130,7 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .brand-sub { font-size: 11px; color: var(--text-dim); }
 .header-actions { display: flex; align-items: center; gap: 8px; }
 
-/* NOTIFICATION STYLES - THIS WAS MISSING! */
+/* NOTIFICATION STYLES */
 .notif-wrapper { position: relative; }
 .notif-btn { position: relative; width: 36px; height: 36px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .notif-btn:hover { background: var(--input-bg); color: var(--text); }
@@ -163,6 +163,12 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .notif-text { flex: 1; }
 .notif-title { font-size: 13px; font-weight: 600; color: var(--text); }
 .notif-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* Sidebar Header Actions (New Chat + Theme Toggle) */
+.sidebar-header-actions {
+  display: flex;
+  gap: 8px;
+}
 
 /* Mobile Sidebar */
 @media (max-width: 860px) {
