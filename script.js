@@ -16,6 +16,7 @@ const menuDelete = document.getElementById("menu-delete");
 const modelBtn = document.getElementById("model-btn");
 const modelDropdown = document.getElementById("model-dropdown");
 const themeBtn = document.getElementById("theme-btn");
+const notifBtn = document.getElementById("notif-btn");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
 const ACTIVE_ID_KEY = "wazeer_active_id";
@@ -81,15 +82,16 @@ function switchConversation(id) { if (id === activeId) return; activeId = id; sa
 function createConversation() { const conv = newConversation(); conversations.push(conv); activeId = conv.id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); chatInput.focus(); }
 function deleteConversation(id) { conversations = conversations.filter((c) => c.id !== id); if (conversations.length === 0) conversations = [newConversation()]; if (id === activeId) activeId = conversations[0].id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); }
 
+// ✅ NEW CHAT BUTTON
 newChatNav.addEventListener("click", createConversation);
 
-// Context Menu
+// ✅ 3-DOT MENU
 menuBtn.addEventListener("click", (e) => { e.stopPropagation(); contextMenu.classList.toggle("open"); });
 document.addEventListener("click", (e) => { if (!contextMenu.contains(e.target) && !menuBtn.contains(e.target)) contextMenu.classList.remove("open"); });
 contextMenu.addEventListener("click", (e) => e.stopPropagation());
 menuDelete.addEventListener("click", () => { deleteConversation(activeId); contextMenu.classList.remove("open"); });
 
-// Model Selector
+// ✅ MODEL SELECTOR
 modelBtn.addEventListener("click", (e) => { e.stopPropagation(); modelDropdown.classList.toggle("open"); });
 document.addEventListener("click", (e) => { if (!modelDropdown.contains(e.target) && !modelBtn.contains(e.target)) modelDropdown.classList.remove("open"); });
 document.querySelectorAll(".model-option").forEach(opt => {
@@ -101,7 +103,7 @@ document.querySelectorAll(".model-option").forEach(opt => {
   });
 });
 
-// Theme Toggle
+// ✅ THEME TOGGLE
 const savedTheme = localStorage.getItem('wazeer_theme');
 if (savedTheme === 'light') document.body.classList.add('light-mode');
 themeBtn.addEventListener("click", () => {
@@ -109,7 +111,12 @@ themeBtn.addEventListener("click", () => {
   localStorage.setItem('wazeer_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
 });
 
-// CHAT FUNCTIONS
+// ✅ NOTIFICATIONS (simple alert for now)
+notifBtn.addEventListener("click", () => {
+  alert("🚀 Wazeer is live!\n⚡ Groq speed enabled\n🌍 Multi-language support\n📎 File uploads supported\n👑 Badshah Mode ON");
+});
+
+// ✅ CHAT FUNCTIONS
 function renderChatWindow() {
   chatWindow.innerHTML = "";
   const conv = getActive();
