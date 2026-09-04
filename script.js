@@ -9,10 +9,8 @@ const attachBtn = document.getElementById("attach-btn");
 const attachmentPreview = document.getElementById("attachment-preview");
 
 const sidebar = document.getElementById("sidebar");
-const sidebarToggle = document.getElementById("sidebar-toggle");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const newChatIconBtn = document.getElementById("new-chat-icon-btn");
-const themeToggleSidebar = document.getElementById("theme-toggle-sidebar");
 const conversationList = document.getElementById("conversation-list");
 
 const CONVERSATIONS_KEY = "wazeer_conversations";
@@ -132,24 +130,27 @@ function deleteConversation(id) {
   renderSidebar();
 }
 
-function openSidebar() { sidebar.classList.add("open"); sidebarOverlay.classList.remove("hidden"); }
-function closeSidebar() { sidebar.classList.remove("open"); sidebarOverlay.classList.add("hidden"); }
-function closeSidebarOnMobile() { if (window.innerWidth <= 860) closeSidebar(); }
+function closeSidebarOnMobile() { 
+  if (window.innerWidth <= 860) {
+    sidebar.classList.remove("open");
+    sidebarOverlay.classList.add("hidden");
+  }
+}
 
-// ── EVENT LISTENERS ──
-if (sidebarToggle) sidebarToggle.addEventListener("click", () => sidebar.classList.contains("open") ? closeSidebar() : openSidebar());
-if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
-if (newChatIconBtn) newChatIconBtn.addEventListener("click", createConversation);
-
-// THEME TOGGLE INSIDE MENU
-const themeIcon = themeToggleSidebar ? themeToggleSidebar.querySelector('.theme-icon') : null;
+// ─ THEME TOGGLE (In Header - The Circled Button) ──
+const themeBtn = document.getElementById('header-theme-btn');
+const themeIcon = themeBtn ? themeBtn.querySelector('.theme-icon') : null;
 const savedTheme = localStorage.getItem('wazeer_theme');
+
+// Load saved theme on startup
 if (savedTheme === 'light') {
   document.body.classList.add('light-mode');
   if (themeIcon) themeIcon.textContent = '🌙';
 }
-if (themeToggleSidebar) {
-  themeToggleSidebar.addEventListener('click', () => {
+
+// Toggle theme on click
+if (themeBtn) {
+  themeBtn.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
     if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
@@ -157,10 +158,11 @@ if (themeToggleSidebar) {
   });
 }
 
-// NOTIFICATIONS
+//  NOTIFICATIONS ──
 const notifBtn = document.getElementById('notif-btn');
 const notifPanel = document.getElementById('notif-panel');
 const notifDot = document.getElementById('notif-dot');
+
 if (notifBtn && notifPanel) {
   notifBtn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -168,12 +170,14 @@ if (notifBtn && notifPanel) {
     if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none';
   });
   document.addEventListener('click', (e) => {
-    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) notifPanel.classList.remove('open');
+    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+      notifPanel.classList.remove('open');
+    }
   });
   notifPanel.addEventListener('click', (e) => e.stopPropagation());
 }
 
-// CHAT FUNCTIONS
+// ─ CHAT FUNCTIONS ──
 function renderChatWindow() {
   chatWindow.innerHTML = "";
   const conv = getActive();
@@ -256,10 +260,20 @@ fileInput.addEventListener("change", async () => {
   if (file.size > MAX_FILE_BYTES) { addMessage("bot", `⚠️ "${file.name}" is over the 8MB limit.`); return; }
   try {
     if (IMAGE_TYPES.includes(file.type)) {
-      const dataUrl = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+      const dataUrl = await new Promise((res, rej) => { 
+        const r = new FileReader(); 
+        r.onload = () => res(r.result); 
+        r.onerror = rej; 
+        r.readAsDataURL(file); 
+      });
       pendingAttachment = { kind: "image", name: file.name, dataUrl };
     } else {
-      const text = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsText(file); });
+      const text = await new Promise((res, rej) => { 
+        const r = new FileReader(); 
+        r.onload = () => res(r.result); 
+        r.onerror = rej; 
+        r.readAsText(file); 
+      });
       pendingAttachment = { kind: "text", name: file.name, content: text.slice(0, MAX_TEXT_CHARS), truncated: text.length > MAX_TEXT_CHARS };
     }
     renderAttachmentPreview();
@@ -289,7 +303,12 @@ function renderAttachmentPreview() {
   removeBtn.type = "button";
   removeBtn.className = "remove-file";
   removeBtn.textContent = "✕";
-  removeBtn.addEventListener("click", () => { pendingAttachment = null; attachmentPreview.classList.add("hidden"); attachmentPreview.innerHTML = ""; attachBtn.classList.remove("has-file"); });
+  removeBtn.addEventListener("click", () => { 
+    pendingAttachment = null; 
+    attachmentPreview.classList.add("hidden"); 
+    attachmentPreview.innerHTML = ""; 
+    attachBtn.classList.remove("has-file"); 
+  });
   attachmentPreview.appendChild(removeBtn);
 }
 
@@ -355,6 +374,7 @@ chatForm.addEventListener("submit", (e) => {
 });
 
 // Init
+if (newChatIconBtn) newChatIconBtn.addEventListener("click", createConversation);
 typingIndicator.classList.add("hidden");
 renderChatWindow();
 renderSidebar();
