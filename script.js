@@ -11,11 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const welcomeScreen = document.getElementById("welcome-screen");
 
   const conversationList = document.getElementById("conversation-list");
-  const newChatBtn = document.getElementById("new-chat-btn");
-  const menuToggle = document.getElementById("menu-toggle");
-  const closeSidebar = document.getElementById("close-sidebar");
-  const slideSidebar = document.getElementById("slide-sidebar");
-  const sidebarOverlay = document.getElementById("sidebar-overlay");
+  const newChatNav = document.getElementById("new-chat-nav");
+  const menuBtn = document.getElementById("menu-btn");
+  const contextMenu = document.getElementById("context-menu");
+  const menuDelete = document.getElementById("menu-delete");
+  const modelBtn = document.getElementById("model-btn");
+  const modelDropdown = document.getElementById("model-dropdown");
   const themeBtn = document.getElementById("theme-btn");
   const notifBtn = document.getElementById("notif-btn");
 
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const ACTIVE_ID_KEY = "wazeer_active_id";
 
   const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only." };
-  const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
+  const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.";
 
   const MAX_FILE_BYTES = 8 * 1024 * 1024;
   const MAX_TEXT_CHARS = 4000;
@@ -75,27 +76,74 @@ document.addEventListener('DOMContentLoaded', function() {
       delBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteConversation(conv.id); });
       item.appendChild(title);
       item.appendChild(delBtn);
-      item.addEventListener("click", () => { switchConversation(conv.id); closeSidebarFunc(); });
+      item.addEventListener("click", () => switchConversation(conv.id));
       conversationList.appendChild(item);
     });
   }
 
   function switchConversation(id) { if (id === activeId) return; activeId = id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); }
-  function createConversation() { const conv = newConversation(); conversations.push(conv); activeId = conv.id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); if(chatInput) chatInput.focus(); closeSidebarFunc(); }
+  function createConversation() { const conv = newConversation(); conversations.push(conv); activeId = conv.id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); if(chatInput) chatInput.focus(); }
   function deleteConversation(id) { conversations = conversations.filter((c) => c.id !== id); if (conversations.length === 0) conversations = [newConversation()]; if (id === activeId) activeId = conversations[0].id; saveState(); clearAttachment(); renderChatWindow(); renderSidebar(); }
 
-  // SIDEBAR TOGGLE
-  function openSidebarFunc() { slideSidebar.classList.add("open"); sidebarOverlay.classList.add("open"); }
-  function closeSidebarFunc() { slideSidebar.classList.remove("open"); sidebarOverlay.classList.remove("open"); }
+  // ✅ NEW CHAT BUTTON
+  if (newChatNav) {
+    newChatNav.addEventListener("click", function() {
+      console.log("New Chat clicked");
+      createConversation();
+    });
+  }
+
+  // ✅ 3-DOT MENU
+  if (menuBtn && contextMenu) {
+    menuBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      contextMenu.classList.toggle("open");
+    });
+    
+    document.addEventListener("click", function(e) {
+      if (!contextMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+        contextMenu.classList.remove("open");
+      }
+    });
+    
+    contextMenu.addEventListener("click", function(e) {
+      e.stopPropagation();
+    });
+  }
   
-  if (menuToggle) menuToggle.addEventListener("click", openSidebarFunc);
-  if (closeSidebar) closeSidebar.addEventListener("click", closeSidebarFunc);
-  if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebarFunc);
+  if (menuDelete) {
+    menuDelete.addEventListener("click", function() {
+      deleteConversation(activeId);
+      if (contextMenu) contextMenu.classList.remove("open");
+    });
+  }
 
-  // NEW CHAT
-  if (newChatBtn) newChatBtn.addEventListener("click", createConversation);
+  // ✅ MODEL SELECTOR
+  if (modelBtn && modelDropdown) {
+    modelBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      modelDropdown.classList.toggle("open");
+    });
+    
+    document.addEventListener("click", function(e) {
+      if (!modelDropdown.contains(e.target) && !modelBtn.contains(e.target)) {
+        modelDropdown.classList.remove("open");
+      }
+    });
+    
+    const modelOptions = document.querySelectorAll(".model-option");
+    modelOptions.forEach(opt => {
+      opt.addEventListener("click", function() {
+        modelOptions.forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+        const modelName = document.getElementById("model-name");
+        if (modelName) modelName.textContent = opt.textContent;
+        modelDropdown.classList.remove("open");
+      });
+    });
+  }
 
-  // THEME TOGGLE
+  // ✅ THEME TOGGLE
   if (themeBtn) {
     const sunIcon = themeBtn.querySelector('.sun-icon');
     const moonIcon = themeBtn.querySelector('.moon-icon');
@@ -121,14 +169,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // NOTIFICATIONS
+  // ✅ NOTIFICATIONS
   if (notifBtn) {
     notifBtn.addEventListener("click", function() {
-      alert(" Wazeer is live!\n Groq speed enabled\n🌍 Multi-language support\n📎 File uploads supported\n👑 Badshah Mode ON");
+      alert(" Wazeer is live!\n⚡ Groq speed enabled\n🌍 Multi-language support\n File uploads supported\n👑 Badshah Mode ON");
     });
   }
 
-  // CHAT FUNCTIONS
+  // ✅ CHAT FUNCTIONS
   function renderChatWindow() {
     if (!chatWindow) return;
     chatWindow.innerHTML = "";
@@ -147,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const wrapper = document.createElement("div");
     wrapper.className = `message ${role}`;
     const avatar = document.createElement("div");
-    avatar.className = `avatar ${role}`;
+    avatar.className = `avatar-circle ${role === "user" ? "user-avatar" : "bot-avatar"}`;
     avatar.textContent = role === "user" ? "B" : "W";
     const bubble = document.createElement("div");
     bubble.className = "bubble";
@@ -160,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         const chip = document.createElement("div");
         chip.textContent = ` ${attachmentMeta.name}`;
-        chip.style.cssText = "font-size:13px;padding:6px 10px;background:var(--glass-bg);border-radius:8px;margin-bottom:8px;";
+        chip.style.cssText = "font-size:13px;padding:6px 10px;background:var(--hover);border-radius:8px;margin-bottom:8px;";
         bubble.appendChild(chip);
       }
     }
@@ -172,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
     wrapper.appendChild(avatar);
     wrapper.appendChild(bubble);
     chatWindow.appendChild(wrapper);
-    document.getElementById("chat-scroll").scrollTop = document.getElementById("chat-scroll").scrollHeight;
+    chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
   function setLoading(isLoading) {
@@ -183,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
       loadingTimeoutId = setTimeout(() => {
         if (typingIndicator) {
           typingIndicator.classList.remove("hidden");
-          document.getElementById("chat-scroll").scrollTop = document.getElementById("chat-scroll").scrollHeight;
+          chatWindow.scrollTop = chatWindow.scrollHeight;
         }
       }, 1500);
     } else {
@@ -192,24 +240,43 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  if (attachBtn) attachBtn.addEventListener("click", () => { if (fileInput) fileInput.click(); });
+  if (attachBtn) {
+    attachBtn.addEventListener("click", function() {
+      if (fileInput) fileInput.click();
+    });
+  }
   
   if (fileInput) {
     fileInput.addEventListener("change", async function() {
       const file = fileInput.files?.[0];
       fileInput.value = "";
       if (!file) return;
-      if (file.size > MAX_FILE_BYTES) { addMessage("bot", `⚠️ "${file.name}" is over the 8MB limit.`); return; }
+      if (file.size > MAX_FILE_BYTES) {
+        addMessage("bot", `⚠️ "${file.name}" is over the 8MB limit.`);
+        return;
+      }
       try {
         if (IMAGE_TYPES.includes(file.type)) {
-          const dataUrl = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+          const dataUrl = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(r.result);
+            r.onerror = rej;
+            r.readAsDataURL(file);
+          });
           pendingAttachment = { kind: "image", name: file.name, dataUrl };
         } else {
-          const text = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsText(file); });
+          const text = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(r.result);
+            r.onerror = rej;
+            r.readAsText(file);
+          });
           pendingAttachment = { kind: "text", name: file.name, content: text.slice(0, MAX_TEXT_CHARS), truncated: text.length > MAX_TEXT_CHARS };
         }
         renderAttachmentPreview();
-      } catch (err) { addMessage("bot", `⚠️ Couldn't read "${file.name}".`); }
+      } catch (err) {
+        addMessage("bot", `⚠️ Couldn't read "${file.name}".`);
+      }
     });
   }
 
@@ -218,36 +285,81 @@ document.addEventListener('DOMContentLoaded', function() {
     attachmentPreview.innerHTML = "";
     attachmentPreview.classList.remove("hidden");
     if (pendingAttachment.kind === "image") {
-      const thumb = document.createElement("img"); thumb.src = pendingAttachment.dataUrl; thumb.className = "thumb"; attachmentPreview.appendChild(thumb);
+      const thumb = document.createElement("img");
+      thumb.src = pendingAttachment.dataUrl;
+      thumb.className = "thumb";
+      attachmentPreview.appendChild(thumb);
     } else {
-      const icon = document.createElement("div"); icon.className = "file-icon"; icon.textContent = pendingAttachment.name.split(".").pop()?.toUpperCase().slice(0, 4) || "FILE"; attachmentPreview.appendChild(icon);
+      const icon = document.createElement("div");
+      icon.className = "file-icon";
+      icon.textContent = pendingAttachment.name.split(".").pop()?.toUpperCase().slice(0, 4) || "FILE";
+      attachmentPreview.appendChild(icon);
     }
-    const name = document.createElement("div"); name.className = "file-name"; name.textContent = pendingAttachment.name; attachmentPreview.appendChild(name);
-    const removeBtn = document.createElement("button"); removeBtn.className = "remove-file"; removeBtn.textContent = "✕"; removeBtn.addEventListener("click", clearAttachment); attachmentPreview.appendChild(removeBtn);
+    const name = document.createElement("div");
+    name.className = "file-name";
+    name.textContent = pendingAttachment.name;
+    attachmentPreview.appendChild(name);
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-file";
+    removeBtn.textContent = "✕";
+    removeBtn.addEventListener("click", clearAttachment);
+    attachmentPreview.appendChild(removeBtn);
   }
 
-  function clearAttachment() { pendingAttachment = null; if (attachmentPreview) { attachmentPreview.classList.add("hidden"); attachmentPreview.innerHTML = ""; } }
+  function clearAttachment() {
+    pendingAttachment = null;
+    if (attachmentPreview) {
+      attachmentPreview.classList.add("hidden");
+      attachmentPreview.innerHTML = "";
+    }
+  }
 
   async function sendMessage(userText) {
-    const conv = getActive(); const attachment = pendingAttachment; clearAttachment();
-    let apiContent = userText; let displayText = userText; let attachmentMeta = null;
-    if (attachment?.kind === "image") { apiContent = [{ type: "text", text: userText || "Describe this image." }, { type: "image_url", image_url: { url: attachment.dataUrl } }]; attachmentMeta = { kind: "image", name: attachment.name, dataUrl: attachment.dataUrl }; }
-    else if (attachment?.kind === "text") { apiContent = `Attached file "${attachment.name}":\n\`\`\`\n${attachment.content}\n\`\`\`\n\n${userText || "Please review."}`; attachmentMeta = { kind: "text", name: attachment.name }; }
+    const conv = getActive();
+    const attachment = pendingAttachment;
+    clearAttachment();
+    let apiContent = userText;
+    let displayText = userText;
+    let attachmentMeta = null;
+    
+    if (attachment?.kind === "image") {
+      apiContent = [{ type: "text", text: userText || "Describe this image." }, { type: "image_url", image_url: { url: attachment.dataUrl } }];
+      attachmentMeta = { kind: "image", name: attachment.name, dataUrl: attachment.dataUrl };
+    } else if (attachment?.kind === "text") {
+      apiContent = `Attached file "${attachment.name}":\n\`\`\`\n${attachment.content}\n\`\`\`\n\n${userText || "Please review."}`;
+      attachmentMeta = { kind: "text", name: attachment.name };
+    }
 
     addMessage("user", displayText, attachmentMeta);
     const wasFirst = !conv.messages.some((m) => m.role === "user");
     conv.messages.push({ role: "user", content: apiContent, displayText, attachmentMeta });
     if (wasFirst) conv.title = titleFromText(displayText || attachment?.name || "New chat");
-    conv.updatedAt = Date.now(); saveState(); renderSidebar(); setLoading(true);
+    conv.updatedAt = Date.now();
+    saveState();
+    renderSidebar();
+    setLoading(true);
 
     try {
-      const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: conv.messages.map((m) => ({ role: m.role, content: m.content })) }) });
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conv.messages.map((m) => ({ role: m.role, content: m.content })) })
+      });
+      
       if (!res.ok) throw new Error(await res.text());
+      
       const data = await res.json();
       const reply = cleanText(data.reply?.trim() || "Hmm, I didn't get a response.");
-      conv.messages.push({ role: "assistant", content: reply }); conv.updatedAt = Date.now(); saveState(); renderSidebar(); addMessage("bot", reply);
-    } catch (err) { addMessage("bot", `⚠️ ${err.message || "Something went wrong."}`); }
-    finally { setLoading(false); }
+      conv.messages.push({ role: "assistant", content: reply });
+      conv.updatedAt = Date.now();
+      saveState();
+      renderSidebar();
+      addMessage("bot", reply);
+    } catch (err) {
+      addMessage("bot", `⚠️ ${err.message || "Something went wrong."}`);
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (chatForm) {
@@ -260,9 +372,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Init
+  // Initialize
   if (typingIndicator) typingIndicator.classList.add("hidden");
   renderChatWindow();
   renderSidebar();
-  console.log("Wazeer initialized!");
+  
+  console.log("Wazeer chatbot initialized successfully!");
+  
 });
