@@ -4,11 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=9" />
+<link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
 
-  <!-- FLOATING PARTICLES BACKGROUND -->
   <div class="particles">
     <span></span><span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span><span></span>
@@ -17,127 +16,70 @@
   </div>
 
   <div class="app">
-
-    <!-- ══════ REDESIGNED SIDEBAR ══════ -->
     <aside id="sidebar" class="sidebar">
-
-      <!-- Logo Area -->
       <div class="sidebar-header">
         <div class="logo">
-          <div class="logo-icon">
-            <span class="logo-dot"></span>
-          </div>
+          <div class="logo-icon">W</div>
           <div class="logo-text">
             <h1>Wazeer</h1>
             <p class="logo-sub">AI Assistant</p>
           </div>
         </div>
-        <button id="sidebar-close" class="icon-btn sidebar-close" type="button" aria-label="Close sidebar">
+        <button id="sidebar-close" class="icon-btn sidebar-close" type="button">
           <svg viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
 
-      <!-- New Chat Button -->
       <button id="new-chat-btn" class="new-chat-btn" type="button">
-        <div class="new-chat-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+        <div class="new-chat-icon">+</div>
         <span>New Chat</span>
-        <span class="new-chat-shortcut">⌘N</span>
       </button>
 
-      <!-- Section Label -->
       <div class="conv-section-label">
         <span>Recent Chats</span>
         <span class="conv-count" id="conv-count">0</span>
       </div>
 
-      <!-- Conversation List -->
       <div id="conversation-list" class="conversation-list"></div>
 
-      <!-- User Profile Footer -->
       <div class="sidebar-footer">
         <div class="user-profile">
-          <div class="user-avatar-sidebar">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
-          </div>
+          <div class="user-avatar-sidebar">B</div>
           <div class="user-info">
-            <span class="user-name">User</span>
-            <span class="user-status">
-              <span class="status-dot"></span>
-              Online
-            </span>
+            <span class="user-name">Badshah</span>
+            <span class="user-status"><span class="status-dot"></span> Online</span>
           </div>
-        </div>
-        <div class="sidebar-footer-actions">
-          <button class="footer-btn" title="Settings" type="button">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
         </div>
       </div>
-
     </aside>
 
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
-        <!-- Main -->
+
     <div class="main-col">
       <header class="app-header">
-
-        <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button" aria-label="Toggle sidebar">
+        <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
 
         <p class="tagline">Powered by Groq</p>
 
-        <!-- Notification bell -->
         <div class="notif-wrapper">
-          <button class="notif-btn" id="notif-btn" type="button" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <button class="notif-btn" id="notif-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="notif-dot" id="notif-dot"></span>
           </button>
           <div class="notif-panel" id="notif-panel">
             <div class="notif-header">Notifications</div>
-            <div class="notif-item">
-              <div class="notif-icon">🚀</div>
-              <div class="notif-text">
-                <div class="notif-title">Wazeer is live!</div>
-                <div class="notif-desc">Your AI assistant is ready to help.</div>
-              </div>
-            </div>
-            <div class="notif-item">
-              <div class="notif-icon">⚡</div>
-              <div class="notif-text">
-                <div class="notif-title">Groq speed enabled</div>
-                <div class="notif-desc">Responses powered by Groq LPU.</div>
-              </div>
-            </div>
-            <div class="notif-item">
-              <div class="notif-icon">🌍</div>
-              <div class="notif-text">
-                <div class="notif-title">Multi-language support</div>
-                <div class="notif-desc">Talk in any language — Wazeer replies in the same one.</div>
-              </div>
-            </div>
-            <div class="notif-item">
-              <div class="notif-icon">📎</div>
-              <div class="notif-text">
-                <div class="notif-title">File upload supported</div>
-                <div class="notif-desc">Attach PDFs, images, docs and more.</div>
-              </div>
-            </div>
+            <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
           </div>
         </div>
 
-        <!-- NEW THEME TOGGLE BUTTON -->
-        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle theme">
-          <svg class="sun-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" style="display:none;"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <!-- THEME TOGGLE BUTTON -->
+        <button id="theme-toggle" class="icon-btn theme-btn" type="button">
+          <span class="theme-icon">☀️</span>
         </button>
 
-        <button id="clear-btn" class="clear-btn" type="button" aria-label="Clear chat">
+        <button id="clear-btn" class="clear-btn" type="button">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M9 7V4.5C9 4.22386 9.22386 4 9.5 4H14.5C14.7761 4 15 4.22386 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Clear
         </button>
@@ -147,134 +89,103 @@
         <div id="chat-window" class="chat-window">
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
-            <div class="bubble">
-              <div class="bubble-text">Assalamu Alaikum! Main hoon Wazeer 🤖 Aap ka apna AI assistant. Aap mujhse kisi bhi zabaan mein baat kar sakte hain — main usi zabaan mein jawab doonga!</div>
-            </div>
+            <div class="bubble"><div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div></div>
           </div>
         </div>
 
-        <!-- Thinking — hidden by default -->
         <div id="thinking-indicator" class="thinking-indicator hidden">
           <div class="avatar bot-avatar">W</div>
           <div class="thinking-bubble">
-            <div class="thinking-label">
-              <div class="thinking-spinner"></div>
-              <span id="thinking-label-text">Thinking...</span>
-            </div>
+            <div class="thinking-label"><div class="thinking-spinner"></div><span id="thinking-label-text">Thinking...</span></div>
             <div class="thinking-steps" id="thinking-steps"></div>
           </div>
         </div>
 
-        <!-- Typing dots — hidden by default -->
         <div id="typing-indicator" class="typing-indicator hidden">
           <div class="avatar bot-avatar">W</div>
-          <div class="bubble typing-bubble">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="bubble typing-bubble"><span></span><span></span><span></span></div>
         </div>
 
         <div id="attachment-preview" class="attachment-preview hidden"></div>
 
         <form id="chat-form" class="chat-input-row" autocomplete="off">
-          <input id="file-input" type="file" accept="image/*,.txt,.md,.csv,.json,.js,.ts,.py,.log,.html,.css,.pdf,.docx" hidden />
-          <button id="attach-btn" type="button" aria-label="Attach file">
+          <input id="file-input" type="file" accept="image/*,.txt,.pdf,.docx" hidden />
+          <button id="attach-btn" type="button">
             <svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5L12.5 20C10.6 21.9 7.5 21.9 5.6 20C3.7 18.1 3.7 15 5.6 13.1L14.1 4.6C15.4 3.3 17.5 3.3 18.8 4.6C20.1 5.9 20.1 8 18.8 9.3L10.6 17.5C9.9 18.2 8.8 18.2 8.1 17.5C7.4 16.8 7.4 15.7 8.1 15L15.5 7.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
-          <button id="send-btn" type="submit" aria-label="Send">
+          <button id="send-btn" type="submit">
             <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
           </button>
         </form>
       </main>
     </div>
   </div>
-    <script>
-    // ── Notification bell ──
+
+  <script>
+    // Theme Toggle Logic
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = themeBtn.querySelector('.theme-icon');
+    const savedTheme = localStorage.getItem('wazeer_theme');
+
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      themeIcon.textContent = '🌙';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      themeIcon.textContent = isLight ? '🌙' : '☀️';
+      localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
+    });
+
+    // Notification Logic
     const notifBtn = document.getElementById('notif-btn');
     const notifPanel = document.getElementById('notif-panel');
     const notifDot = document.getElementById('notif-dot');
     notifBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       notifPanel.classList.toggle('open');
-      if (notifPanel.classList.contains('open')) notifDot.style.display = 'none';
+      if(notifPanel.classList.contains('open')) notifDot.style.display = 'none';
     });
     document.addEventListener('click', () => notifPanel.classList.remove('open'));
-    notifPanel.addEventListener('click', (e) => e.stopPropagation());
 
-    // ── Thinking animation ──
-    const THINKING_STEPS = [
-      "Reading your message",
-      "Detecting language",
-      "Forming a response",
-      "Almost ready"
-    ];
-    let _thinkingTimer = null;
-
-    window.startThinking = function () {
-      const indicator = document.getElementById('thinking-indicator');
-      const stepsEl   = document.getElementById('thinking-steps');
-      const labelEl   = document.getElementById('thinking-label-text');
-
+    // Thinking Animation
+    const THINKING_STEPS = ["Reading message", "Detecting language", "Forming response", "Almost ready"];
+    let _tTimer = null;
+    window.startThinking = function() {
+      const ind = document.getElementById('thinking-indicator');
+      const steps = document.getElementById('thinking-steps');
+      const lbl = document.getElementById('thinking-label-text');
       document.getElementById('typing-indicator').classList.add('hidden');
-
-      indicator.classList.remove('hidden');
-      stepsEl.innerHTML = '';
-      labelEl.textContent = 'Thinking...';
-
+      ind.classList.remove('hidden');
+      steps.innerHTML = '';
+      lbl.textContent = 'Thinking...';
       let i = 0;
-      function addStep() {
-        const prev = stepsEl.querySelector('.thinking-step.active');
-        if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
-
-        if (i < THINKING_STEPS.length) {
-          const step = document.createElement('div');
-          step.className = 'thinking-step active';
-          step.textContent = THINKING_STEPS[i];
-          stepsEl.appendChild(step);
-          i++;
-          _thinkingTimer = setTimeout(addStep, 650);
+      function add() {
+        const prev = steps.querySelector('.thinking-step.active');
+        if(prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+        if(i < THINKING_STEPS.length) {
+          const s = document.createElement('div'); s.className = 'thinking-step active'; s.textContent = THINKING_STEPS[i];
+          steps.appendChild(s); i++; _tTimer = setTimeout(add, 600);
         } else {
-          labelEl.textContent = 'Responding...';
-          setTimeout(() => {
-            indicator.classList.add('hidden');
-            document.getElementById('typing-indicator').classList.remove('hidden');
-          }, 400);
+          lbl.textContent = 'Responding...';
+          setTimeout(() => { ind.classList.add('hidden'); document.getElementById('typing-indicator').classList.remove('hidden'); }, 400);
         }
       }
-      addStep();
+      add();
     };
-
-    window.stopThinking = function () {
-      clearTimeout(_thinkingTimer);
+    window.stopThinking = function() {
+      clearTimeout(_tTimer);
       document.getElementById('thinking-indicator').classList.add('hidden');
-      document.getElementById('thinking-steps').innerHTML = '';
       document.getElementById('typing-indicator').classList.add('hidden');
     };
-
-    // ── Theme Toggle Logic ──
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('wazeer_theme');
-
-    // Load saved theme on startup
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-mode');
-    }
-
-    // Toggle theme on click
-    themeToggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
-    });
   </script>
 
-  <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
-  
-  <!-- Main Chat Logic -->
   <script src="script.js"></script>
 </body>
 </html>
