@@ -8,6 +8,14 @@
 </head>
 <body>
 
+  <div class="particles">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
   <div class="app">
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -16,7 +24,7 @@
           <div class="logo-icon-w">W</div>
           <span class="logo-name">Wazeer</span>
         </div>
-        <button class="icon-btn sidebar-menu-btn" title="Menu">
+        <button class="icon-btn sidebar-menu-btn" id="sidebar-menu-btn" title="Menu">
           <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 3V21" stroke="currentColor" stroke-width="1.5"/></svg>
         </button>
       </div>
@@ -31,7 +39,7 @@
           <span>Search Chats</span>
         </button>
         <button class="nav-item">
-          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M17 21V19C17 17.94 16.58 16.92 15.83 16.17C15.08 15.42 14.06 15 13 15H5C3.94 15 2.92 15.42 2.17 16.17C1.42 16.92 1 17.94 1 19V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21V19C23 18.11 22.7 17.25 22.16 16.55C21.62 15.85 20.86 15.35 20 15.13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span>Community</span>
         </button>
         <button class="nav-item">
@@ -106,9 +114,7 @@
       <!-- CHAT AREA -->
       <div class="chat-area">
         <div class="welcome-screen" id="welcome-screen">
-          <div class="welcome-logo">
-            <div class="welcome-icon">W</div>
-          </div>
+          <div class="welcome-icon">W</div>
           <h1 class="welcome-title">How can I help you?</h1>
         </div>
 
