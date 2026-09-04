@@ -612,3 +612,17 @@ if (plusBtn && attachMenu) {
 
   attachMenu.addEventListener("click", (e) => e.stopPropagation());
 }
+// Debug: Test if form submission works
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("Form submitted!");
+  const text = chatInput.value.trim();
+  console.log("Message text:", text);
+  if (!text && !pendingAttachment) {
+    console.log("No text or attachment");
+    return;
+  }
+  console.log("Sending message...");
+  chatInput.value = "";
+  sendMessage(text);
+});
