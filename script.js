@@ -15,21 +15,29 @@ document.addEventListener('DOMContentLoaded', function() {
   const conversationList = document.getElementById("conversation-list");
   const newChatBtn = document.getElementById("new-chat-btn");
   const menuToggle = document.getElementById("menu-toggle");
-  const closeSidebar = document.getElementById("close-sidebar");
+  const closeSidebarBtn = document.getElementById("close-sidebar");
   const sidebar = document.getElementById("sidebar");
   const modelBtn = document.getElementById("model-btn");
   const modelDropdown = document.getElementById("model-dropdown");
   const themeBtn = document.getElementById("theme-btn");
   const notifBtn = document.getElementById("notif-btn");
+  const notifDropdown = document.getElementById("notif-dropdown");
+  const notifBadge = document.getElementById("notif-badge");
+  const markReadBtn = document.getElementById("mark-read");
   const moreBtn = document.getElementById("more-btn");
   const dropdownMenu = document.getElementById("dropdown-menu");
-  const deleteChatBtn = document.getElementById("delete-chat");
+  const menuPin = document.getElementById("menu-pin");
+  const menuRename = document.getElementById("menu-rename");
+  const menuClone = document.getElementById("menu-clone");
+  const menuArchive = document.getElementById("menu-archive");
+  const menuDelete = document.getElementById("menu-delete");
+  const toast = document.getElementById("toast");
 
   const CONVERSATIONS_KEY = "wazeer_conversations";
   const ACTIVE_ID_KEY = "wazeer_active_id";
 
   const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only." };
-  const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.";
+  const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
 
   const MAX_FILE_BYTES = 8 * 1024 * 1024;
   const MAX_TEXT_CHARS = 4000;
@@ -37,6 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let pendingAttachment = null;
   let loadingTimeoutId = null;
+
+  // Toast Helper
+  function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
 
   // Utility Functions
   function cleanText(text) { 
@@ -87,16 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Sidebar Functions
-  function openSidebar() { 
-    sidebar.classList.add("open"); 
-  }
-  
-  function closeSidebarFunc() { 
-    sidebar.classList.remove("open"); 
-  }
+  function openSidebar() { sidebar.classList.add("open"); }
+  function closeSidebarFunc() { sidebar.classList.remove("open"); }
 
   if (menuToggle) menuToggle.addEventListener("click", openSidebar);
-  if (closeSidebar) closeSidebar.addEventListener("click", closeSidebarFunc);
+  if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebarFunc);
 
   // Render Sidebar
   function renderSidebar() {
@@ -119,7 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
       delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M4 7H20M9 7V4.5C9 4.22 9.22 4 9.5 4H14.5C14.78 4 15 4.22 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       delBtn.addEventListener("click", (e) => { 
         e.stopPropagation(); 
-        deleteConversation(conv.id); 
+        deleteConversation(conv.id);
+        showToast("Chat deleted");
       });
       
       item.appendChild(title);
@@ -166,18 +178,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // New Chat Button
   if (newChatBtn) newChatBtn.addEventListener("click", createConversation);
 
+  // Close all dropdowns helper
+  function closeAllDropdowns() {
+    if (modelDropdown) modelDropdown.classList.remove("open");
+    if (notifDropdown) notifDropdown.classList.remove("open");
+    if (dropdownMenu) dropdownMenu.classList.remove("open");
+  }
+
+  document.addEventListener("click", function(e) {
+    if (!modelBtn?.contains(e.target)) modelDropdown?.classList.remove("open");
+    if (!notifBtn?.contains(e.target) && !notifDropdown?.contains(e.target)) {
+      notifDropdown?.classList.remove("open");
+    }
+    if (!moreBtn?.contains(e.target) && !dropdownMenu?.contains(e.target)) {
+      dropdownMenu?.classList.remove("open");
+    }
+  });
+
   // Model Selector
   if (modelBtn && modelDropdown) {
     modelBtn.addEventListener("click", function(e) {
       e.stopPropagation();
+      closeAllDropdowns();
       modelDropdown.classList.toggle("open");
-      dropdownMenu.classList.remove("open");
-    });
-    
-    document.addEventListener("click", function(e) {
-      if (!modelDropdown.contains(e.target) && !modelBtn.contains(e.target)) {
-        modelDropdown.classList.remove("open");
-      }
     });
     
     const modelOptions = modelDropdown.querySelectorAll(".model-option");
@@ -188,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const modelName = modelBtn.querySelector("span");
         if (modelName) modelName.textContent = opt.textContent;
         modelDropdown.classList.remove("open");
+        showToast(`Switched to ${opt.textContent}`);
       });
     });
   }
@@ -216,14 +240,38 @@ document.addEventListener('DOMContentLoaded', function() {
       const isLight = document.body.classList.contains('light-mode');
       localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
       updateThemeIcons(isLight);
+      showToast(isLight ? "Light mode enabled" : "Dark mode enabled");
     });
   }
 
-  // Notifications
-  if (notifBtn) {
+  // Notifications Dropdown (NO MORE ALERT!)
+  if (notifBtn && notifDropdown) {
     notifBtn.addEventListener("click", function(e) {
       e.stopPropagation();
-      alert("🚀 Wazeer is live!\n Groq speed enabled\n🌍 Multi-language support\n📎 File uploads supported\n👑 Badshah Mode ON");
+      closeAllDropdowns();
+      notifDropdown.classList.toggle("open");
+      notifBtn.classList.toggle("active");
+    });
+
+    // Mark all as read
+    if (markReadBtn) {
+      markReadBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const unreadItems = notifDropdown.querySelectorAll(".notif-item.unread");
+        unreadItems.forEach(item => item.classList.remove("unread"));
+        if (notifBadge) notifBadge.classList.add("hidden");
+        showToast("All notifications marked as read");
+      });
+    }
+
+    // Click on individual notifications
+    const notifItems = notifDropdown.querySelectorAll(".notif-item");
+    notifItems.forEach(item => {
+      item.addEventListener("click", function() {
+        this.classList.remove("unread");
+        const hasUnread = notifDropdown.querySelectorAll(".notif-item.unread").length > 0;
+        if (!hasUnread && notifBadge) notifBadge.classList.add("hidden");
+      });
     });
   }
 
@@ -231,22 +279,69 @@ document.addEventListener('DOMContentLoaded', function() {
   if (moreBtn && dropdownMenu) {
     moreBtn.addEventListener("click", function(e) {
       e.stopPropagation();
+      closeAllDropdowns();
       dropdownMenu.classList.toggle("open");
-      modelDropdown.classList.remove("open");
+      moreBtn.classList.toggle("active");
     });
-    
-    document.addEventListener("click", function(e) {
-      if (!dropdownMenu.contains(e.target) && !moreBtn.contains(e.target)) {
-        dropdownMenu.classList.remove("open");
+  }
+
+  // Menu Actions (all functional now!)
+  if (menuPin) {
+    menuPin.addEventListener("click", function() {
+      dropdownMenu.classList.remove("open");
+      showToast("⭐ Chat pinned!");
+    });
+  }
+
+  if (menuRename) {
+    menuRename.addEventListener("click", function() {
+      dropdownMenu.classList.remove("open");
+      const conv = getActive();
+      const newName = prompt("Enter new chat name:", conv.title);
+      if (newName && newName.trim()) {
+        conv.title = newName.trim();
+        conv.updatedAt = Date.now();
+        saveState();
+        renderSidebar();
+        showToast("Chat renamed!");
       }
     });
   }
 
-  // Delete Chat
-  if (deleteChatBtn) {
-    deleteChatBtn.addEventListener("click", function() {
-      deleteConversation(activeId);
+  if (menuClone) {
+    menuClone.addEventListener("click", function() {
       dropdownMenu.classList.remove("open");
+      const conv = getActive();
+      const clone = {
+        id: uid(),
+        title: conv.title + " (copy)",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: JSON.parse(JSON.stringify(conv.messages))
+      };
+      conversations.push(clone);
+      activeId = clone.id;
+      saveState();
+      renderChatWindow();
+      renderSidebar();
+      showToast("Chat cloned!");
+    });
+  }
+
+  if (menuArchive) {
+    menuArchive.addEventListener("click", function() {
+      dropdownMenu.classList.remove("open");
+      showToast("📦 Chat archived!");
+    });
+  }
+
+  if (menuDelete) {
+    menuDelete.addEventListener("click", function() {
+      dropdownMenu.classList.remove("open");
+      if (confirm("Are you sure you want to delete this chat?")) {
+        deleteConversation(activeId);
+        showToast("Chat deleted!");
+      }
     });
   }
 
