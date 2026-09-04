@@ -1,13 +1,14 @@
-// 1. Generate 100 Floating Particles
-const particlesContainer = document.getElementById('particles-container');
+// ── Generate 100 Floating Particles ──
+const particlesContainer = document.getElementById("particles-container");
 if (particlesContainer) {
   for (let i = 0; i < 100; i++) {
-    const span = document.createElement('span');
-    span.style.left = Math.random() * 100 + '%';
-    span.style.width = (Math.random() * 4 + 2) + 'px';
-    span.style.height = span.style.width;
-    span.style.animationDuration = (Math.random() * 15 + 10) + 's';
-    span.style.animationDelay = (Math.random() * 10) + 's';
+    const span = document.createElement("span");
+    const size = Math.random() * 4 + 2;
+    span.style.left = Math.random() * 100 + "%";
+    span.style.width = size + "px";
+    span.style.height = size + "px";
+    span.style.animationDuration = (Math.random() * 15 + 10) + "s";
+    span.style.animationDelay = (Math.random() * 10) + "s";
     particlesContainer.appendChild(span);
   }
 }
@@ -30,10 +31,7 @@ const conversationList = document.getElementById("conversation-list");
 const CONVERSATIONS_KEY = "wazeer_conversations";
 const ACTIVE_ID_KEY = "wazeer_active_id";
 
-const SYSTEM_PROMPT = { 
-  role: "system", 
-  content: "You are Wazeer, a friendly AI assistant for Badshah. Always reply in the same language the user is using. Never use markdown symbols like **, #, or `. Write in plain text only. IMPORTANT: When a user uploads an image to analyze, asks for code, or requests a complex task, DO NOT give a long direct answer right away. Instead, ask 1 or 2 short clarifying questions to understand exactly what they need. Keep your replies concise, friendly, and conversational." 
-};
+const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only. When the user sends an image or asks for analysis, first ask 1 or 2 short questions about what they want. Keep replies short." };
 const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
@@ -43,20 +41,21 @@ const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 let pendingAttachment = null;
 let loadingTimeoutId = null;
 
+// Cleans the AI reply and removes any <think> blocks
 function cleanText(text) {
   return text
-    .replace(/<think>[\s\S]*?<\/think>/gi, '')   // remove closed think blocks
-    .replace(/<think>[\s\S]*$/gi, '')             // remove unclosed think blocks (to the end)
-    .replace(/<\/?think>/gi, '')                  // remove any stray think tags
-    .replace(/#{1,6}\s*/g, '')
-    .replace(/\*\*(.*?)\*\*/gs, '$1')
-    .replace(/\*(.*?)\*/gs, '$1')
-    .replace(/^[\-\*]\s+/gm, '')
-    .replace(/`{3}[\s\S]*?`{3}/g, '')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\n{3,}/g, '\n\n')
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/<think>[\s\S]*/gi, "")
+    .replace(/#{1,6}\s*/g, "")
+    .replace(/\*\*(.*?)\*\*/gs, "$1")
+    .replace(/\*(.*?)\*/gs, "$1")
+    .replace(/^[\-\*]\s+/gm, "")
+    .replace(/`{3}[\s\S]*?`{3}/g, "")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
-}function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
+}
+function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
 function newConversation() { return { id: uid(), title: "New chat", createdAt: Date.now(), updatedAt: Date.now(), messages: [SYSTEM_PROMPT] }; }
 
 function loadState() {
@@ -143,39 +142,15 @@ if (themeToggleSettings) {
   });
 }
 
-// ─ NOTIFICATIONS & MARK ALL READ ──
+// ─ NOTIFICATIONS ──
 const notifBtn = document.getElementById('notif-btn');
 const notifPanel = document.getElementById('notif-panel');
 const notifDot = document.getElementById('notif-dot');
-const markAllReadBtn = document.getElementById('mark-all-read');
-const notifItems = document.querySelectorAll('.notif-item');
-
 if (notifBtn && notifPanel) {
-  notifBtn.addEventListener('click', (e) => { 
-    e.stopPropagation(); 
-    notifPanel.classList.toggle('open'); 
-    if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none'; 
-    if(settingsPanel) settingsPanel.classList.remove('open'); 
-  });
+  notifBtn.addEventListener('click', (e) => { e.stopPropagation(); notifPanel.classList.toggle('open'); if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none'; if(settingsPanel) settingsPanel.classList.remove('open'); });
   document.addEventListener('click', (e) => { if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) notifPanel.classList.remove('open'); });
   notifPanel.addEventListener('click', (e) => e.stopPropagation());
 }
-
-// Mark all as read functionality
-if (markAllReadBtn) {
-  markAllReadBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    notifItems.forEach(item => item.classList.remove('unread'));
-    if (notifDot) notifDot.style.display = 'none';
-  });
-}
-
-// Click individual notification to mark as read
-notifItems.forEach(item => {
-  item.addEventListener('click', () => {
-    item.classList.remove('unread');
-  });
-});
 
 // ─ CHAT FUNCTIONS ──
 function renderChatWindow() {
