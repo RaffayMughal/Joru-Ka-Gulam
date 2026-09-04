@@ -401,7 +401,7 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .particles span:nth-child(97){left:50%;animation-duration:17s;animation-delay:4s;width:2px;height:2px}
 .particles span:nth-child(98){left:60%;animation-duration:23s;animation-delay:7s}
 .particles span:nth-child(99){left:70%;animation-duration:15s;animation-delay:0s;width:5px;height:5px}
-.particles span:nth-child(100){left:80%;animation-duration:25s;animation-delay:0s;width:2px;height:2px}
+.particles span:nth-child(100){left:80%;animation-duration:19s;animation-delay:3s}
 .notif-panel {
   max-height: 340px;
   overflow-y: auto;
