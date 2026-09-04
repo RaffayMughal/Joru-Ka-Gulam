@@ -17,7 +17,6 @@
   </div>
 
   <div class="app">
-    <!-- SIDEBAR MENU -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
         <div class="logo">
@@ -36,14 +35,11 @@
           </button>
         </div>
       </div>
-
       <div class="conv-section-label">
         <span>Recent Chats</span>
         <span class="conv-count" id="conv-count">0</span>
       </div>
-
       <div id="conversation-list" class="conversation-list"></div>
-
       <div class="sidebar-footer">
         <div class="user-profile">
           <div class="user-avatar-sidebar">B</div>
@@ -54,10 +50,8 @@
         </div>
       </div>
     </aside>
-
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
 
-    <!-- MAIN CONTENT -->
     <div class="main-col">
       <header class="app-header">
         <div class="logo-area">
@@ -67,10 +61,7 @@
             <span class="brand-sub">for Badshah</span>
           </div>
         </div>
-
         <div class="header-actions">
-          
-          <!-- SETTINGS BUTTON (Gear Icon) -->
           <div class="settings-wrapper">
             <button class="icon-btn" id="settings-btn" title="Settings">
               <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -78,7 +69,6 @@
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.5"/>
               </svg>
             </button>
-            <!-- SETTINGS DROPDOWN MENU -->
             <div class="settings-panel" id="settings-panel">
               <div class="settings-header">Settings</div>
               <div class="settings-item" id="theme-toggle-settings">
@@ -88,7 +78,6 @@
             </div>
           </div>
 
-          <!-- NOTIFICATIONS -->
           <div class="notif-wrapper">
             <button class="notif-btn" id="notif-btn" title="Notifications">
               <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -99,11 +88,11 @@
             </button>
             <div class="notif-panel" id="notif-panel">
               <div class="notif-header">Notifications</div>
-              <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready to help.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready.</div></div></div>
               <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language support</div><div class="notif-desc">Talk in any language.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads supported</div><div class="notif-desc">Attach PDFs, images, and docs.</div></div></div>
-              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode ON</div><div class="notif-desc">Wazeer treats you like royalty.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language</div><div class="notif-desc">Talk in any language.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads</div><div class="notif-desc">Attach PDFs & images.</div></div></div>
+              <div class="notif-item"><div class="notif-icon">👑</div><div class="notif-text"><div class="notif-title">Badshah Mode</div><div class="notif-desc">Treats you like royalty.</div></div></div>
             </div>
           </div>
 
@@ -120,28 +109,21 @@
         <div id="chat-window" class="chat-window">
           <div class="message bot">
             <div class="avatar bot-avatar">W</div>
-            <div class="bubble">
-              <div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div>
-            </div>
+            <div class="bubble"><div class="bubble-text">Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.</div></div>
           </div>
         </div>
 
         <div id="thinking-indicator" class="thinking-indicator hidden">
           <div class="avatar bot-avatar">W</div>
           <div class="thinking-bubble">
-            <div class="thinking-label">
-              <div class="thinking-spinner"></div>
-              <span id="thinking-label-text">Thinking...</span>
-            </div>
+            <div class="thinking-label"><div class="thinking-spinner"></div><span id="thinking-label-text">Thinking...</span></div>
             <div class="thinking-steps" id="thinking-steps"></div>
           </div>
         </div>
 
         <div id="typing-indicator" class="typing-indicator hidden">
           <div class="avatar bot-avatar">W</div>
-          <div class="bubble typing-bubble">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="bubble typing-bubble"><span></span><span></span><span></span></div>
         </div>
 
         <div id="attachment-preview" class="attachment-preview hidden"></div>
@@ -167,6 +149,40 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  
+  <!-- Thinking Animation Script -->
+  <script>
+    const THINKING_STEPS = ["Reading message", "Detecting language", "Forming response", "Almost ready"];
+    let _tTimer = null;
+    window.startThinking = function() {
+      const ind = document.getElementById('thinking-indicator');
+      const steps = document.getElementById('thinking-steps');
+      const lbl = document.getElementById('thinking-label-text');
+      document.getElementById('typing-indicator').classList.add('hidden');
+      ind.classList.remove('hidden');
+      steps.innerHTML = '';
+      lbl.textContent = 'Thinking...';
+      let i = 0;
+      function add() {
+        const prev = steps.querySelector('.thinking-step.active');
+        if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+        if (i < THINKING_STEPS.length) {
+          const s = document.createElement('div'); s.className = 'thinking-step active'; s.textContent = THINKING_STEPS[i];
+          steps.appendChild(s); i++; _tTimer = setTimeout(add, 600);
+        } else {
+          lbl.textContent = 'Responding...';
+          setTimeout(() => { ind.classList.add('hidden'); document.getElementById('typing-indicator').classList.remove('hidden'); }, 400);
+        }
+      }
+      add();
+    };
+    window.stopThinking = function() {
+      clearTimeout(_tTimer);
+      document.getElementById('thinking-indicator').classList.add('hidden');
+      document.getElementById('typing-indicator').classList.add('hidden');
+    };
+  </script>
+
   <script src="script.js"></script>
 </body>
 </html>
