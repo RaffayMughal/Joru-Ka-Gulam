@@ -30,7 +30,10 @@ const conversationList = document.getElementById("conversation-list");
 const CONVERSATIONS_KEY = "wazeer_conversations";
 const ACTIVE_ID_KEY = "wazeer_active_id";
 
-const SYSTEM_PROMPT = { role: "system", content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only." };
+const SYSTEM_PROMPT = { 
+  role: "system", 
+  content: "You are Wazeer, a friendly AI assistant for Badshah. Always reply in the same language the user is using. Never use markdown symbols like **, #, or `. Write in plain text only. IMPORTANT: When a user uploads an image to analyze, asks for code, or requests a complex task, DO NOT give a long direct answer right away. Instead, ask 1 or 2 short clarifying questions to understand exactly what they need. Keep your replies concise, friendly, and conversational." 
+};
 const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
