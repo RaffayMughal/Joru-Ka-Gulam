@@ -1,6 +1,6 @@
 :root {
   --bg-grad: linear-gradient(-45deg, #020617, #0f172a, #172554, #082f49);
-  --sidebar-bg: rgba(2, 6, 23, 0.85);
+  --sidebar-bg: rgba(2, 6, 23, 0.95);
   --chat-bg: rgba(15, 23, 42, 0.5);
   --text: #f8fafc;
   --text-dim: #94a3b8;
@@ -13,8 +13,8 @@
 
 body.light-mode {
   --bg-grad: linear-gradient(-45deg, #f8fafc, #e2e8f0, #cbd5e1);
-  --sidebar-bg: rgba(255, 255, 255, 0.95);
-  --chat-bg: rgba(255, 255, 255, 0.9);
+  --sidebar-bg: rgba(255, 255, 255, 0.98);
+  --chat-bg: rgba(255, 255, 255, 0.95);
   --text: #0f172a;
   --text-dim: #64748b;
   --border: rgba(0,0,0,0.1);
@@ -42,8 +42,11 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: white; box-shadow: 0 0 15px var(--accent); }
 .logo-text h1 { margin: 0; font-size: 18px; background: linear-gradient(to right, var(--text), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .logo-sub { margin: 0; font-size: 11px; color: var(--text-dim); }
+
 .icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.icon-btn:hover { background: var(--input-bg); color: var(--text); }
+.icon-btn:hover { background: var(--input-bg); color: var(--text); border-color: var(--accent); }
+
+.sidebar-header-actions { display: flex; gap: 8px; }
 
 .conv-section-label { padding: 10px 20px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
 .conv-count { background: var(--accent); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; }
@@ -82,7 +85,6 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .message.bot .bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-top-left-radius: 4px; }
 .message.user .bubble { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border-top-right-radius: 4px; }
 
-/* IMAGE & FILE ATTACHMENT STYLES */
 .bubble-image { display: block; max-width: 240px; max-height: 240px; width: auto; height: auto; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 1px solid var(--border); }
 .bubble-file-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 6px 10px; border-radius: 8px; background: var(--input-bg); margin-bottom: 8px; }
 
@@ -122,7 +124,6 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 #chat-input { flex: 1; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--text); outline: none; }
 #chat-input:focus { border-color: var(--accent); }
 
-/* Header Specific Styles */
 .logo-area { display: flex; align-items: center; gap: 10px; margin-right: auto; margin-left: 10px; }
 .logo-icon-small { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: white; }
 .brand-text { display: flex; flex-direction: column; }
@@ -130,7 +131,6 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .brand-sub { font-size: 11px; color: var(--text-dim); }
 .header-actions { display: flex; align-items: center; gap: 8px; }
 
-/* NOTIFICATION STYLES */
 .notif-wrapper { position: relative; }
 .notif-btn { position: relative; width: 36px; height: 36px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .notif-btn:hover { background: var(--input-bg); color: var(--text); }
@@ -164,13 +164,6 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .notif-title { font-size: 13px; font-weight: 600; color: var(--text); }
 .notif-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
 
-/* Sidebar Header Actions (New Chat + Theme Toggle) */
-.sidebar-header-actions {
-  display: flex;
-  gap: 8px;
-}
-
-/* Mobile Sidebar */
 @media (max-width: 860px) {
   .sidebar { position: fixed; left: -300px; height: 100%; z-index: 100; }
   .sidebar.open { left: 0; }
