@@ -58,12 +58,61 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .conv-delete { background: none; border: none; color: var(--text-dim); cursor: pointer; display: none; }
 .conversation-item:hover .conv-delete { display: block; }
 
-.sidebar-footer { padding: 15px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-.user-avatar-sidebar { width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, var(--accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
-.user-info { display: flex; flex-direction: column; }
-.user-name { font-weight: 600; font-size: 14px; }
-.user-status { font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 5px; }
-.status-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
+/* ── Sidebar Footer Layout (Badshah Profile) ── */
+.sidebar-footer {
+  padding: 15px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center; /* Centers the logo and text block vertically */
+  gap: 12px;
+  margin-top: auto; /* Pushes it to the very bottom */
+}
+
+.user-avatar-sidebar {
+  width: 36px;
+  height: 36px;
+  /* Changed to match the Wazeer "W" logo colors (Cyan/Blue) */
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column; /* This stacks Badshah and Online vertically */
+  justify-content: center;
+  gap: 2px;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.user-status {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #22c55e; /* Green dot */
+  border-radius: 50%;
+  display: inline-block;
+}
 
 .app-header { display: flex; align-items: center; gap: 10px; padding-bottom: 15px; }
 .clear-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text-dim); padding: 8px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
