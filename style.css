@@ -496,4 +496,38 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .sidebar-toggle, .sidebar-close {
   display: flex !important;
 }
+  /* New Sidebar Header Buttons */
+.sidebar-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar-header-actions .icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-header-actions .icon-btn:hover {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+/* Light mode adjustments for these buttons */
+body.light-mode .sidebar-header-actions .icon-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body.light-mode .sidebar-header-actions .icon-btn:hover {
+  background: rgba(6, 182, 212, 0.1);
+}
 }
