@@ -60,11 +60,6 @@
     <!-- MAIN CONTENT -->
     <div class="main-col">
       <header class="app-header">
-        <!-- THEME TOGGLE BUTTON (In the circled position) -->
-        <button id="header-theme-btn" class="icon-btn" title="Toggle Dark/Light Mode">
-          <span class="theme-icon">☀️</span>
-        </button>
-
         <div class="logo-area">
           <div class="logo-icon-small">W</div>
           <div class="brand-text">
@@ -74,6 +69,26 @@
         </div>
 
         <div class="header-actions">
+          
+          <!-- SETTINGS BUTTON (Gear Icon) -->
+          <div class="settings-wrapper">
+            <button class="icon-btn" id="settings-btn" title="Settings">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <!-- SETTINGS DROPDOWN MENU -->
+            <div class="settings-panel" id="settings-panel">
+              <div class="settings-header">Settings</div>
+              <div class="settings-item" id="theme-toggle-settings">
+                <span class="settings-label">Dark Mode</span>
+                <span class="theme-icon">☀️</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
           <div class="notif-wrapper">
             <button class="notif-btn" id="notif-btn" title="Notifications">
               <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -84,7 +99,7 @@
             </button>
             <div class="notif-panel" id="notif-panel">
               <div class="notif-header">Notifications</div>
-              <div class="notif-item"><div class="notif-icon">🚀</div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready to help.</div></div></div>
+              <div class="notif-item"><div class="notif-icon"></div><div class="notif-text"><div class="notif-title">Wazeer is live!</div><div class="notif-desc">Your AI assistant is ready to help.</div></div></div>
               <div class="notif-item"><div class="notif-icon">⚡</div><div class="notif-text"><div class="notif-title">Groq speed enabled</div><div class="notif-desc">Lightning-fast responses.</div></div></div>
               <div class="notif-item"><div class="notif-icon">🌍</div><div class="notif-text"><div class="notif-title">Multi-language support</div><div class="notif-desc">Talk in any language.</div></div></div>
               <div class="notif-item"><div class="notif-icon">📎</div><div class="notif-text"><div class="notif-title">File uploads supported</div><div class="notif-desc">Attach PDFs, images, and docs.</div></div></div>
