@@ -1,5 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
   
+  // Create 100 floating particles
+  function createParticles() {
+    const container = document.getElementById('particles-container');
+    if (!container) return;
+    
+    for (let i = 0; i < 100; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      const size = Math.random() * 4 + 2;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 15 + 10;
+      const delay = Math.random() * 10;
+      
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = left + '%';
+      particle.style.animationDuration = duration + 's';
+      particle.style.animationDelay = delay + 's';
+      
+      container.appendChild(particle);
+    }
+  }
+  
+  createParticles();
+  
   // Elements
   const chatWindow = document.getElementById("chat-window");
   const chatForm = document.getElementById("chat-form");
@@ -178,20 +204,27 @@ document.addEventListener('DOMContentLoaded', function() {
   // New Chat Button
   if (newChatBtn) newChatBtn.addEventListener("click", createConversation);
 
-  // Close all dropdowns helper
+  // Close all dropdowns
   function closeAllDropdowns() {
     if (modelDropdown) modelDropdown.classList.remove("open");
     if (notifDropdown) notifDropdown.classList.remove("open");
     if (dropdownMenu) dropdownMenu.classList.remove("open");
+    if (notifBtn) notifBtn.classList.remove("active");
+    if (moreBtn) moreBtn.classList.remove("active");
   }
 
+  // Close dropdowns when clicking outside
   document.addEventListener("click", function(e) {
-    if (!modelBtn?.contains(e.target)) modelDropdown?.classList.remove("open");
-    if (!notifBtn?.contains(e.target) && !notifDropdown?.contains(e.target)) {
-      notifDropdown?.classList.remove("open");
+    if (modelBtn && modelDropdown && !modelBtn.contains(e.target)) {
+      modelDropdown.classList.remove("open");
     }
-    if (!moreBtn?.contains(e.target) && !dropdownMenu?.contains(e.target)) {
-      dropdownMenu?.classList.remove("open");
+    if (notifBtn && notifDropdown && !notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+      notifDropdown.classList.remove("open");
+      notifBtn.classList.remove("active");
+    }
+    if (moreBtn && dropdownMenu && !moreBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
     }
   });
 
@@ -208,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function() {
       opt.addEventListener("click", function() {
         modelOptions.forEach(o => o.classList.remove("active"));
         opt.classList.add("active");
-        const modelName = modelBtn.querySelector("span");
-        if (modelName) modelName.textContent = opt.textContent;
+        const modelNameText = document.getElementById("model-name-text");
+        if (modelNameText) modelNameText.textContent = opt.textContent;
         modelDropdown.classList.remove("open");
         showToast(`Switched to ${opt.textContent}`);
       });
@@ -244,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Notifications Dropdown (NO MORE ALERT!)
+  // Notifications Dropdown
   if (notifBtn && notifDropdown) {
     notifBtn.addEventListener("click", function(e) {
       e.stopPropagation();
@@ -285,17 +318,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Menu Actions (all functional now!)
+  // Menu Actions
   if (menuPin) {
-    menuPin.addEventListener("click", function() {
+    menuPin.addEventListener("click", function(e) {
+      e.stopPropagation();
       dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
       showToast("⭐ Chat pinned!");
     });
   }
 
   if (menuRename) {
-    menuRename.addEventListener("click", function() {
+    menuRename.addEventListener("click", function(e) {
+      e.stopPropagation();
       dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
       const conv = getActive();
       const newName = prompt("Enter new chat name:", conv.title);
       if (newName && newName.trim()) {
@@ -309,8 +346,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (menuClone) {
-    menuClone.addEventListener("click", function() {
+    menuClone.addEventListener("click", function(e) {
+      e.stopPropagation();
       dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
       const conv = getActive();
       const clone = {
         id: uid(),
@@ -329,15 +368,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (menuArchive) {
-    menuArchive.addEventListener("click", function() {
+    menuArchive.addEventListener("click", function(e) {
+      e.stopPropagation();
       dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
       showToast("📦 Chat archived!");
     });
   }
 
   if (menuDelete) {
-    menuDelete.addEventListener("click", function() {
+    menuDelete.addEventListener("click", function(e) {
+      e.stopPropagation();
       dropdownMenu.classList.remove("open");
+      moreBtn.classList.remove("active");
       if (confirm("Are you sure you want to delete this chat?")) {
         deleteConversation(activeId);
         showToast("Chat deleted!");
