@@ -131,6 +131,38 @@ html, body { height: 100%; margin: 0; color: var(--text); font-family: "Inter", 
 .brand-sub { font-size: 11px; color: var(--text-dim); }
 .header-actions { display: flex; align-items: center; gap: 8px; }
 
+/* SETTINGS DROPDOWN */
+.settings-wrapper { position: relative; }
+.settings-panel {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 220px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  display: none;
+}
+.settings-panel.open { display: block; animation: slideDown 0.2s ease; }
+.settings-header { font-size: 12px; font-weight: 600; color: var(--text-dim); padding: 5px 10px 10px; border-bottom: 1px solid var(--border); margin-bottom: 5px; }
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.settings-item:hover { background: var(--input-bg); }
+.settings-label { font-size: 14px; color: var(--text); }
+.settings-item .theme-icon { font-size: 18px; }
+
+/* NOTIFICATIONS */
 .notif-wrapper { position: relative; }
 .notif-btn { position: relative; width: 36px; height: 36px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .notif-btn:hover { background: var(--input-bg); color: var(--text); }
