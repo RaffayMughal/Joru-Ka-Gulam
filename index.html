@@ -112,19 +112,69 @@
             <svg class="sun-icon" viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             <svg class="moon-icon" viewBox="0 0 24 24" fill="none" width="20" height="20" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <button class="action-btn" id="notif-btn" title="Notifications">
-            <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          
+          <!-- NOTIFICATIONS -->
+          <div class="dropdown-wrapper">
+            <button class="action-btn" id="notif-btn" title="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="notif-badge" id="notif-badge"></span>
+            </button>
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-header">
+                <h4>Notifications</h4>
+                <button class="mark-read" id="mark-read">Mark all read</button>
+              </div>
+              <div class="notif-list" id="notif-list">
+                <div class="notif-item unread">
+                  <div class="notif-icon">🚀</div>
+                  <div class="notif-text">
+                    <div class="notif-title">Wazeer is live!</div>
+                    <div class="notif-desc">Your AI assistant is ready to help.</div>
+                  </div>
+                </div>
+                <div class="notif-item unread">
+                  <div class="notif-icon">⚡</div>
+                  <div class="notif-text">
+                    <div class="notif-title">Groq speed enabled</div>
+                    <div class="notif-desc">Lightning-fast responses.</div>
+                  </div>
+                </div>
+                <div class="notif-item unread">
+                  <div class="notif-icon">🌍</div>
+                  <div class="notif-text">
+                    <div class="notif-title">Multi-language support</div>
+                    <div class="notif-desc">Talk in any language.</div>
+                  </div>
+                </div>
+                <div class="notif-item unread">
+                  <div class="notif-icon">📎</div>
+                  <div class="notif-text">
+                    <div class="notif-title">File uploads supported</div>
+                    <div class="notif-desc">Attach PDFs, images, and docs.</div>
+                  </div>
+                </div>
+                <div class="notif-item unread">
+                  <div class="notif-icon">👑</div>
+                  <div class="notif-text">
+                    <div class="notif-title">Badshah Mode ON</div>
+                    <div class="notif-desc">Wazeer treats you like royalty.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MORE OPTIONS -->
           <div class="dropdown-wrapper">
             <button class="action-btn" id="more-btn" title="More Options">
               <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>
             </button>
             <div class="dropdown-menu" id="dropdown-menu">
-              <button class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Pin</button>
-              <button class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 20h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Rename</button>
-              <button class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.5"/></svg> Clone</button>
-              <button class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M21 8V21H3V8M1 3H23V8H1V3ZM10 12H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Archive</button>
-              <button class="dropdown-item danger" id="delete-chat"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M4 7H20M9 7V4.5C9 4.22 9.22 4 9.5 4H14.5C14.78 4 15 4.22 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Delete</button>
+              <button class="dropdown-item" id="menu-pin"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Pin</button>
+              <button class="dropdown-item" id="menu-rename"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 20h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Rename</button>
+              <button class="dropdown-item" id="menu-clone"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.5"/></svg> Clone</button>
+              <button class="dropdown-item" id="menu-archive"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M21 8V21H3V8M1 3H23V8H1V3ZM10 12H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Archive</button>
+              <button class="dropdown-item danger" id="menu-delete"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M4 7H20M9 7V4.5C9 4.22 9.22 4 9.5 4H14.5C14.78 4 15 4.22 15 4.5V7M18 7L17.3 18.3C17.25 19.25 16.45 20 15.5 20H8.5C7.55 20 6.75 19.25 6.7 18.3L6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Delete</button>
             </div>
           </div>
         </div>
@@ -142,7 +192,7 @@
         </div>
 
         <!-- Messages -->
-        <div class="messages-container" id="messages-container">
+        <div class="messages-container" id="messages-container" style="display:none;">
           <div id="chat-window" class="chat-window"></div>
         </div>
 
@@ -177,6 +227,9 @@
       </div>
     </main>
   </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";</script>
