@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('particles-container');
     if (!container) return;
     
+    container.innerHTML = '';
+    
     for (let i = 0; i < 100; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
@@ -37,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const attachmentPreview = document.getElementById("attachment-preview");
   const welcomeScreen = document.getElementById("welcome-screen");
   const messagesContainer = document.getElementById("messages-container");
-
   const conversationList = document.getElementById("conversation-list");
   const newChatBtn = document.getElementById("new-chat-btn");
   const menuToggle = document.getElementById("menu-toggle");
@@ -52,11 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const markReadBtn = document.getElementById("mark-read");
   const moreBtn = document.getElementById("more-btn");
   const dropdownMenu = document.getElementById("dropdown-menu");
-  const menuPin = document.getElementById("menu-pin");
-  const menuRename = document.getElementById("menu-rename");
-  const menuClone = document.getElementById("menu-clone");
-  const menuArchive = document.getElementById("menu-archive");
-  const menuDelete = document.getElementById("menu-delete");
   const toast = document.getElementById("toast");
 
   const CONVERSATIONS_KEY = "wazeer_conversations";
@@ -80,18 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => toast.classList.remove("show"), 2500);
   }
 
-  // Utility Functions
-  function cleanText(text) { 
-    return text.replace(/#{1,6}\s*/g, '')
-      .replace(/\*\*(.*?)\*\*/gs, '$1')
-      .replace(/\*(.*?)\*/gs, '$1')
-      .replace(/^[\-\*]\s+/gm, '')
-      .replace(/`{3}[\s\S]*?`{3}/g, '')
-      .replace(/`([^`]+)`/g, '$1')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim(); 
-  }
-  
   function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
   
   function newConversation() { 
@@ -202,49 +186,55 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // New Chat Button
-  if (newChatBtn) newChatBtn.addEventListener("click", createConversation);
-
-  // Close all dropdowns
-  function closeAllDropdowns() {
-    if (modelDropdown) modelDropdown.classList.remove("open");
-    if (notifDropdown) notifDropdown.classList.remove("open");
-    if (dropdownMenu) dropdownMenu.classList.remove("open");
-    if (notifBtn) notifBtn.classList.remove("active");
-    if (moreBtn) moreBtn.classList.remove("active");
+  if (newChatBtn) {
+    newChatBtn.addEventListener("click", function() {
+      createConversation();
+    });
   }
 
   // Close dropdowns when clicking outside
   document.addEventListener("click", function(e) {
-    if (modelBtn && modelDropdown && !modelBtn.contains(e.target)) {
+    if (modelDropdown && !modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) {
       modelDropdown.classList.remove("open");
     }
-    if (notifBtn && notifDropdown && !notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+    if (notifDropdown && !notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
       notifDropdown.classList.remove("open");
-      notifBtn.classList.remove("active");
+      if (notifBtn) notifBtn.classList.remove("active");
     }
-    if (moreBtn && dropdownMenu && !moreBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+    if (dropdownMenu && !moreBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
       dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (moreBtn) moreBtn.classList.remove("active");
     }
   });
 
-  // Model Selector
+  // Model Selector - FIXED
   if (modelBtn && modelDropdown) {
     modelBtn.addEventListener("click", function(e) {
       e.stopPropagation();
-      closeAllDropdowns();
+      // Close other dropdowns
+      if (notifDropdown) notifDropdown.classList.remove("open");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (notifBtn) notifBtn.classList.remove("active");
+      if (moreBtn) moreBtn.classList.remove("active");
+      
       modelDropdown.classList.toggle("open");
     });
     
     const modelOptions = modelDropdown.querySelectorAll(".model-option");
-    modelOptions.forEach(opt => {
-      opt.addEventListener("click", function() {
-        modelOptions.forEach(o => o.classList.remove("active"));
+    modelOptions.forEach(function(opt) {
+      opt.addEventListener("click", function(e) {
+        e.stopPropagation();
+        modelOptions.forEach(function(o) { o.classList.remove("active"); });
         opt.classList.add("active");
+        
+        // Update the model name
         const modelNameText = document.getElementById("model-name-text");
-        if (modelNameText) modelNameText.textContent = opt.textContent;
+        if (modelNameText) {
+          modelNameText.textContent = opt.textContent;
+        }
+        
         modelDropdown.classList.remove("open");
-        showToast(`Switched to ${opt.textContent}`);
+        showToast("Switched to " + opt.textContent);
       });
     });
   }
@@ -277,21 +267,27 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Notifications Dropdown
+  // Notifications - FIXED
   if (notifBtn && notifDropdown) {
     notifBtn.addEventListener("click", function(e) {
       e.stopPropagation();
-      closeAllDropdowns();
+      // Close other dropdowns
+      if (modelDropdown) modelDropdown.classList.remove("open");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
+      
       notifDropdown.classList.toggle("open");
       notifBtn.classList.toggle("active");
     });
 
-    // Mark all as read
+    // Mark all as read - FIXED
     if (markReadBtn) {
       markReadBtn.addEventListener("click", function(e) {
         e.stopPropagation();
         const unreadItems = notifDropdown.querySelectorAll(".notif-item.unread");
-        unreadItems.forEach(item => item.classList.remove("unread"));
+        unreadItems.forEach(function(item) {
+          item.classList.remove("unread");
+        });
         if (notifBadge) notifBadge.classList.add("hidden");
         showToast("All notifications marked as read");
       });
@@ -299,40 +295,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Click on individual notifications
     const notifItems = notifDropdown.querySelectorAll(".notif-item");
-    notifItems.forEach(item => {
+    notifItems.forEach(function(item) {
       item.addEventListener("click", function() {
         this.classList.remove("unread");
         const hasUnread = notifDropdown.querySelectorAll(".notif-item.unread").length > 0;
-        if (!hasUnread && notifBadge) notifBadge.classList.add("hidden");
+        if (!hasUnread && notifBadge) {
+          notifBadge.classList.add("hidden");
+        }
       });
     });
   }
 
-  // More Options Dropdown
+  // More Options - FIXED
   if (moreBtn && dropdownMenu) {
     moreBtn.addEventListener("click", function(e) {
       e.stopPropagation();
-      closeAllDropdowns();
+      // Close other dropdowns
+      if (modelDropdown) modelDropdown.classList.remove("open");
+      if (notifDropdown) {
+        notifDropdown.classList.remove("open");
+        if (notifBtn) notifBtn.classList.remove("active");
+      }
+      
       dropdownMenu.classList.toggle("open");
       moreBtn.classList.toggle("active");
     });
   }
 
-  // Menu Actions
-  if (menuPin) {
-    menuPin.addEventListener("click", function(e) {
+  // Menu Actions - FIXED
+  if (document.getElementById("menu-pin")) {
+    document.getElementById("menu-pin").addEventListener("click", function(e) {
       e.stopPropagation();
-      dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
       showToast("⭐ Chat pinned!");
     });
   }
 
-  if (menuRename) {
-    menuRename.addEventListener("click", function(e) {
+  if (document.getElementById("menu-rename")) {
+    document.getElementById("menu-rename").addEventListener("click", function(e) {
       e.stopPropagation();
-      dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
       const conv = getActive();
       const newName = prompt("Enter new chat name:", conv.title);
       if (newName && newName.trim()) {
@@ -345,11 +349,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  if (menuClone) {
-    menuClone.addEventListener("click", function(e) {
+  if (document.getElementById("menu-clone")) {
+    document.getElementById("menu-clone").addEventListener("click", function(e) {
       e.stopPropagation();
-      dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
       const conv = getActive();
       const clone = {
         id: uid(),
@@ -367,20 +371,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  if (menuArchive) {
-    menuArchive.addEventListener("click", function(e) {
+  if (document.getElementById("menu-archive")) {
+    document.getElementById("menu-archive").addEventListener("click", function(e) {
       e.stopPropagation();
-      dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
       showToast("📦 Chat archived!");
     });
   }
 
-  if (menuDelete) {
-    menuDelete.addEventListener("click", function(e) {
+  if (document.getElementById("menu-delete")) {
+    document.getElementById("menu-delete").addEventListener("click", function(e) {
       e.stopPropagation();
-      dropdownMenu.classList.remove("open");
-      moreBtn.classList.remove("active");
+      if (dropdownMenu) dropdownMenu.classList.remove("open");
+      if (moreBtn) moreBtn.classList.remove("active");
       if (confirm("Are you sure you want to delete this chat?")) {
         deleteConversation(activeId);
         showToast("Chat deleted!");
