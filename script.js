@@ -23,7 +23,7 @@ const SYSTEM_PROMPT = {
   content: "You are Wazeer, a friendly AI assistant. Always reply in the same language the user is using. Never use markdown symbols. Write in plain text only." 
 };
 
-const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer 🤖 Aap ka apna AI assistant.";
+const GREETING = "Assalamu Alaikum Badshah! Main hoon Wazeer  Aap ka apna AI assistant.";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const MAX_TEXT_CHARS = 4000;
@@ -141,6 +141,7 @@ function switchConversation(id) {
   clearAttachment();
   renderChatWindow();
   renderSidebar();
+  closeSidebarOnMobile();
 }
 
 function createConversation() {
@@ -151,6 +152,7 @@ function createConversation() {
   clearAttachment();
   renderChatWindow();
   renderSidebar();
+  closeSidebarOnMobile();
   chatInput.focus();
 }
 
@@ -168,8 +170,7 @@ function deleteConversation(id) {
   renderSidebar();
 }
 
-newChatBtn.addEventListener("click", createConversation);
-
+// SIDEBAR FUNCTIONS - THIS IS WHAT YOU NEED!
 function openSidebar() {
   sidebar.classList.add("open");
   sidebarOverlay.classList.remove("hidden");
@@ -180,11 +181,30 @@ function closeSidebar() {
   sidebarOverlay.classList.add("hidden");
 }
 
-sidebarToggle.addEventListener("click", () => {
-  sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
-});
-sidebarClose.addEventListener("click", closeSidebar);
-sidebarOverlay.addEventListener("click", closeSidebar);
+function closeSidebarOnMobile() {
+  if (window.innerWidth <= 860) closeSidebar();
+}
+
+// Event listeners for sidebar buttons
+if (sidebarToggle) {
+  sidebarToggle.addEventListener("click", () => {
+    if (sidebar.classList.contains("open")) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+}
+
+if (sidebarClose) {
+  sidebarClose.addEventListener("click", closeSidebar);
+}
+
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener("click", closeSidebar);
+}
+
+newChatBtn.addEventListener("click", createConversation);
 
 function renderChatWindow() {
   chatWindow.innerHTML = "";
@@ -233,7 +253,7 @@ function addMessage(role, text, attachmentMeta, isStatus) {
     } else {
       const chip = document.createElement("div");
       chip.className = "bubble-file-chip";
-      chip.textContent = `📄 ${attachmentMeta.name}`;
+      chip.textContent = ` ${attachmentMeta.name}`;
       bubble.appendChild(chip);
     }
   }
@@ -282,7 +302,7 @@ fileInput.addEventListener("change", async () => {
   fileInput.value = "";
   if (!file) return;
   if (file.size > MAX_FILE_BYTES) {
-    addMessage("bot", `⚠️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
+    addMessage("bot", `️ "${file.name}" is over the ${MAX_FILE_BYTES / (1024 * 1024)}MB limit.`);
     return;
   }
   const lowerName = file.name.toLowerCase();
@@ -461,7 +481,6 @@ async function sendMessage(userText) {
   }
 }
 
-// Single form submit handler
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const text = chatInput.value.trim();
