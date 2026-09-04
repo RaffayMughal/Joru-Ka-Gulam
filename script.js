@@ -35,10 +35,7 @@ function cleanText(text) {
 }
 
 function uid() { return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
-
-function newConversation() {
-  return { id: uid(), title: "New chat", createdAt: Date.now(), updatedAt: Date.now(), messages: [SYSTEM_PROMPT] };
-}
+function newConversation() { return { id: uid(), title: "New chat", createdAt: Date.now(), updatedAt: Date.now(), messages: [SYSTEM_PROMPT] }; }
 
 function loadState() {
   try {
@@ -137,28 +134,46 @@ function closeSidebarOnMobile() {
   }
 }
 
-// ─ THEME TOGGLE (In Header - The Circled Button) ──
-const themeBtn = document.getElementById('header-theme-btn');
-const themeIcon = themeBtn ? themeBtn.querySelector('.theme-icon') : null;
+// ─ SETTINGS PANEL LOGIC ──
+const settingsBtn = document.getElementById('settings-btn');
+const settingsPanel = document.getElementById('settings-panel');
+
+if (settingsBtn && settingsPanel) {
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsPanel.classList.toggle('open');
+    // Close notifications if open
+    const notifPanel = document.getElementById('notif-panel');
+    if (notifPanel) notifPanel.classList.remove('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+      settingsPanel.classList.remove('open');
+    }
+  });
+  settingsPanel.addEventListener('click', (e) => e.stopPropagation());
+}
+
+//  THEME TOGGLE (Inside Settings Panel) ──
+const themeToggleSettings = document.getElementById('theme-toggle-settings');
+const themeIcon = themeToggleSettings ? themeToggleSettings.querySelector('.theme-icon') : null;
 const savedTheme = localStorage.getItem('wazeer_theme');
 
-// Load saved theme on startup
 if (savedTheme === 'light') {
   document.body.classList.add('light-mode');
   if (themeIcon) themeIcon.textContent = '🌙';
 }
 
-// Toggle theme on click
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
+if (themeToggleSettings) {
+  themeToggleSettings.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
-    if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+    if (themeIcon) themeIcon.textContent = isLight ? '' : '☀️';
     localStorage.setItem('wazeer_theme', isLight ? 'light' : 'dark');
   });
 }
 
-//  NOTIFICATIONS ──
+// ─ NOTIFICATIONS ──
 const notifBtn = document.getElementById('notif-btn');
 const notifPanel = document.getElementById('notif-panel');
 const notifDot = document.getElementById('notif-dot');
@@ -168,6 +183,8 @@ if (notifBtn && notifPanel) {
     e.stopPropagation();
     notifPanel.classList.toggle('open');
     if (notifPanel.classList.contains('open') && notifDot) notifDot.style.display = 'none';
+    // Close settings if open
+    if (settingsPanel) settingsPanel.classList.remove('open');
   });
   document.addEventListener('click', (e) => {
     if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
