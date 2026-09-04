@@ -4,15 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wazeer</title>
-<link rel="stylesheet" href="style.css?v=12" />
+<link rel="stylesheet" href="style.css?v=13" />
 <style>
-.bubble-image{display:block;max-width:240px;max-height:240px;width:auto;height:auto;border-radius:12px;object-fit:cover;margin-bottom:8px;border:1px solid rgba(148,163,184,.3)}
-.bubble-file-chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:6px 10px;border-radius:8px;background:rgba(148,163,184,.15);margin-bottom:8px}
-.notif-icon{width:34px;height:34px;border-radius:8px;background:rgba(148,163,184,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.notif-item{align-items:center}
-.notif-panel{max-height:340px;overflow-y:auto}
-.attachment-preview .thumb{width:36px;height:36px;border-radius:8px;object-fit:cover}
-.attachment-preview .remove-file{background:none;border:none;cursor:pointer;font-size:16px}
+  .bubble-image { display: block; max-width: 240px; max-height: 240px; width: auto; height: auto; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 1px solid rgba(148,163,184,.3); }
+  .bubble-file-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 6px 10px; border-radius: 8px; background: rgba(148,163,184,.15); margin-bottom: 8px; }
+  .notif-icon { width: 34px; height: 34px; border-radius: 8px; background: rgba(148,163,184,.15); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .notif-item { align-items: center; }
+  .notif-panel { max-height: 340px; overflow-y: auto; }
+  .attachment-preview .thumb { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+  .attachment-preview .remove-file { background: none; border: none; cursor: pointer; font-size: 16px; }
 </style>
 </head>
 <body>
@@ -69,7 +69,8 @@
     </aside>
 
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
-        <div class="main-col">
+
+    <div class="main-col">
       <header class="app-header">
         <button id="sidebar-toggle" class="icon-btn sidebar-toggle" type="button">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
@@ -98,6 +99,7 @@
             </button>
             <div class="notif-panel" id="notif-panel">
               <div class="notif-header">Notifications</div>
+
               <div class="notif-item">
                 <div class="notif-icon">🚀</div>
                 <div class="notif-text">
@@ -105,6 +107,7 @@
                   <div class="notif-desc">Your AI assistant is ready to help.</div>
                 </div>
               </div>
+
               <div class="notif-item">
                 <div class="notif-icon">⚡</div>
                 <div class="notif-text">
@@ -112,6 +115,7 @@
                   <div class="notif-desc">Lightning-fast responses powered by Groq.</div>
                 </div>
               </div>
+
               <div class="notif-item">
                 <div class="notif-icon">🌍</div>
                 <div class="notif-text">
@@ -119,18 +123,16 @@
                   <div class="notif-desc">Talk in any language — Wazeer replies in the same one.</div>
                 </div>
               </div>
+
               <div class="notif-item">
                 <div class="notif-icon">📎</div>
                 <div class="notif-text">
                   <div class="notif-title">File uploads supported</div>
                   <div class="notif-desc">Attach PDFs, images, and documents.</div>
-                                </div>
+                </div>
               </div>
+
               <div class="notif-item">
-                     <div class="notif-icon">👑</div>
-                <div class="notif-text">
-                  <div class="notif-title">Badshah Mode ON
-                                     <div class="notif-item">
                 <div class="notif-icon">👑</div>
                 <div class="notif-text">
                   <div class="notif-title">Badshah Mode ON</div>
